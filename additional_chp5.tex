@@ -1,0 +1,498 @@
+Now let's compute the coefficients first\\
+From Equation 5.32 a and the expression of $\hat{u}$ we obtain
+\begin{equation}
+U = \hat{\alpha} - \dfrac{R(z) \, |k|}{\rho} A_1
+\end{equation}
+From $\partial_x \hat{u} + ik \hat{v} = 0 |_{x = 0}$
+\begin{equation}
+\bar{\mu} U = ik V
+\end{equation}
+From $\hat{\phi}_x = 0$
+\begin{equation}
+-|k| A_1 - \gamma A_2 = 0 \, \, \, \Rightarrow A_2 = - \dfrac{|k|}{\gamma} A_1
+\end{equation}
+
+Combining E (4.19 (d)) with the expression of $\hat{v}$ we have
+\begin{equation*}
+V - \dfrac{ik \, R(z)}{\rho} A_1 + ik \Delta t (\hat{B} - 1) (A_1 + A_2) = \hat{\beta}
+\end{equation*}
+
+Substitute E (4.21) and 4.22 into the above equation we obtain
+\begin{equation*}
+\dfrac{\bar{\mu} U}{i k} - \dfrac{ik R(z)}{\rho} A_1 + ik \Delta t (\hat{B} - 1)(1 - \dfrac{|k|}{\gamma}) A_1 = \hat{\beta}
+\end{equation*}
+\begin{equation*}
+= \bar{\mu} U + k^2 A_1[\dfrac{R(z)}{\rho} - \Delta t (\hat{B} - 1)(1 - \dfrac{|k|}{\gamma})] = ik \hat{\beta}
+\end{equation*}
+Recall the definition of $\gamma^2$ leads to $\Delta t = \dfrac{2 Re \, F}{\gamma^2 - k^2}$ Hence
+\begin{equation}
+\bar{\mu} U + k^2 A_1 [ \dfrac{R(z)}{\rho} - \dfrac{2 Re \, F \, (\hat{B} - 1)}{\gamma (\gamma + |k|)}] = ik \hat{\beta}
+\end{equation}
+Then by substituting E (4.20) to eliminate $U$ we can solve for $A_1$:
+
+\begin{equation*}
+\bar{\mu} \hat{\alpha} - A_1 (\dfrac{\bar{\mu} \, R(z) \, |k|}{\rho} - k^2 [\dfrac{R(z)}{\rho} - \dfrac{2 Re \, F \, (\hat{B} - 1)}{\gamma (\gamma + |k|)}]) = ik \hat{\beta}
+\end{equation*}
+\begin{equation*}
+= \bar{\mu} \hat{\alpha} - A_1 (\dfrac{R(z) |k| (\bar{\mu} - |k|) (\bar{\mu} + |k|)}{\rho (\bar{\mu} + |k|)} + \dfrac{2 k^2 \, Re \, F \, (\hat{B} - 1)}{\gamma (\gamma + |k|)}]) = ik \hat{\beta}
+\end{equation*}
+Recall $\bar{\mu}^2 = k^2 + Re \, \rho$, then
+\begin{equation*}
+= \bar{\mu} \hat{\alpha} - A_1 \dfrac{Re \, R(z) |k|}{\bar{\mu} + |k|} (1 + \dfrac{2 |k|(\bar{\mu} + |k|)F(\hat{B} - 1)}{R(z) \, \gamma (\gamma + |k|))} = ik \hat{\beta}
+\end{equation*}
+\begin{equation*}
+= \bar{\mu} \hat{\alpha} - A_1 \, E = ik \hat{\beta}
+\end{equation*}
+where we have defined: $E =  \dfrac{Re \, R(z) |k|}{\bar{\mu} + |k|}(1 + \dfrac{C \, F(\hat{B} - 1)}{R(z)})$ and $C = \dfrac{2 |k|(\bar{\mu} + |k|)}{\gamma (\gamma + |k|)}$ for convenience.\\
+$E$ represents precisely the coupling between the choice of pressure approximation ($R(z)$ and $F$) and choice of boundary condition of projection (this will affect $\hat{B}$). \textbf{Note $C$ contains $\gamma$ maybe causing a numerical boundary layer?}. The coupling between these functions must be carefully chosen to maintain second order accuracy for all variables across the domain. We will see in the subsequent discussions how this can be met.\\
+
+$\Rightarrow$
+\begin{equation}
+A_1 = E^{-1} (\bar{\mu} \hat{\alpha} - ik \hat{\beta})
+\end{equation}
+
+Then substitute this back into E (4.20), E (4.21) and E (4.22) we recover other coefficients:\\
+In summary:
+\begin{equation}
+\begin{cases}
+A_1 = \dfrac{(\bar{\mu} + |k|)\,(\bar{\mu} \hat{\alpha} - ik \hat{\beta})}{Re \, R(z) |k|}(1 + \dfrac{C \, F(\hat{B} - 1)}{R(z)})^{-1}\\
+U = \hat{\alpha} - \dfrac{(\bar{\mu} \hat{\alpha} - ik \hat{\beta}) \, (\bar{\mu} + |k|)}{Re \, \rho} (1 + \dfrac{C\,F(\hat{B} - 1)}{R(z)})^{-1}\\
+A_2 = - \dfrac{(\bar{\mu} \hat{\alpha} - ik \hat{\beta}) \, (\bar{\mu} + |k|)}{\gamma \, Re \rho R(z)}(1 + \dfrac{C\,F(\hat{B} - 1)}{R(z)})^{-1}\\
+V = \dfrac{\bar{\mu} \hat{\alpha}}{i k} - \dfrac{\bar{\mu}(\bar{\mu} \hat{\alpha} - ik \hat{\beta}) \, (\bar{\mu} + |k|)}{ik \, Re \, \rho} (1 + \dfrac{C\,F(\hat{B} - 1)}{R(z)})^{-1}\\
+\end{cases}
+\end{equation}
+%U = \hat{\alpha} - \dfrac{R(z) |k|}{\rho} E^{-1}\,(\bar{\mu} \hat{\alpha} - ik \hat{\beta})
+%= \hat{\alpha} - \dfrac{(\bar{\mu} \hat{\alpha} - ik \hat{\beta}) \, (\bar{\mu} + |k|)}{Re \, \rho} (1 + %\dfrac{C\,F(\hat{B} - 1)}{R(z)})^{-1}
+
+For our purpose of testing the accuracy, we want to compare the expression between the reference solutions (E (4.9)) and our numerical solutions (E (4.18)). More precisely, we are comparing between their coefficients (amplitude of normal modes). Of course that the frequency of normal modes between the true and numerical solutions could be different (as in velocity variables), they are often easier to compare than their corresponding coefficients. \\
+
+Let's first compare the coefficients of the second component solution in the $u$ velocity because both the numerical and the reference $\hat{u}$ solutions have the same decaying rate ($- |k|$).
+
+\begin{equation*}
+\dfrac{R(z) |k|}{\rho} A_1 \text{ numericcal and } \, \, \, \dfrac{(\mu + |k|)}{Re \, s} (\mu \hat{\alpha} - ik \hat{\beta}) \text{ reference solution}
+\end{equation*}
+Followed from the result for $A_1$
+\begin{equation*}
+= \dfrac{R(z) |k|}{\rho} \, E^{-1} (\bar{\mu} \hat{\alpha} - ik \hat{\beta})\text{ compare with } \, \, \, \dfrac{(\mu + |k|)}{Re \, s} (\mu \hat{\alpha} - ik \hat{\beta})\text{ reference}
+\end{equation*}
+
+Therefore it is obvious that we want 
+\begin{equation}
+\dfrac{R(z) |k|}{\rho} \, E^{-1} \approx \dfrac{(\mu + |k|)}{Re \, s} \, \text{ and } \, (\bar{\mu} \hat{\alpha} - ik \hat{\beta}) \approx (\mu \hat{\alpha} - ik \hat{\beta})
+\end{equation}
+in order to achieve optimal accuracy.\\
+
+Let's do the second one first since it is easier! Keep in mind that it is our purpose to achieve second order accuracy in time for the numerical solutions. Hence quantitatively we want
+\begin{equation*}
+\mu \hat{\alpha} - ik \hat{\beta} = \bar{\mu} \hat{\alpha} - ik \hat{\beta} + \mathcal{O}(\Delta t^2)
+\end{equation*}
+where we have used the ``Big $\mathcal{O}$" notation to express the error.\\
+Observe that the only term inhibits the accuracy is $\bar{\mu}$. \\
+
+Recall $\bar{\mu}^2 = k^2 + Re \, \rho$ and  $\mu^2 = k^2 + Re \, s$
+Hence it is $\rho$ which produces the error. A rough estimate indicate that we want $\rho$ converging to $s$ at least with second order accuracy. Hence let's prove this hypothesis first!\\
+
+Recall the definition of $\rho$:
+\begin{dgroup}
+\begin{dmath*}
+\rho = \dfrac{2(z-1)}{\Delta t (z+1)}
+\end{dmath*}
+\intertext{\\
+because by definition, $z = e^{s\Delta t} = \sum_{n = 0}^\infty \dfrac{(s \Delta t)^n}{n !} = 1 + \mathcal{O}(\Delta t)$, hence $(z-1)^n = \mathcal{O}(\Delta t^n)$
+\\
+By Taylor expansion of $f(z) = \dfrac{z-1}{z+1}$ at $z = 1$ to order $(z-1)^3$ we obtain:
+\\}
+\begin{dmath}
+f(z) = \sum_{n=0}^\infty \dfrac{f^{(n)}(1)\,(z-1)^n}{n!}
+= f(1) + f'(1)\,(z-1) + \dfrac{f'''(1)\,(z-1)^2}{2} + \mathcal{O}(\Delta t^3)
+= \dfrac{e^{s\Delta t} - 1}{2} - \dfrac{(e^{s\Delta t} - 1)^2}{4}
+\end{dmath}
+\intertext{\\
+By expanding $e^{s\Delta t}$ using the definition we find\\}
+\begin{dmath}
+f(z) = \dfrac{s\Delta t}{2} - \dfrac{(s\Delta t)^3}{4} + \mathcal{O}(\Delta t^3)
+\end{dmath}
+\intertext{\\
+Then it is easy to show to that
+\\}
+\begin{dmath}
+\rho = \dfrac{2f(z)}{\Delta t}
+= s - \dfrac{s^3\Delta t^2}{2} + \mathcal{O}(\Delta t^2)
+= s + \mathcal{O}(\Delta t^2)
+\end{dmath}
+\end{dgroup}
+
+As for the error between $\bar{\mu}$ and $\mu$, it is straightforward to use a similar Taylor series argument and the result proven for $\rho$ to show 
+\begin{equation}
+\bar{\mu} = \mu + \mathcal{O}(\Delta t^2)
+\end{equation}
+
+These are the two important relations that we use in the accuracy test.\\
+
+Now for the first comparison (in (4. 26)), there are three varying functions $C$ and $B(z)$ that we must consider to obtain second order accuracy.
+\begin{equation*}
+R(z) |k|E^{-1} = \dfrac{\bar{\mu} + |k|}{Re}(1 + \dfrac{C \, F(\hat{B} - 1)}{R(z)})^{-1} \text{ compare with } \dfrac{\mu + |k|}{Re} 
+\end{equation*}
+
+Hence according to the above formulation, we want $(1 + \dfrac{C \, F(\hat{B} - 1)}{R(z)})$ to converge to 1 and equivalently $\dfrac{C \, F(\hat{B} - 1)}{R(z)}$ to 0. By varying the pressure approximation function we can make this possible. Recall the 3 choices of $\mathcal{B}$ for projection methods
+\begin{equation}
+\begin{array}{lcl}
+\mathcal{B} = 0 & \Rightarrow & \hat{B} = 1 \, \, \, \text{      $Pm 1 (a)$ and $Pm 1 (b)$}\\
+
+\mathcal{B} = \phi^n & \Rightarrow & \hat{B} = 1/z \, \, \, \text{      $Pm 2$}\\
+
+\mathcal{B} = 2\phi^n - \phi^{n-1} & \Rightarrow & \hat{B} = \dfrac{2}{z} - \dfrac{1}{z^2} \, \, \, \text{         $Pm 2$}\\
+\end{array}
+\end{equation}
+
+Let's consider these methods separately here:\\
+
+If $\mathcal{B} = 0$ as in $Pm 1 (a)$ and $Pm 1 (b)$, then we don't suffer from the error caused by $(1 + \dfrac{C \, F(\hat{B} - 1)}{R(z)})^{-1}$. Hence $R(z) |k|E^{-1}$ is a second order approximation to $\dfrac{\mu + |k|}{Re} $ since we have just proved $\bar{\mu} = \mu + \mathcal{O} (\Delta t^2)$. However it is important to note that enforcing a Dirchilet boundary condition might causing non-smoothness in spatial interpolation. Hence limiting the accuracy too \cite{strikwerda1999accuracy}.\\
+
+However for $Pm 2$, the problem is more complicated. 
+\begin{equation}
+|\dfrac{C \, F(\hat{B} - 1)}{R(z)}| \leq |\dfrac{C \, F}{R(z)}| \, | \hat{B} - 1|
+\end{equation}
+We desire that the right hand side of the inequality vanishes as $\Delta t \rightarrow 0$. Luckily this can be achieved. If we let $\mathcal{B} = \phi^n$, then
+\begin{dmath*}
+\hat{B} - 1 = \dfrac{z - 1}{z}
+\end{dmath*}
+By using a Taylor expansion argument $\hat{B} = 1+ \mathcal{O}(\Delta t)$\\
+
+Similarly for $\mathcal{B} = 2 \phi^n - \phi^{n-1}$ which is a second order approximation to $\phi^{n+1}$ would result in $\hat{B} - 1 = \mathcal{O} (\Delta t^2)$, however first order accurate is suffices here.\\
+
+%k^2 + \dfrac{2Re\,F}{\Delta t}
+Now for the first term in Equation 5.43, use the identity $| \gamma (\gamma + |k|) \, R(z) | \geqslant |\gamma^2|$
+\begin{dmath*}
+|\dfrac{C \, F}{R(z)}| = | \dfrac{2|k| (\bar{\mu} + |k|) \, F}{\gamma(\gamma + |k|) \, R(z)} |
+\leq | \dfrac{2|k| (\bar{\mu} + |k|) \, F}{\gamma^2 \, R(z)} |
+\end{dmath*}
+
+Further recall $R(z) = \dfrac{2 z(1 + Q(z))}{1 + z}$ where $\hat{q} = Q(z)\hat{\phi}$ but $q = 0 \Rightarrow Q(z) = 0$. Therefore (also from E (4.26) and neglecting higher order terms)
+\begin{equation}
+R(z) = \dfrac{2 z}{1 + z} = \dfrac{2 (2 + s \Delta t)}{4} = 1 + \dfrac{1}{2} s \Delta t
+\end{equation}
+However we know that $1 >> \Delta t$ and hence 1 dominates the error. Hence $R(z) = \mathcal{O} (1)$.\\
+
+$\Rightarrow$
+\begin{equation}
+| \dfrac{2|k| (\bar{\mu} + |k|) \, F}{\gamma^2 \, R(z)} | \leq | \dfrac{2|k| (\bar{\mu} + |k|) \, F}{\gamma^2}|
+\end{equation}
+\begin{equation*}
+= |\dfrac{2|k| (\bar{\mu} + |k|) \, F}{k^2 + \dfrac{2 Re \, F}{\Delta t}}| 
+\leq |\dfrac{2|k| (\bar{\mu} + |k|) \, F}{\dfrac{2 Re \, F}{\Delta t}}| 
+\end{equation*}
+$\Rightarrow$
+\begin{dmath*}
+|\dfrac{C \, F}{R(z)}| \leq |\dfrac{\Delta t |k| (\bar{\mu} + |k|)}{Re}| \, \, \, (\mathcal{O} (\Delta t))
+\end{dmath*}
+
+Hence together we have 
+\begin{equation}
+|\dfrac{C \, F (\hat{B} - 1)}{R(z)}| = \mathcal{O} (\Delta t^2)
+\end{equation}
+This leads to 
+\begin{equation*}
+\dfrac{R(z) |k|}{\rho} A_1 = \dfrac{(\mu + |k|)}{Re \, s} (\mu \hat{\alpha} - ik \hat{\beta}) + \mathcal{O} (\Delta t^2)
+\end{equation*}
+This relation holds for all projection methods.\\
+
+Now we compute the accuracy for the first component of $\hat{u}$: compare 
+$U e^{-\bar{\mu} x}$ numerical and $\dfrac{(\mu + |k|)}{Re \,s} (- |k| \hat{\alpha} + ik \hat{\beta}) e^{-\mu x}$ reference solution.\\
+
+First note since $\bar{\mu} = \mu + \mathcal{O} (\Delta t^2)$ then
+\begin{equation*}
+| e^{\bar{\mu}x} - e^{\mu x} | = | \sum_{n=0}^{\infty} \dfrac{(\bar{\mu} x)^n - (\mu x)^n}{n!} |
+\end{equation*}
+\begin{equation*}
+= | 0 + (\bar{\mu}x - \mu x) + \dfrac{((\bar{\mu} x)^2 - (\mu x)^2)}{2} + \cdots
+\end{equation*}
+\begin{equation*}
+\leq |\bar{\mu} - \mu| |x| + |\dfrac{((\bar{\mu} x)^2 - (\mu x)^2)}{2}| + \cdots
+\end{equation*}
+Neglecting higher error terms we obtain
+\begin{equation*}
+| e^{\bar{\mu}x} - e^{\mu x} | \leq \mathcal{O} (\Delta t^2)
+\end{equation*}
+
+As for their coefficients\\
+\begin{equation*}
+U = \hat{\alpha} - \dfrac{(\bar{\mu} \hat{\alpha} - ik \hat{\beta}) \, (\bar{\mu} + |k|)}{Re \, \rho} (1 + \dfrac{C\,F(\hat{B} - 1)}{R(z)})^{-1}
+= \dfrac{(\bar{\mu} + |k|) (-|k| \hat{\alpha} + ik \hat{\beta})}{Re \rho} (1 + \dfrac{C\,F(\hat{B} - 1)}{R(z)})^{-1}
+\end{equation*}
+Because $(1 + \dfrac{C\,F(\hat{B} - 1)}{R(z)})^{-1} = 1 + \mathcal{O} (\Delta t^2)$ , hence we can treat this term as $1$ and only need to compare the rest of the $U$ with the reference solution coefficient.
+\begin{equation*}
+| \dfrac{(\bar{\mu} + |k|) (-|k| \hat{\alpha} + ik \hat{\beta})}{Re \rho} - \dfrac{(\mu + |k|) (-|k| \hat{\alpha} + ik \hat{\beta})}{Re s} |
+= | (\dfrac{(\bar{\mu} + |k|)}{\rho} - \dfrac{(\mu + |k|)}{s}) \, \dfrac{(-|k| \hat{\alpha} + ik \hat{\beta})}{Re}|
+\end{equation*}
+\begin{equation*}
+\leq | (\dfrac{\mathcal{O} (\Delta t^2)}{(\mu - |k|)^2}| \, |(-|k| \hat{\alpha} + ik \hat{\beta})|
+\end{equation*}
+
+Combine these results we finally obtain an error bound for the $u$ velocity\\
+
+$| \hat{u}_{numerical} - \hat{u}_{reference} | $
+\begin{equation*}
+\leq |U - \dfrac{(\mu + |k|) (-|k| \hat{\alpha} + ik \hat{\beta})}{Re s}| \, |e^{-\bar{\mu} x} - e^{-\mu x} | + | \dfrac{R(z) |k|}{\rho} A_1 - \dfrac{\mu + |k|)}{Re s} (\mu \hat{\alpha} - ik \hat{\beta}) | \, |e^{- |k|x}|
+\end{equation*}
+\begin{equation*}
+= | \dfrac{(\bar{\mu} + |k|) (-|k| \hat{\alpha} + ik \hat{\beta})}{Re \rho} - \dfrac{(\mu + |k|) (-|k| \hat{\alpha} + ik \hat{\beta})}{Re s} |\, |e^{-\bar{\mu} x} - e^{-\mu x} | 
+\end{equation*}
+\begin{equation*}
++ | \dfrac{R(z) |k|}{\rho} E^{-1} (\mu \hat{\alpha} - ik \hat{\beta}) - \dfrac{\mu + |k|)}{Re s} (\mu \hat{\alpha} - ik \hat{\beta}) | \, |e^{- |k|x}|
+\end{equation*}
+\begin{equation*}
+= | \mathcal{O} (\Delta t^2) |\cdot |\mathcal{O} (\Delta t^2)| + |\mathcal{O} (\Delta t^2)| \cdot| (\mu \hat{\alpha} - ik \hat{\beta}) | \cdot |e^{- |k|x}|
+\leq \mathcal{O} (\Delta t^2) 
+\end{equation*}
+
+Hence overall $\hat{u}$ is second order accurate in time. Similar results shows $\hat{v}$ is second order accurate too. These results hold for all projection methods ($Pm 1 (a), (b)$ and $Pm 2$).\\
+
+The error analysis for pressure is more complicated since the accuracy depends on the particular projection methods.\\
+
+From E (4.12) and E (4.13) we found that
+\begin{equation*}
+\hat{p}^{n+1/2} = Q(z)\hat{\phi}^{n+1} + L\hat{\phi}^{n+1}
+\end{equation*}
+Since $n + 1/2$ is half time step away from $n+1$, hence $\hat{p}^{n+1} = z^{1/2} \, \hat{p}^{n+1/2}$. Dropping the $n+1/2$ index we obtain an equation relating the pressure and the scalar potential ($\phi$) resulted from the projection\\
+\begin{equation}
+\hat{p} = z^{1/2} \, (Q(z) + L)\hat{\phi}
+\end{equation}
+This equation is the Fourier transformed Pressure update formula and hence governs the accuracy of pressure. The choice of $Q(z)$ and $L$ varies between projection methods and they must be chosen carefully to ensure second order accuracy.\\
+
+Let's consider the 3 projection methods separately.\\
+1. $Pm\,1 \, (a)$\\
+This corresponds to $q = p^{n-1/2}$, $L = I$ and $\mathcal{B} = 0 \, (\hat{B} = 1)$. The boundary condition for $\textbf{u}^{n+1}$ is satisfied exactly. Substituting this into the previous equations leads to
+\begin{equation*}
+\hat{q} = Q(z)\,\hat{\phi} = \hat{p}^{n-1/2} = \dfrac{1}{z^{3/2}}\,\hat{p} = \dfrac{1}{z^{3/2}} \, z^{1/2} (Q(z) + 1) \hat{\phi}
+\end{equation*}
+\begin{equation*}
+\Rightarrow Q(z) = \dfrac{1}{z} (Q(z) + 1)
+\end{equation*}
+Hence we obtain a simple expression for $Q(z)$
+\begin{equation}
+Q(z) = \dfrac{1}{z-1}
+\end{equation}
+and therefore
+\begin{equation}
+\hat{p} = \dfrac{z^{3/2}}{z-1} \, \hat{\phi} = \dfrac{z^{3/2}}{z-1}\, A_1 e^{-|k|x} + \dfrac{z^{3/2}}{z-1} \, A_2 e^{-\gamma x}
+\end{equation}
+It is obvious that this formula would result in a degraded accuracy because it contains the spurious mode $A_2 e^{-\gamma x}$. The spurious mode is:
+\begin{equation*}
+- \, \dfrac{(\bar{\mu} \hat{\alpha} - ik \hat{\beta})\,(\bar{\mu} + |k|)}{\gamma Re \rho R(z)}
+\end{equation*}
+
+Because this term will not converge to zero and hence the pressure in $Pm \, 1\,(a)$ will remain less than second order accurate. In fact, as proved in \emph{Brown et. al 2001} paper \cite{brown2001accurate}, $\dfrac{z^{3/2}}{z-1}\,A_2 \,e^{-\gamma x} \sim \mathcal{O} (\Delta t)$ and hence pressure will actually be first order accurate.\\
+\textbf{I am not totally sure how Brown proved $\dfrac{z^{3/2}}{z-1}\,A_2 \,e^{-\gamma x} \sim \mathcal{O} (\Delta t)$. Maybe this is to do with $\gamma$? ($\gamma^2 = k^2 + \dfrac{2Re}{\Delta t}F$). But the degradation in accuracy is clear. }\\
+
+2. $Pm \, 1\,(b)$. The pressure approximation and boundary condition for $\textbf{u}^*$ are the same with $Pm\,1\,(a)$ however in this case we are using the more accurate pressure update formula. 
+
+\begin{dmath}
+\hat{p} = z^{1/2}\,(Q(z) + 1)\,A_1\,e^{-|k|x}
+= \dfrac{z^{3/2}}{(z-1)} \dfrac{1}{R(z)} \dfrac{(\bar{\mu} + |k|)\,(\bar{\mu} \hat{\alpha}  -ik \hat{\beta})}{Re\,|k|}\,e^{-|k|x}
+\end{dmath}
+
+with $R(z) = \dfrac{2z(1+Q(z))}{1+z} = dfrac{2z^2}{z^2 - 1}$ we obtain:\\
+
+\begin{equation}
+\hat{p} = \dfrac{z+1}{2z^{1/2}}\,\dfrac{(\bar{\mu} + |k|)\,(\bar{\mu} \hat{\alpha}  -ik \hat{\beta})}{Re\,|k|}\,e^{-|k|x}
+\end{equation}
+
+and then we know
+\begin{equation*}
+|\,\hat{p}_{nu} - \hat{p}_{ex}\,| =|\, \dfrac{z+1}{2 z^{1/2}} \dfrac{(\bar{\mu} + |k|)\,(\bar{\mu} \hat{\alpha}  -ik \hat{\beta})}{Re\,|k|} - \dfrac{(\mu + |k|)\,(\mu \hat{\alpha}  -ik \hat{\beta})}{Re\,|k|}\,|
+\end{equation*}
+By using a Taylor series expansion we find that $\dfrac{z+1}{2z^{1/2}} = 1 + \mathcal{O}(\Delta t^2)$ and combine the result that $\bar{\mu} = \mu + \mathcal{O}(\Delta t^2)$, it is straightforward to show that $\hat{p}_{nu} = \hat{p}_{ex} + \mathcal{O}(\Delta t^2)$
+
+Hence here we have proved that by eliminating the spurious mode, the new pressure update formula used in $Pm\,1(b)$ indeed proves second order accuracy in pressure.\\
+
+Does the same result hold for $Pm\,2$ where the same formula for pressure is used? Well the answer is yes but we need to pay attention to the boundary conditions of the projection ($\mathbb{B}$ and $C$).\\
+
+Since pressure is not involved in the update of solutions ($q = 0$) leads to $Q(z) = 0$. The transformed version is
+\begin{equation}
+\hat{p} = z^{1/2}\,\hat{\phi}_1 = z^{1/2}\,A_1\,e^{-|k|x}
+\end{equation}
+which again eliminates the spurious mode.\\
+
+We want the coefficient $A_1$ be at least second order accurate compared to the coefficient for the reference pressure solution. As shown by our previous analysis, all the boundary conditions suffices here. However better approximation to $\phi^{n+1}$ leads to a decrease in size of error. More importantly as noted by many researchers including Brown and Strikwerda enforcing $\textbf{$\tau$}\cdot\phi^{n+1}$ to be zero causes non-smoothness for $\textbf{u}^*$ along the boundary because $\textbf{u}^*$ is not a second order approximation to $\textbf{u}^{n+1}$ now \cite{strikwerda1999accuracy}. This is supported by our numerical results in Chapter 6 section: ``Necessity for accurate approximation to $\phi^{n+1}$".\\
+
+Hence we have demonstrated that the error bounds can be second order for all the projection methods considered provided the better pressure approximation formula is used.\\
+
+\subsection{Normal mode analysis of Gauge method}
+In this subsection, the accuracy of the Gauge method is explored. We will demonstrate that the introduction consistent update of Gauge variable lead to significant improvement over the accuracy in pressure simulations.\\
+
+For simplicity let's take the periodic channel analysed for Projection methods before. The geometry is the same and hence we take the same boundary conditions for analytical velocities ($\textbf{u}$).\\
+Recall the semi-discretised Gauge formulation for the linearised Stokes equations:
+\begin{dgroup}
+\begin{equation}
+\dfrac{m^{n+1} -m^n}{\Delta t} = \dfrac{1}{2} \nabla^2\left(m^{n+1} + m^n\right)
+\end{equation}
+\intertext{\\
+By the periodic geometry,the boundaries at $y = 0,\,2\pi$ are periodic. Only the Dirichlet boundary at $x=0$ needs to be specified. At this boundary, the x direction is normal and the y direction is tangential. Hence we have\\
+}
+\begin{dmath}
+u(0,y,t) = \alpha(y,t) \condition{   and $v(0,y,t) = \beta(y,t)$}
+\end{dmath}
+\begin{dmath}
+m_1(0,y,t) = \alpha(y,t) \condition{   and $m_2(0,y,t) = v(0,y,t) + \partial_y \chi (0,y,t)$}
+\end{dmath}
+\intertext{\\
+Performing projection\\
+}
+\begin{dmath}
+\nabla^2 \chi^{n+1} = \nabla \cdot \textbf{m}^{n+1} \condition{   with $\partial_x \chi^{n+1} = 0$}
+\end{dmath}
+\begin{dmath}
+\textbf{u}^{n+1} = \textbf{m}^{n+1} - \nabla \chi^{n+1}
+\end{dmath}
+\intertext{\\
+By making the normal boundary condition the same for the Gauge variable and velocity $\textbf{u}^*$, we obtain a zero Neumann boundary condition for the auxiliary field $\chi^{n+1}$. Similar to the projection method, this is one of the most common boundary condition for auxiliary fields.}
+\end{dgroup}
+
+Again the Reynolds number is made to be 1 for simplicity.\\
+Because the Gauge variable $\textbf{m}$ is being updated consistently, hence like velocities and pressure we have a nice relationship between the Gauge variables calculated at different time iterations: $\textbf{m}^{n+1} = z \textbf{m}^n$ (where $z$ again is the discrete Laplace transform variable). This was not possible for the intermediate velocity field shown in the projection methods because it is rather discarded after each iteration. We cannot really locate the variable in time and thus makes the tracking of its errors difficult.\\
+
+In this case, we can solve the Gauge variables directly by performing Laplace and Fourier transforms.\\
+\begin{equation*}
+\dfrac{\hat{\textbf{m}} - \dfrac{\hat{\textbf{m}}}{z}}{\Delta t} = \dfrac{1}{2}\left(\partial_x^2 - k^2 \right)
+\left(\hat{\textbf{m}} + \dfrac{\hat{\textbf{m}}}{z} \right)
+\end{equation*}
+After rearranging and define $\bar{\mu} = k^2 + \rho$ where $\rho = \dfrac{2(z-1)}{\Delta t \,(z+1)}$, the transformed momentum equations (in components) are:
+
+\begin{dgroup}
+\begin{dmath}
+\left( \partial^2_x - \bar{\mu}^2 \right) \, \hat{m}_1 = 0
+\end{dmath}
+\begin{dmath}
+\left( \partial^2_x - \bar{\mu}^2 \right) \, \hat{m}_2 = 0
+\end{dmath}
+\end{dgroup}
+Solving these 2 ordinary differential equations we obtain an expression for $\hat{textbf{m}}$:
+\begin{dgroup}
+\begin{dmath}
+\hat{m}_1 = A_1\,e^{-\bar{\mu} x}
+\end{dmath}
+\begin{dmath}
+\hat{m}_2 = A_2\,e^{-\bar{\mu} x}
+\end{dmath}
+\end{dgroup}
+where $A_1$ and $A_2$ are constants to be determined.\\
+Note that unlike the intermediate velocities in Projection methods, the Gauge variable actually does not contain any spurious mode! This would indeed lead to an improved accuracy since there is no numerical boundary in $\textbf{m}$.\\
+This in turn guarantees the auxiliary field is also free of spurious modes. It is solved by the compatibility condition (\textbf{equation ()}):
+\begin{equation}
+\left(\partial_x^2 - k^2 \right)\,\hat{\chi} = \partial_x \hat{m}_1 + ik\hat{m}_2
+\end{equation}
+which then leads to an expression of $\hat{\chi}$ as:
+\begin{dmath}
+%\hat{\chi} = \dfrac{1}{\rho} \left(P\,e^{-|k|\,x} - \bar{\mu} \hat{m}_1 + ik\hat{m}_2 \right)
+%= \dfrac{1}{\rho} \left(P\,e^{-|k|\,x} - A\,\bar{\mu} e^{-\bar{\mu} x} + ik\,B\,e^{-\bar{\mu} x} \right)
+\hat{\chi} = P e^{-|k|x} + \dfrac{(-\bar{\mu}A_1 + ikA_2)}{\rho}e^{-\bar{\mu}x}
+\end{dmath}
+
+The velocities and pressure can then be recovered using the compatibility condition and the Gauge update formula respectively.\\
+
+\begin{dgroup}
+\begin{dmath}
+\hat{u} = \hat{m}_1 - \partial_x \hat{\chi} = |k|Pe^{-|k|x} + \dfrac{\left(-k^2A_1 + ikA_2\bar{\mu} \right)}{\rho}e^{-\bar{\mu}x}
+\end{dmath}
+\begin{dmath}
+\hat{v} = \hat{m}_2 - ik \hat{\chi} = -ikPe^{-|k|x} + \dfrac{\left(A_2\bar{\mu}^2 + ikA_1\bar{\mu} \right)}{\rho}e^{-\bar{\mu}x}
+\end{dmath}
+\end{dgroup}
+The pressure can be recovered using the transformed Pressure update formula:
+\begin{equation*}
+\dfrac{\hat{p}}{\sqrt{z}} = \dfrac{1}{\Delta t}\left(1 - \dfrac{1}{z} \right)\,\hat{\chi} - \dfrac{1}{2} \left(\partial_x^2 - k^2\right)\left(1 + \dfrac{1}{z}\right)\,\hat{\chi}
+\end{equation*}
+Leading to 
+\begin{equation}
+\hat{p} = \dfrac{z+1}{2\,z^{1/2}}\left(\rho\,Pe^{-|k|x}\right)
+\end{equation}
+Unlike in projection method, the spurious mode must be eliminated with special pressure update formulas, the velocities and pressure in Gauge method naturally leads to the exclusion of spurious modes. Hence this demonstrates that no numerical boundary layers are formed in Gauge method. This is also confirmed by our numerical studies presented in Chapter 6.\\
+
+Equipped with the boundary conditions given, we can then solve for the undetermined coefficients in the solutions above. \\
+
+Normal component:
+\begin{equation}
+\hat{m}_1 \,|_{x=0} = \hat{u}\, |_{x=0} = \hat{\alpha}
+\end{equation}
+
+The tangential boundary condition for $\hat{textbf{m}}$ needs more attention, because by compatibility condition, solving $\textbf{m}^{n+1}$ requires the knowledge of $\chi^{n+1}$ which we don't have access yet:
+\begin{equation}
+\hat{u}\,|_{x=0} = \hat{m}_2\,|_{x=0} - ik \hat{\chi}^{n+1}\,|_{x=0} = \hat{\beta}\,\,\,\text{   exact relation}
+\end{equation}
+An approximation to $\hat{\chi}^{n+1}$ is needed and similar to the projection methods, we use the same function: $\hat{B}$ to represent the different approximations.\\
+%\begin{equation*}
+%\hat{B} = 1,\,\dfrac{1}{z},\,\dfrac{2z-1}{z^2}\,\,\, \text{   for 
+%\end{equation*}
+\begin{equation}
+\hat{m}_2\,|_{x=0} = \hat{u}\,|_{x=0} + ik \hat{B}\hat{\chi}^{n+1}\,|_{x=0} \,\,\,\text{   actual boundary condition used in practice}
+\end{equation}
+Combine \textbf{equation () and ()} we get:
+\begin{equation}
+\hat{u}\,|_{x=0} + ik \hat{\chi}\,(\hat{B}-1)\,|_{x=0} = \hat{\beta}
+\end{equation}
+
+Same problem in regarding to the choice of auxiliary field approximation function $\hat{B}$. We can choose no approximation to $\chi^{n+1}$ which corresponds to $\hat{B} = 1$. This is artificially enforcing the Gauge variable and the velocities to be equal at all boundaries. This as noted by many researchers including \emph{strikwerda, Brown} that this would introduce non-smooth along boundary as the Gauge variable (or the intermediate velocity in $Pm\,2$) is not be a close approximation to the velocities \cite{strikwerda1999accuracy, brown2001accurate}. This choice of tangential boundary condition for $\textbf{m}$ lead to degraded accuracy in velocities and pressure. There is a nice proof by Strikwerda in \cite{strikwerda1999accuracy} about the neccessity for tangential boundary conditions. Later we will demonstrate this through numerical tests.\\
+
+Now because the tangential boundary condition for $v$ is not exactly satisfied in the projection step (see \textbf{equation ()}), we need to ensure it approaches $\beta$ along the boundary at a second order rate. Hence second order approximation to $\phi^{n+1}$ is needed and this corresponds to $\hat{B} = \dfrac{2z-1}{z^2}$ (For $Pm\,2$ first order approximation to $\phi^{n+1}$ is sufficient since the approximation term is a multiplied with $\Delta t$ by the compatibility equation).\\
+
+Hence along the boundary (taking $x=0$) we note the Gauge variables must satisfy:
+\begin{dgroup}
+\begin{dmath}
+A_1 = \hat{\alpha} \condition{   $m_1$ at $x=0$}
+\end{dmath}
+\begin{dmath}
+A_2 - ik\left(\dfrac{2z-1}{z^2}\right)\left(P + \dfrac{(-\bar{\mu}A_1 + ikA_2)}{\rho} \right) = \hat{\beta}
+\end{dmath}
+\end{dgroup}
+
+Further because the auxiliary field satisfies a zero Neumann normal boundary condition ($\partial_x\hat{\chi} = 0$) hence we have:
+\begin{equation}
+\bar{\mu}^2A_1 - ik\bar{\mu}A_2 - |k|\rho\,P = 0
+\end{equation}
+
+Summaries these conditions we can solve for $A_1,\,A_2$ and $P$ directly:
+\begin{equation}
+\begin{bmatrix}
+\bar{\mu}^2 & -ik\bar{\mu} & -|k|\rho \\
+ik\bar{\mu}\hat{B}(z) & \left(\rho + k^2\hat{B}(z)\right) & -ik\hat{B}(z)\rho\\
+1 & 0 & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+A_1\\
+A_2\\
+P\\
+\end{bmatrix}
+= \begin{bmatrix}
+0\\
+\hat{\beta}\rho\\
+\hat{\alpha}\\
+\end{bmatrix}
+\end{equation}
+where $\hat{B}(z) = \dfrac{2z-1}{z^2}$. Further it can be shown by a Taylor expansion argument that $\dfrac{1}{\hat{B}(z)} = \dfrac{z^2}{2z-1} = 1 + \mathcal{O}(\Delta t^2)$. Substitute this back into the linear system above (Equation 5.78) and then we can solve for $A_1,\,A_2$ and $P$ easily.
+
+\begin{dgroup}
+\begin{dmath}
+A_1 = \hat{\alpha}
+\end{dmath}
+\begin{dmath}
+A_2 = \dfrac{\bar{\mu}^2\hat{\alpha} - (\bar{\mu} + |k|)(\bar{\mu}\hat{\alpha} - ik\hat{\beta})}{ik\bar{\mu}} + \mathcal{O}(\Delta t^2)
+\end{dmath}
+\begin{dmath}
+P = \dfrac{(\bar{\mu} + |k|)(\bar{\mu}\hat{\alpha} - ik\hat{\beta})}{\rho \,|k|} + \mathcal{O}(\Delta t^2)
+\end{dmath}
+\end{dgroup}
+
+The numerical solutions can then be recovered using Equation 5.70 and 5.71 by directly substituting $A_1,\,A_2$ and $P$ into the expressions for $\hat{u}, \,\hat{v}$ and $\hat{p}$.
+\begin{equation}
+\begin{cases}
+\hat{u}_{nu} = \left(\dfrac{(\bar{\mu}+|k|)(-|k|\hat{\alpha}+ik\hat{\beta})}{\rho} + \mathcal{O}(\Delta t^2) \right)e^{-\bar{\mu}x} + \left(\dfrac{(\bar{\mu} + |k|)(\bar{\mu}\hat{\alpha} - ik\hat{\beta})}{\rho} + \mathcal{O}(\Delta t^2) \right)e^{-\bar{\mu}x}\\
+\hat{v}_{nu} =  \left(\dfrac{i\bar{\mu}(\bar{\mu} + |k|)\,\left(- \dfrac{k}{|k|}\hat{\alpha}+i\hat{\beta}\right)}{\rho} +\mathcal{O}(\Delta t^2)\right) e^{-\bar{\mu} x} +  \left(\dfrac{-ik(\bar{\mu} + |k|)(\bar{\mu}\hat{\alpha} - ik\hat{\beta})}{\rho|k|} +\mathcal{O}(\Delta t^2)\right) e^{- |k| x} \\
+\hat{p}_{nu} = \dfrac{z+1}{2z^{1/2}}\,\left(\dfrac{(\bar{\mu} + |k|)(\bar{\mu}\hat{\alpha} - ik\hat{\beta})}{|k|} + \mathcal{O}(\Delta t^2) \right)e^{-\bar{\mu}x}\\
+\end{cases}
+\end{equation}
+where $nu$ denotes ``numerical" to distinguish from the analytical solutions in Equation 5.9.\\
+
+Now recall from the subsection Projection methods, we have shown that $\rho = s + \mathcal{O} (\Delta t^2), \, \bar{\mu} = \mu + \mathcal{O} (\Delta t^2)$ and $\dfrac{z+1}{2z^{1/2}} = 1 + \mathcal{O} (\Delta t^2)$. Hence it is straightforward to show that the coefficients in the numerical solutions above are of second order accuracy to that of the analytical solutions presented in Equation 5.9.\\
+
+Hence with the Gauge variable tangential boundary equals to $\textbf{$\tau$}\cdot\left(\textbf{u}^{n+1} + (2\chi^n - \chi^{n-1})\right)$, the Gauge method shows completely second order accuracy in both velocities and pressure. Also because neither the Gauge variable and the auxiliary field contains spurious modes, hence there is no special formula needed to filter out the numerical boundary layers as in Projection methods. This means the error convergence does not depend on the domain and boundary conditions as much as the projection methods which has fully second order accuracy only in periodic domains. The Gauge method exhibits the same order of accuracy in general domains too (see Shen' paper \cite{pyo2005normal,guermond2006overview} for details of proof).

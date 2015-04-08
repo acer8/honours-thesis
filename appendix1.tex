@@ -1,0 +1,28 @@
+
+\chapter{Error analysis for first order Projection Methods}
+\label{appendix1}
+
+\newpage
+
+\section{Error analysis on Chorin's original projection method}
+
+\subsection{Notation and Preliminaries}
+\begin{itemize}
+\item Functional spaces
+\end{itemize}
+1. $\textit{L}^p$ space\\
+A space of $p$th power integrable functions. (space for which the p-th power of the absolute value is Lebesgue integrable). $\textbf{should I give a very precise and formal definition?}$\\
+
+2. Sobolev space\\
+A subspace of $\textit{L}^p$ in which the functions contained has the property that its weak derivatives up to kth order has finite $\textit{L}^p$ norm.
+\begin{equation}
+||f||_{k,p} = (\sum^k_{i=0} \int_{\Omega} |f^{(i)} (x)|^p dx)^{\dfrac{1}{p}} 
+\end{equation}
+
+In this case we are concerned with the $\textit{L}^2 (\Omega) $ space (space of square integrable functions on bounded regular domain $\Omega \subset \mathbb{R}^d$ where $d=1,2,3$) and Sobolev space up to derivative one ($\textit{H}^1 (\Omega)$).\\
+Hence we have the following norms:
+%\begin{dgroup}
+%\intertext{$\textit{•}^2$ space norm
+%\begin{dmath}
+
+

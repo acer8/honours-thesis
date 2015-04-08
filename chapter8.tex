@@ -1,0 +1,16 @@
+
+\chapter{Conclusions}
+\label{chapter8}
+In this thesis, we have examined robust Projection method to the numerical solutions of Incompressible Navier Stokes equations. We have talked about the origin of the method which is based on the idea of Helmholtz Hodge decomposition theorem. We have described the Chorin's original method and the second order extensions as well as the Gauge method. We have analysed these methods' accuracy through normal mode analysis. In a periodic channel domain,(following Brown's analysis) our normal mode analysis is predicting second order accuracy for all projection methods. This is also consistent with our numerical results. However further analysis could be done in a more general domain because normal mode analysis is restricted on the domain we work with and the error convergence might behave differently too \cite{pyo2005normal}. 
+
+In summary:
+\paragraph*{We observe that the Gauge method} shows fully 2nd order convergence in Pressure in all examples and domains considered whereas Projection methods show a degraded accuracy in some examples (see Unforced flow example in Results chapter). 
+We observe that the Projection methods depends strongly on the smooth of domain (especially for Alg 2 with a lagged pressure approximation used). The exact cause of this problem still remains open (\cite{guermond2004error}). This finding is consistent with Shen et.al where they have bounded the $L_2$ norm of Pressure error to be only 1.5 order accurate in general domains (e.g. the square domain with Dirichlet boundary conditions we have considered in the Forced flow example). For details of the proof see \cite{guermond2004error, pyo2005normal}. In the case of periodic channel, all projection methods show 2nd order accuracy in pressure. This is consistent with the predications of error estimates by our normal mode analysis done in previous chapter where a periodic channel domain was considered. 
+
+\paragraph*{Necessity for accurate boundary condition} of the tangential component of the intermediate velocity field ($\textbf{u}^*$).
+We have observed that second order approximation $\phi^{n+1}$ is needed when computing $\textbf{$\tau$}\cdot\textbf{u}^*$ in the projection step. This is consistent with our normal mode analysis predications and findings of other researchers too \cite{brown2001accurate}.
+
+\paragraph*{Modification to pressure approximation in Alg 2}
+We have observed that the inconsistent normal pressure gradient in Alg 2 is caused by an inappropriate choice of pressure approximation $q$ used. This introduces non-smooth along the boundary of pressure gradients. This is more evident when the test problems have non-zero pressure gradients. However with a modified $q = 2\phi^{n-1/2} - \phi^{n-3/2}$, we restore fully second order convergence in pressure. The exact reason of this improvement however still subject to more careful considerations.
+
+\paragraph*{Further research} could be looking at flow in general domain and complex geometry, Interface problems. Finite element could also to be used too. We are also interested in higher order schemes e.g. 4th 6th order schemes using compact finite difference.

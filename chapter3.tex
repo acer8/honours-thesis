@@ -1,0 +1,140 @@
+\chapter{Properties of Navier Stokes Equations}
+\label{chapter3}
+
+\section{Navier Stokes Equations as initial value problem}
+Talk about the weak form of NSE
+
+\begin{itemize}
+\item NSE is scale invariant, Picard contraction principle
+\end{itemize}
+
+\section{Stokes equations}
+Stokes equations are essentially the linearised Navier Stokes Equations. It is when the advective inertial force is very small compared to viscous force ($\textbf{Citation needed!}$). Hence it describes a very viscous flow with Reynolds number << 1.\\
+
+Due to its simplicity it is often used in proving uniqueness and existence of solutions\\
+($\textbf{citation needed, this part not sure}$ as well as error analysis of numerical solvers \cite{shen1992error,brown2001accurate}.\\
+
+The Stokes equations:
+\begin{dgroup}
+\begin{dmath}
+\mu \nabla^2 \textbf{u} - \nabla p = f
+\end{dmath}
+\intertext{where $\mu$ is the dynamic viscosity and $f$ is a forcing representing an external force, such as Gravity.\\
+With the usual divergence constraint}
+\begin{dmath}
+\nabla \cdot \textbf{u} = 0
+\end{dmath}
+\end{dgroup}
+
+If we replace the operators with its numerical discretisations then we can write Stokes Equations in block matrix form.\\
+
+\begin{center}
+Let's $A$ denote the Stokes operator:
+\begin{equation}
+A = \mathbb{P} (\mu \nabla^2 \textbf{u})
+\end{equation}
+\end{center}
+where $\mathbb{P}$ is the projection operator which projects vector fields into the divergence free vector fields. We will study this in detail in Chapter 4.
+
+\begin{center}
+Let $D$ denote the divergence operator which basically approximates the divergence $\nabla \cdot$.\\
+By construction $D$ is skew adjoint such that 
+\begin{equation}
+D = -G^T
+\end{equation}
+where $G$ is the gradient operator.
+\end{center}
+
+Hence we can rewrite the Stokes equations as:
+\begin{dgroup}
+\begin{dmath}
+Au + D^T p = f
+\end{dmath}
+\begin{dmath}
+Du = 0
+\end{dmath}
+\end{dgroup}
+and in block matrix form:
+\begin{equation}
+\begin{bmatrix}
+A & D^T \\
+D & 0\\
+\end{bmatrix}
+= \begin{bmatrix}
+\textbf{u}\\
+\textit{p}
+\end{bmatrix}
+= \begin{bmatrix}
+\textit{F}\\
+0
+\end{bmatrix}
+\end{equation}
+
+
+\section{Role of Pressure}
+Pressure is a rather mysterious variable.\\
+We can approach the Navier Stokes Equations from an optimisation point of view.\\
+
+First we will cover some background of optimisation.\\
+
+Suppose we have an objective function $J (\textbf{x}$ with $\textbf{x} \in L^2 (\Omega)$ (e.g. $\mathbb{R}$) subject to a constraint $g(\textbf{x}) = c$.\\
+We want to optimise (to maximise or minimise) $J (\textbf{x}$ given $g(\textbf{x}) = c$.\\
+
+We could use the Lagrange optimisation approach. \\
+The extrema of $J$ occurs at a point where it should not increase or decrease in any direction near the contour line $g (\textbf{x} = c$. Hence this is only possible if the gradient of $J$ is parallel to the gradient of $g$, or we have $\nabla J = 0$. Based on this observation we can define an auxiliary Lagrangian function as:
+
+
+\begin{equation}
+\Lambda (\textbf{x}, \lambda) = J (\textbf{x}) + \lambda (g (\textbf{x}) - c)
+\end{equation}
+where $\lambda \in \mathbb{R}$ is a constant called Lagrangian multiplier.\\
+Hence we can find the extrema of $J$ by finding the critical points of the Lagrangian function
+\begin{dmath}
+\nabla \Lambda = 0
+= \nabla J (\textbf{x}) + \lambda \nabla g (\textbf{x})
+\end{dmath}
+By solving a simultaneous equations for $\lambda$ and $\textbf{x}$ we can recover the extrema of $J$ subject to the constraint $g$.\\
+
+For Navier Stokes Equations and especially the linearised Stokes equations, we can treat this as an optimisation problem.\\
+
+We want to minimise the kinetic energy of the fluid (the objective function) subject to the divergence constraint.
+\begin{dgroup}
+\intertext{minimise}
+\begin{dmath}
+J = \dfrac{1}{2} ||A \textbf{u}||^2 - F^T \textbf{u}
+\end{dmath}
+\intertext{\textbf{need to double check this!}\\
+subject to the divergence constraint}
+\begin{dmath}
+D \textbf{u} = 0
+\end{dmath}
+\end{dgroup}
+Hence the Lagrangian function is:
+\begin{equation}
+\Lambda (\textbf{u}, \lambda) = \dfrac{1}{2} ||A \textbf{u}||^2 - F^T \textbf{u} + \lambda D \textbf{u} 
+\end{equation}
+
+By taking $\nabla \Lambda = 0$ we obtain:
+\begin{dmath}
+A \textbf{u} - F + D^T \lambda = 0
+\end{dmath}
+and combine with the divergence constraint we obtain (in block matrix form):
+
+\begin{equation}
+\begin{bmatrix}
+A & D^T \\
+D & 0\\
+\end{bmatrix}
+= \begin{bmatrix}
+\textbf{u}\\
+\lambda
+\end{bmatrix}
+= \begin{bmatrix}
+\textit{F}\\
+0
+\end{bmatrix}
+\end{equation}
+Hence it is obvious that the pressure variable is actually the Lagrange multiplier of the optimisation problem.
+$\textbf{need further reading to extend this idea!}$
+
+

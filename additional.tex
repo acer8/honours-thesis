@@ -1,0 +1,63 @@
+Chapter 2
+NSE initial value problem 
+
+\section*{Direct and iterative methods}
+$\textbf{Plan}$\\
+section 2.1\\
+Talk about coupled nature of NSEs.\\
+The velocity and pressure are coupled by the continuity constraint.\\ 
+Could also talk about the pressure stabilisation methods and earlier works.\\
+$\textbf{talk about the cost of operations between full coupled and decoupled methods!}$
+Pressure as Lagrange Multipliers ($\textbf{See HHD for NSEs)}$)
+Direct: Stokes like problems (huge computational cost)\\
+Projection method was also independently introduced by Temam.
+We only consider the vanishing normal boundary condition from now on\\
+However Chorin only showed first order accuracy on pressure
+Original paper: 1st order accuracy.
+
+Stability analysis of projection methods.
+
+Prove laplace \textbf{b} = \textbf{r} with Dirichlet boundary condition has unique solution.
+(Thesis page 28) Discrete Projection operator: D = -G^T Skew adjoint
+Look at functional spaces they are useful in chapter 1 characterisation of Navier Stokes equations
+
+intermediate velocity satisfies the boundary but not divergence free while the projected velocity is divergence free but do not satisfy the boundary condition.
+This is because by HHD: only one component of the boundary is required and hence the projected velocity \in H may not satisfy the required boundary condition for fluid velocity, e.g. Homogeneous boundary condition, depends on the flow problem.
+
+Idea: Consider HHD as an orthogonal projection from $V$ to $H$, prove Linearity, Idempotent properties of HHD\\
+My concern: even though HHD is unique with only one boundary component is specified, but from David Brown's paper, both normal and tangential components are needed to be specified to ensure high order accuracy of the pressure update.
+
+Confused ask Steve: Also this results in an extra compatibility constraint similar to the physical constraint: $\int_{\partial \Omega} \textbf{u} \cdot \textbf{n} = 0$. This extra constraint is added to the right hand of Poisson pressure equation and can result in marked oscillations in low Mach number process [9,10,18]. 
+
+Change every triangle to Delta and every Delta to divergence squared!
+
+prove \mathbb{P} is self adjoint and symmetric
+
+This decoupling in local grids is more evident when E[2.33] is expressed in a concise matrix form below.
+%\begin{equation*}
+% matrix of one subgrid
+%\end{equation*}
+
+Second order Projection methods: mention: Crank-Nicholson and centred difference were used, but many other methods could also be implemented: second order back differing... Shen Normal mode analysis paper
+
+Also describe the Gauge method too!
+
+Mention that the accuracy in pressure is still an open question, our analysis does not consider the specific functional setting (it is just a simple illustration).
+
+Ask Steve: \textbf{for the laplace transform variable $s$, can I choose the real part of $s$ > 0?}
+Used in proving $\dfrac{z - 1}{z} = |s| \Delta t$
+
+Ask Steve: is n \cdot \textbf{u} = v or u? Is it correspond to y or x direction?
+what is n \cdot \nabla \phi, \dfrac{d \phi}{d y}?
+2.3 Numerical discretisation
+CFL condition
+%________________________
+
+One 1. Chapter 4: mention that in practice n * u \neg 0, so the orthogonality and hence uniqueness and existence of the decomposition is subject to question, 2 successive Poisson equations to solve, but too expensive. 
+Chapter 5: there is a typo in the coefficient of A2! (p71)
+Set Re = 1 this confuses with Real part of complex number
+numerical boundary layer: Pm1: n * gradient of p is the same for all time steps
+
+Two 2. Chapter 6: [-1,1] work bad for Pm1 a, 4 spikes on error field, div uv* show large jump large numerical layer leading to high 
+
+Three 3. Chapter 5: ask Steve, why \gamma with \Delta t in the denominator causes numerical boundary layer?

@@ -1,0 +1,640 @@
+optional: find \textbf{size of water molecule}
+
+Heisenberg uncertainty principle, P6, 2.12
+
+graph of density over volume, same page
+
+The \textbf{Continuum hypothesis was first proposed by.} 
+
+Chapter 4
+Any smooth vector field can be uniquely decomposed into the sum of gradient vector field and divergence free vector field such that it is parallel to the boundary \cite{chorin1990mathematical,maria2003application}.\\
+
+The Theorem: For 2D or 3D spatial problems
+Let $\Omega$ denote a bounded regular domain (on a compact Riemannian manifold, the decomposition redueces to the classical Hodge decomposition \cite{maria2003application}). For instance, a bounded subspace of $\textbf{$R^2$}$ or $\textbf{$R^3$}$. Regularity or smoothness is required so that classical calculus like differentiation and integration can be applied over the domain \cite{maria2003application,chorin1990mathematical}.\\ 
+Let $\textit{$L^2$} (\Omega)$ denote the space of $\textit{$L^2$}$ integrable vector functions on domain $\Omega$ with the standard $\textit{$L^2$}$ inner product. Let the subspaces $\textit{V}$ and $\textit{H}$ denote the range and kernel of the decomposition respectively.\\
+Then, for any vectors $\textbf{w} \in \textit{$L^2$} (\Omega)$, it can be uniquely decomposed \cite{chorin1990mathematical,maria2003application,brown2001accurate} into the sum of curl free vector field ($\textbf{w}_1 \in \textit{V}$) (for instance gradient vector field) and divergence free vector field ($\textbf{w}_2 \in \textit{H}$) such that the divergence free vector field is parallel to the boundary $\partial \Omega$\\
+The theorem can also be stated alternatively, any smooth vector field in a bounded regular domain $\textbf{w} \in \textit{$L^2$} (\Omega)$ can be uniquely determined if its divergence, curl and normal (or tangential) boundary condition is specified \cite{maria2003application}.\\
+
+The decomposition is essentially a linear transformation from $\textit{V} \to \textit{H}$.\\
+Furthermore the space is complete (a Hilbert space) and the HHD decomposition is an orthogonal decomposition in the sense that the subspaces $\textit{V}$ is orthogonal to $\textit{H}$ provided the $\textit{L}^2$ inner product \cite{maria2003application}. This result is immediate from the condition that the decomposed solenoid part is parallel to the boundary surface.\\
+
+HHD:
+Let $\Omega$ be a bounded regular domain of $\mathbb{R}^3$ (or $\mathbb{R}^2$), let $\textit{L}^2 (\Omega)$ denote the space of $\textit{L}^2$ integrable vector functions on $\Omega$ with the standard $\textit{L}^2$ inner product, and
+V and H are two orthogonal subspaces of $\textit{L}^2 (\Omega)$ such that $\textit{L}^2 (\Omega)$ = V $\oplus$ H. Then\\
+$\forall \textbf{w} \, \in \, \textit{L}^2 (\Omega), \, \exists \, \textbf{w}_1 \in V \, \text{and} \, \textbf{w}_2 \in H$ such that
+
+The decomposition is essentially a linear transformation from $\textit{V} \to \textit{H}$.\\
+Furthermore the space is complete (a Hilbert space) and the HHD decomposition is an orthogonal decomposition in the sense that the subspaces $\textit{V}$ is orthogonal to $\textit{H}$ provided the $\textit{L}^2$ inner product \cite{maria2003application}. This result is immediate from the condition that the decomposed solenoid part is parallel to the boundary surface.\\
+
+Because by Helmholtz theorem $\textbf{w}$ is uniquely determined only if its divergence, curl and (one component of) boundary are specified, Therefore the following relations must be specified for $\textbf{w}$. \\
+$\forall \textbf{x} \in \Omega$
+($\textbf{w}$ is essentially a vector function over $\Omega$)
+\begin{dgroup}
+\begin{dmath}
+\nabla \cdot \textbf{w} = \rho
+\end{dmath}
+\begin{dmath}
+\nabla \times \textbf{w} = \textbf{r}
+\end{dmath}
+\intertext{The boundary conditions of $\textbf{w}$ can be specified in two ways:}
+\begin{dmath}
+\textbf{n} \cdot \textbf{w} = w_N \condition{scalar normal component}
+\end{dmath}
+\begin{dmath}
+\textbf{n} \times \textbf{w} = \textbf{w}_T \condition{tangential vector component}
+\end{dmath}
+\intertext{sometimes a different notation to the tangential component is used [3]}
+\begin{dmath*}
+\textbf{$\tau$} \cdot \textbf{w} = w_T \condition{scalar tangential component}
+\end{dmath*}
+\end{dgroup}
+
+Hence, according to the above formulation of the decomposition, the parallel property of $\textbf{w}_2$ ($\textbf{w}_2$ // $\partial \Omega$) can be done in two ways \cite{maria2003application}.\\
+The first method corresponding to Vanishing normal component is more widely used and we have also used this in our numerical schemes. Hence our following analysis is dedicated to the Vanishing normal component projections.\\
+
+\textbf{Vanishing normal component}.\\
+We want the normal component of $\textbf{w}_2$ to be zero over the boundary and this naturally makes $\textbf{w}_2$ to be parallel to the boundary surface of $\Omega$.\\
+Note however the tangential component needs not to be explicitly specified.
+\begin{dgroup}
+\begin{dmath}
+\textbf{n} \cdot \textbf{w}_2 = 0
+\intertext{ $\textbf{n}$ is the unit normal vector to the surface of boundary $\partial \Omega$ }
+\end{dmath}
+\intertext{ $\forall \textbf{x} \in \partial \Omega$\\
+$\Rightarrow$ the normal and tangential component of the original vector $\textbf{w}$}
+\begin{dmath}
+\textbf{n} \cdot \textbf{w} = \textbf{n} \cdot \textbf{w}_1 
+= \textbf{n} \cdot \nabla \phi
+= w_n
+\end{dmath}
+\end{dgroup}
+
+Properties of Projection operator
+$\mathbb{P}$ is self adjoint ($\textbf{I haven't checked this!}$)\\
+$\mathbb{P}$ is idempotent because $\mathbb{P}(\mathbb{P}(\textbf{w})) = \mathbb{P} (\textbf{w})$\\
+$\mathbb{P}$ is linear since $\mathbb{P} (\textbf{w} + \textbf{z}) = \mathbb{P} (\textbf{w}) + \mathbb{P} (\textbf{z})$\\
+$\mathbb{P}$ is also orthogonal by construction\\
+
+\subsection{Effect of Boundary conditions on Helmholtz Hodge Decomposition}
+\begin{itemize}
+\item
+$\textbf{I am still working on this}$\\
+As discussed in section 2.2.1 that a only one component (normal or tangential) of the projected vector field is needed to be explicitly specified in order to obtain the unique Helmholtz Hodge Decomposition (HHD). Hence HHD does not guarantee the projected divergence free vector field ($\textbf{w}_1$) simultaneously accomplish all physical values along the boundary [7]. The question then arises as whether this would affect the accuracy of the projection method on the boundary, or at least would this lead to non-physical types of results?\\
+Hence in this subsection, we begin by exploring the different types of boundary conditions and the corresponding decomposition.
+\end{itemize}
+
+\begin{itemize}
+\item
+Case One: Vanishing normal component for the divergence free vector field.
+\end{itemize}
+We examine the decomposition of Eq. (2.20) based on the vanishing normal boundary condition for $\textbf{w}_2$ given by Eq. (2.3 a). Plugging $\textbf{w} = \textbf{u}^*_t, \, \textbf{w}_1 = \nabla \phi$ and $\textbf{w}_2 = \textbf{u}_t$ this decomposition leads Eq. (2.20).This projection is therefore a true orthogonal  projection. \\
+The approximation to pressure gradient $\phi$ is solved by taking divergence on Eq. (2.20 e). Hence we are solving the Poisson equation with inhomogeneous Neumann boundary condition:
+\begin{dgroup}
+\begin{dmath}
+\Delta \phi = \nabla \textbf{u}^*
+\end{dmath}
+\begin{dmath}
+\dfrac{\partial \phi}{\partial n} = \textbf{u}^*_n
+\end{dmath}
+\end{dgroup}
+
+\begin{itemize}
+\item Boundary condition for the projection\\
+Because the projected velocity is expected to satisfy both the normal and tangential boundary, so the auxiliary field need too.
+\end{itemize}
+
+\begin{itemize}
+\item Case 2: Assigning tangential component.
+\end{itemize}
+Based on Eq. (2.4) by assigning 
+\begin{dgroup*}
+\begin{dmath*}
+\textbf{n} \times \textbf{u}^*_t = \textbf{n} \times (\times \textbf{b}) = \textbf{w}^*_T
+\end{dmath*}
+\intertext{where $\textbf{w}^*_T$ denote the tangential component of field $\textbf{u}^*_t$}
+\intertext{This resulting in}
+\begin{dmath*}
+\textbf{n} \times \nabla \phi = 0
+\end{dmath*}
+\end{dgroup*}
+Hence we have:
+\begin{center}
+$\textbf{w} = \textbf{u}^*_t$, $\textbf{w}_1 = \nabla \phi$, and $\textbf{w}_2 = \textbf{u}_t = \nabla \times \textbf{b}$.
+\end{center}
+where $\textbf{b}$ is a solenoid vector field. Like $\phi$, it is to be determined by solving a Poisson problem.\\
+Therefore the decomposition can be written as:
+\begin{equation}
+\textbf{u}^*_t = \nabla \phi + \nabla \times \textbf{b}
+\end{equation}
+which is a unique decomposition with the pre-specified boundary condition: $\textbf{n} \times \nabla \phi = 0$\\
+We can verify that this decomposition indeed work by applying the Projection operator to $\textbf{u}^*_t$
+\begin{dmath}
+\mathbb{P} (\textbf{u}^*_t) = \nabla \phi + \nabla \times \textbf{b} - \nabla (\nabla \cdot \nabla )^{-1} \nabla \cdot (\nabla \phi + \nabla \times \textbf{b})
+= \nabla \times \textbf{b} + \nabla \phi - \nabla \times \textbf{b} - \nabla (\nabla \cdot \nabla )^{-1} \nabla \cdot \nabla \phi
+= \nabla \times \textbf{b}
+= \textbf{u}_t
+\end{dmath}
+Since the identity $\nabla \cdot (\nabla \times \textbf{b}) = 0$\\
+This decomposition indeed allow the auxiliary field $\textbf{u}^*_t$ to be projected to the divergence free field $\nabla \times \textbf{b}$. It is also an unique HHD as shown in section 2.2.1.\\
+
+The potential divergence free vector field $\textbf{b}$ is solved by taking curl on both sides of Eq. (2.26).\\
+Before we proceed, we define $\nabla \times \textbf{u}^*_t = \textbf{r}^*$\\
+Then curl of Eq. (2.26) is rearranged into
+\begin{dgroup}
+\begin{dmath}
+\textbf{r}^* = \nabla \times (\nabla \phi + \nabla \times \textbf{b})
+= \nabla \times (\nabla \times \textbf{b})
+= - \Delta \textbf{b}
+\end{dmath}
+\begin{dmath}
+\Delta \textbf{b} = - \textbf{r}^*
+\end{dmath}
+\intertext{with the boundary condition below, $\textbf{b}$ can be solved uniquely}
+\begin{dmath}
+\textbf{n} \times (\nabla \textbf{b}) = \textbf{n} \times \textbf{u}^*_t
+\end{dmath}
+\intertext{which is a inhomogeneous Dirichlet Boundary condition}
+\end{dgroup}
+
+More over this case will actually lead to the potential Velocity Vorticity formulation of the Navier Stokes Equations \cite{maria2003application,johnston2002finite}\\
+\begin{dgroup}
+\intertext{Define vorticity as $\textbf{$\omega$}$}
+\begin{dmath}
+\textbf{$\omega$} = - \nabla \times \textbf{u}
+\end{dmath}
+\intertext{Define stream function $\psi$}
+\begin{dmath}
+\textbf{$\omega$} = \Delta \psi
+\end{dmath}
+\intertext{the velocity fields can then be taken back by:}
+\begin{dmath}
+\textbf{u} = \nabla^\perp \psi = (-\psi_y, \psi_x)^T
+\end{dmath}
+\end{dgroup}
+
+And taking the curl of the momentum equation one obtains:
+\begin{dmath}
+\textbf{$\omega$}_t = - (\textbf{u} \cdot \nabla) \textbf{$\omega$} + \dfrac{1}{Re} \Delta \textbf{$\omega$}
+\end{dmath}
+(Actual derivation will be added to Appendix)\\
+
+The projection is therefore:
+\begin{equation}
+\mathbb{P} (\textbf{$\omega$}^*_t) = \textbf{$\omega$}^*_t = \Delta \textbf{b}
+\end{equation}
+Hence we see that the two cases with different specification of boundary condition on the projected divergence free field gives two different formulations of Projection method on the Navier Stokes equations.\\
+
+In practice, even though the HHD only requires one boundary (normal or tangential) but to retain consistent accuracy along both boundary and interior points we want to specify $\textbf{u}^*$ both normal and tangential components \cite{brown2001accurate}. ($\textbf{This is the part I am not sure}$)\\
+
+%_______________________ analysis, Chorin original method is only first order accurate
+Perot argues that in a heuristic way this drawback can not be improved and it is due to the method itself\cite{perot1993analysis}.\\
+
+Recall the numerical pressure obtained from the projection operation can be recovered by solving the Poisson equation resulted from taking divergence on $textbf{u}^*$.
+\begin{dgroup}
+\begin{dmath}
+\nabla^2 p^{n+1} = \dfrac{1}{\Delta t} \nabla \cdot \textbf{u}^*
+\end{dmath}
+\intertext{however the actual pressure is recovered from a rather very different equation which is not a result from Helmholtz decomposition.\\
+Taking divergence on both side of the momentum equation and recall that $\nabla \cdot \textbf{u}_t$ and $\nabla \cdot \Delta \textbf{u}$ all equals zero, we obtained the following Poisson equation}
+\begin{dmath}
+\nabla^2 p = \nabla \cdot (\textbf{u} \cdot \nabla) \textbf{u}
+\end{dmath}
+\end{dgroup}
+
+However it is not hard to observe that the right hand side of Eq. (2.36 a) and Eq. (2.36 b) are only of first order accuracy \cite{perot1993analysis}. If we assume $\textbf{u}^*$ is of second order accurate to $\textbf{u}$ which is the best one can obtain, then because of the $\dfrac{1}{\vartriangle t}$ term on the intermediate velocity, we inevitably have an error term of $O(\Delta t)$ for the right hand side of the Poisson equation. Hence from this heuristic point of view that pressure can only be made first order accurate despite of what numerical method one is using.\\
+
+This justification by Perot \cite{perot1993analysis} is indeed correct if we are considering the original projection method where we have used the $\phi$ term from Eq. (2.20 e) as the primary approximation to pressure ($\phi = p^{n+1} \approx p$). However as shown by Brown \cite{brown2001accurate} that we can indeed obtain a full second order scheme of the projection method if using a variation to the pressure update equation Eq. (2.23).\\
+
+As done by Shen it is observed that the Projection method is a decoupled variant of the Pressure stabilisation method (Petrov - Galerkin) which has been well studied \cite{shen1992error,rannacher1992chorin}.
+
+Shen has derived the following error bound for Chorin's original method. We omit the proof here due to limited space. The details can be found in \cite{shen1992error}
+\begin{theorem}
+Let n denote a particular time step and $t_n = \vartriangle t n$.\\
+Let $\textbf{u}^n$ denote the numerical solution to the Navier Stokes equations at time step n whereas $\textbf{u} (t_n)$ denote the exact solution at time $t_n$. Analogously let $\textit{p}^n$ denote the numerical approximation at time step n to the exact pressure solution $\textit{p} (t_n)$ at time $t_n$.\\
+Then the following relation holds:
+\begin{equation}
+|| \textbf{u}^n - \textbf{u} (t_n)||_1 + || \textit{p}^n - \textit{p} (t_n)|| \leq O(\sqrt{\dfrac{1}{Re} \Delta t})
+\end{equation}
+$\textbf{A proof will be given in Appendix}$.\\
+Hence it is evident that the scheme is only first order in time.
+\end{theorem}
+
+%_________________________________
+\subsection{Second order accurate schemes}
+
+At the time of construction, Chorin's Projection method and especially its efficiency was still considered to be a great progress in computational fluid dynamics. However there are still many drawbacks associated with it. In particular, as noted before there are a lot of controversial discussion about the choice of boundary conditions. For instance the intermediate velocity ($\textbf{u}^*$) and the projected velocity; the choice of specification of normal and tangential components of velocity boundaries. Among those issues, the most concerned and also the most critical issues is how should the pressure term to be recovered from the projection. This will soon to be shown to have determining impact on the overall accuracy of the method.\\
+
+As discussed in the previous section, Chorin's projection method was only shown to be first order accurate. Certainly Chorin's work has left space for improvements, however it was not until more than 20 years later when academics were able to obtain seconder order or semi-seconder order schemes (e.g. \cite{kim1985application,bell1989second}). The generalisation to seconder order accuracy in time for velocity variables were not difficult to achieve. However it is the pressure and especially along the boundary layer which causes problem. 
+
+Let us consider a general setup of the numerical scheme which most modern Projection methods use.\\
+Consider a second order time centred differencing scheme. Thus we are solving the primitive variables at time $n + 1/2$ step. This was proposed by a number of authors in 1980s including Goda \cite{goda1979multistep}, Bell \cite{bell1989second}, Kim and Moin \cite{kim1985application} and Van Kan \cite{van1986second}\\
+\begin{dgroup}
+\begin{dmath}
+\textbf{u}_t^{n+1/2} = \dfrac{\textbf{u}^{n+1} - \textbf{u}^n}{\Delta t} + \nabla p^{n+1/2}
+= -[(\textbf{u} \cdot \nabla)\textbf{u}]^{n+1/2} + \dfrac{1}{R} \Delta \textbf{u}^{n+1/2}
+\end{dmath}
+\intertext{second order Crank-Nicholson scheme is used to discretise the Diffusion term. For simplicity, the convection term is not being fully discretised for now.\\
+We therefore arrived at the numerical scheme of:}
+\begin{dmath}
+\dfrac{\textbf{u}^{n+1} - \textbf{u}^n}{\Delta t} + \nabla p^{n+1/2} = -[(\textbf{u} \cdot \nabla)\textbf{u}]^{n+1/2} + \dfrac{1}{2 R} \Delta (\textbf{u}^{n+1} + \textbf{u}^n)
+\end{dmath}
+\intertext{with the divergence constraint}
+\begin{dmath}
+\nabla \cdot \textbf{u}^{n+1} = 0
+\end{dmath}
+\intertext{and boundary condition}
+\begin{dmath}
+\textbf{u}^{n+1} = \textbf{u} ((n+1)\Delta t) |_{\partial \Omega}
+\end{dmath}
+\end{dgroup}
+the subscript ``h" for discrete operators is dropped for simplicity.\\
+
+Numerical steps of this modified Projection method:\\
+Step 1:
+\begin{dgroup}
+\intertext{Solve for intermediate velocity field $\textbf{u}^*$\\
+}
+\begin{dmath}
+\dfrac{\textbf{u}^* - \textbf{u}^n}{\Delta t} + \nabla q = -[(\textbf{u} \cdot \nabla)\textbf{u}]^{n+1/2} + \dfrac{1}{2 Re} \Delta (\textbf{u}^* + \textbf{u}^n)
+\end{dmath}
+\intertext{\\
+This is identical to the original scheme except that we are using a centred time differencing and a (curl free) scalar potential $\textit{q}$ to approximate the pressure $p^{n+1/2}$\\
+}
+\begin{dmath}
+B(\textbf{u}^*) = 0
+\end{dmath}
+\intertext{where $\textit{B}$ is the function that specifies the boundary condition of the intermediate velocity}
+\end{dgroup}
+
+Step 2:\\
+Perform the Projection (simply decompose the intermediate velocity field according to the Helmholtz Decomposition Theorem. Identical to the original method.)
+\begin{dgroup}
+\begin{dmath}
+\textbf{u}^* = \textbf{u}^{n+1} + \Delta t \nabla \phi^{n+1}
+\end{dmath}
+\intertext{\\
+(Note $\phi$ is not an approximation to $\textit{p}^{n+1/2}$, it is just a term resulting from the Helmholtz decomposition)\\
+And the divergence constraint (uses Approximation method)\\
+}
+\begin{dmath}
+\nabla \cdot \textbf{u}^{n+1} = 0 \condition{only up to the truncation error: $\mathcal{O}(\Delta t^2)$}
+\end{dmath}
+\intertext{\\
+with the boundary condition specified for both the intermediate and projected velocity fields\\
+}
+\begin{dmath}
+B(\textbf{u}^*) = 0
+\end{dmath}
+\begin{dmath}
+\textbf{u}^{n+1} = \textbf{u} ((n+1)\Delta t) |_{\partial \Omega}
+\end{dmath}
+\intertext{the projected velocity field should satisfy the same boundary condition as the exact solution}
+\end{dgroup} 
+
+Step 3:\\
+Pressure correction (the most critical part of the Projection method)
+\begin{dmath}
+p^{n+1/2} = q + L(\phi^{n+1})
+\end{dmath}
+where $\textit{L}$ is a function of $\phi$ such that the pressure can be correctly updated. We will see soon how this would impact the accuracy of pressure.\\
+
+This is often referred as incremental pressure projection method \cite{brown2001accurate} as the projection step and step 3 works to compute an incremental pressure correction each time. This is opposed to the original projection method proposed by Chorin where the pressure is fully recovered from the Poisson equation and no correction is being made thereafter.\\
+
+There are 3 things that need to be considered: the pressure approximation $\textit{q}$, the boundary function $\textit{B}$ for the intermediate velocity and the pressure correction function $\textit{L}$. Brown has argued that the coupling between these 3 issues must be considered to obtain high order schemes \cite{brown2001accurate}. The reason that the pressure approximation can not be improved for the original method was because that the pressure update formula Eq. (2.36 a) does not take into account the coupling between pressure and the fluid velocity (especially the non-linear convection terms). Hence our assumption of the curl free field $\phi$ after the HHD is good approximation to $\textit{p}^{n+1}$ failed to work at higher orders accuracy. However this issue can be fixed by choosing the correct pressure update function $\textit{L}$ as proposed by Brown et al 2001 \cite{brown2001accurate}.
+\begin{dgroup}
+\intertext{Substitute Eq. (2.39a) into Eq. (2.38a) to eliminate $\textbf{u}^*$ and compare to the centred differencing scheme Eq. (2.37b) we arrived at a pressure update formula:}
+\begin{dmath}
+p^{n+1/2} = q + \phi^{n+1} - \dfrac{\Delta t}{2 Re} \nabla^2 \phi^{n+1}
+\end{dmath}
+\intertext{Hence}
+\begin{dmath}
+L (\phi^{n+1}) = \phi^{n+1} - \dfrac{\Delta t}{2 Re} \nabla^2 \phi^{n+1}
+\end{dmath}
+\intertext{the last term of the function $\textit{L}$ is critical to ensuring a second order accurate scheme to pressure and many previous methods failed to be second order accurate because they did not involve this correction term.}
+\end{dgroup}
+
+The role of the intermediate velocity $\textbf{u}^*$ still remains undetermined. In the original Projection method proposed by Chorin, it is simply served to approximate the fluid velocity at an intermediate time (betwee n and n+1). However the question is not so simple in the incremental pressure projection method. This question must be answered by taking into account the role of $\textit{q}$. If $\textit{q}$ is a good approximation to $\textit{p}^{n+1/2}$ (to the truncation error of the method), then $\textbf{u}^*$ should not deviate from the fluid velocity very much and vice versa.\\
+
+Boundary condition is always critical. In this case a careful choice of $\textit{B} (\textbf{u}^*)$ must be made. Notice that the intermediate velocity is closely related to the divergence free velocity and the gradient term ($\phi$) by the decomposition given in Eq. (2.39 a). Hence the boundary condition of $\textbf{u}^*$ must be consistent with that of $\textbf{u}^{n+1}$ and $\phi^{n+1}$ even though $\phi^{n+1}$ is not known yet! Hence an appropriate approximation to it must be considered and this is a question that have puzzled many researchers \cite{brown2001accurate}. In fact all these issues are related to $\textit{q}$ and the degree of approximation to the true pressure field.\\
+
+Naturally people would think that the pressure at the previous time would be a good approximation. Hence let's choose $q = \textit{p}^{n-1/2}$. This type of incremental pressure projection method was first proposed by $\emph{Bell, Colella and Glaz}$ \cite{bell1989second}. Hence the intermediate velocity is closer to the true fluid velocity and thus by ensuring the same boundary condition we obtained:
+\begin{dgroup}
+\begin{dmath}
+B(\textbf{u}^*) = (\textbf{u}^* - \textbf{u}((n+1)\Delta t))|_{\partial \Omega} = 0
+\end{dmath}
+\intertext{If a vanishing normal boundary condition is imposed for the projected field ($\textbf{u}^{n+1}$) then this leads to a boundary condition for $\phi$}
+\begin{dmath}
+\textbf{n} \cdot \nabla \phi^{n+1}|_{\partial \Omega} = 0
+\end{dmath}
+\end{dgroup}
+This is derived from the fact that the normal component of $\textbf{u}^{n+1}$ and $\textbf{u}^*$ eqauls zero. \\
+$phi$ can therefore be recovered from by solving an elliptic equation with a homogeneous Neumman boundary condition.\\
+The original scheme proposed by Bell et al uses a rather different pressure update formula:
+\begin{equation}
+\nabla p^{n+1/2} = \nabla p^{n-1/2} + \nabla \phi^{n+1}
+\end{equation}
+which is inherently first order accurate \cite{brown2001accurate}.\\
+This loss of accuracy in the pressure, which typically manifests itself as a boundary layer, is well known and has been analyzed rigorously by Temam \cite{temam1991remark}, E and Liu \cite{liu1996projection}, Shen \cite{shen1996error}, and others ($\textbf{I will look into this!}$)\\
+
+As noted by Brown that this problem can be solved if the modified pressure update formula Eq. (2.41) is used instead and this would recover a full second order scheme for both pressure and velocity up to boundary \cite{brown2001accurate}. Brown has justified his claim by using a normal mode analysis (see $\textbf{Appendix: Accuracy of modern Projection methods}$)\\
+
+There is another way of looking at the problem. Because of the limitation of accuracy of pressure update, what if we don't simply don't update pressure? Wouldn't it be nice if our calculations doesn't even involve pressure (and its gradient) at all? This might sounds ridiculous at first because velocity and pressure are strongly coupled by the divergence constraint. However this is not theoretically impossible. In fact it is very tempting to do it because we then would not have an accumulation of error of pressure in the numerical calculations. In 1985 Kim and Moin has proposed such a method with $\textit{q}=0$ in their well - cited paper  $\emph{''Application of a fractional-step method to incompressible Navier-Stokes equations"}$. This is referred to $\emph{The Pressure free Projection method}$ \cite{kim1985application}
+
+With the same Helmholtz Hodge Decomposition for the intermediate velocity Eq. (2.39 a) we now encountered a question of how to find the appropriate boundary condition for $\textbf{u}^*$ since $\textbf{u}^*$ is now no where close to $\textbf{u}^{n+1}$. Since the boundary condition for $\textbf{u}^*$ depends on Eq. (2.38 a) and hence we would need an accurate approximation to $\phi^{n+1}$. As argued by Kim and Moin that by using $\phi^n$ along the boundary we can fully recover a second order scheme for this method \cite{kim1985application}. \\
+$\textbf{an normal mode analysis will be done here too}$\\
+
+The process of the pressure can be summarised as follows:
+Step 1:
+\begin{dgroup}
+\intertext{Solve for intermediate velocity field $\textbf{u}^*$}
+\begin{dmath}
+\dfrac{\textbf{u}^* - \textbf{u}^n}{\vartriangle t} = -[(\textbf{u} \cdot \nabla)\textbf{u}]^{n+1/2} + \dfrac{1}{2 Re} \Delta (\textbf{u}^* + \textbf{u}^n)
+\end{dmath}
+\intertext{This is identical to the incremental pressure projection method E [2.38] except that $\textit{q} = 0$\\
+As argued by Brown that a second order scheme can only be obtained if the tangential component of the boundary condition of $\textbf{u}^*$ is also specified: \cite{brown2001accurate}}
+\begin{dmath}
+\textbf{n} \times (\textbf{u}^* - \nabla \phi^{n+1}) |_{\partial \Omega} = \textbf{n} \times \textbf{u} ((n+1) \Delta t)|_{\partial \Omega}
+\end{dmath}
+\intertext{$\phi^n$ is used to approximate $\phi^{n+1}$ along the boundary}
+\end{dgroup}
+
+Step 2:\\
+Solving for the gradient potential $\phi^{n+1}$ and update velocity
+\begin{dgroup}
+\intertext{$\phi^{n+1}$ can be solved by the Poisson equation below with a Neumman boundary condition}
+\begin{dmath}
+\nabla^2 \phi^{n+1} = \dfrac{1}{\Delta t} \textbf{u}^*, \condition{$\dfrac{\partial \phi^{n+1}}{\partial n}|_{\partial \Omega} = 0$}
+\end{dmath}
+\intertext{velocity can therefore be updated to}
+\begin{dmath}
+\textbf{u}^{n+1} = \textbf{u}^* - \Delta t \phi^{n+1}, \condition{$\textbf{u}^{n+1}|_{\partial \Omega} = \textbf{u} ((n+1)\Delta t)|_{\partial \Omega}$}
+\end{dmath}
+\end{dgroup}
+
+The pressure update is ignored, however we can still use Eq. (2.41 a) to do it (except q = 0) if we are interested to solve for the true pressure as well.
+
+\subsection{Gauge method}
+Here I give a brief introduction to second order Gauge method for Incompressible flows.\\
+
+Gauge method or ``Impulse" or ``Magnetisation " methods was first introduced by Oseledets and then popularised by several researchers including E and Liu and Summers and Chorin \cite{brown2001accurate,weinan2003gauge}. It provides an alternative option to decouple the velocity and pressure in the Navier Stokes equations by a change of variable. In this section we illustrates a standard second order Gauge method based on E and Liu as well as David. \\
+\textbf{talk about why use m, boundary conditions, free by Liu}
+The method starts by introducing a ``Gauge" variable $\textbf{m}$ which is followed directly by the Helmholtz - Hodge decomposition:
+\begin{equation}
+\textbf{m} = \textbf{u} + \nabla \chi
+\end{equation}
+where $\textbf{u}$ is the velocity field which satisfies the Navier Stokes equations and $\chi$ represents an  auxiliary scalar potential obtained by projecting $\textbf{m}$ to the space of divergence free vector field. This is essentially the same as the standard Projection methods where $\textbf{m}$ replaces $\textbf{u}^*$ the intermediate velocity field. However $\textbf{m}$ and $\textbf{u}^*$ are not equal to each other! In fact we will soon see that the Gauge variable introduces advantages in accuracy.\\
+
+To specify the value of $\chi$ we need to make sure the Navier Stokes equations are still satisfied after this change of variable. Substituting the expression for $\textbf{m}$ into the momentum equation we obtain:\\
+(for simplicity the convective term is not transformed)
+\begin{equation*}
+\partial_x\textbf{m} - \partial_x(\nabla \chi) + \left(\nabla p + \nabla \chi\right) = -(\textbf{u} \cdot \nabla)\textbf{u} + \dfrac{1}{Re}\nabla^2\textbf{m} 
+\end{equation*}
+Hence by ensuring the momentum equation is satisfied, we define the auxiliary field to satisfy the following relation with Pressure:
+\begin{equation*}
+p = \partial_x\chi - \dfrac{1}{Re}\nabla^2\chi
+\end{equation*}
+
+Now we can discretise the scheme in time using second order schemes including centred finite differencing and Crank-Nicholson. We obtain:
+\begin{equation*}
+\dfrac{\textbf{m}^{n+1} - \textbf{m}^n}{\Delta t} = -\left[(\textbf{u} \cdot \nabla)\textbf{u}\right]^{n+1/2} + \dfrac{1}{2\,Re}\nabla^2\left(\textbf{m}^{n+1} + \textbf{m}^n\right)
+\end{equation*}
+Hence the Gauge variable $\textbf{m}$ is not discarded but rather re-computed at each iteration. This is one of the major differences between the standard Projection methods and this Gauge method. Later through Normal analysis we will show the advantageous of such transformation. More specifically w show that by updating the Gauge variable the spurious mode is eliminated in all variables.\\
+
+The first step is therefore solve $\textbf{m}^{n+1}$ with the knowledge of $\textbf{m}^n$ and $\textbf{u}^n$ and boundary condition:
+\begin{equation*}
+\textbf{n}\cdot\textbf{m}^{n+1}\,|_{\partial \Omega} = \textbf{n} \cdot \textbf{u}^{n+1}\,|_{\partial \Omega}
+\end{equation*}
+and 
+\begin{equation*}
+\textbf{$\tau$}\cdot\textbf{m}^{n+1}\,|_{\partial \Omega} = \textbf{$\tau$} \cdot\,(\textbf{u}^{n+1} - \nabla \chi^{n+1})\,|_{\partial \Omega}
+\end{equation*}
+This is almost identical to the boundary condition of $\textbf{u}^*$ in $Pm\,2$. In normal mode analysis we show that a second order approximation to $\phi^{n+1}$ in the form of $\phi^{n+1}\simeq 2\phi^n - \phi$ along the boundary is necessary in obtaining second order accuracy in pressure.\\
+
+Second step: imposing divergence free constraint:
+\begin{equation*}
+\nabla^2\chi^{n+1} = \nabla \cdot \textbf{m}^{n+1}
+\end{equation*}
+with again a zero Neumann boundary condition in the normal component which is followed by the choice of boundary condition of $\textbf{m}^{n+1}$ specified in the previous step:
+\begin{equation*}
+\textbf{n} \cdot \nabla \chi^{n+1}\,|_{\partial \Omega}  = \dfrac{\chi^{n+1}}{\textbf{n}}\,|_{\partial \Omega}  = 0
+\end{equation*}
+Third step: Then the velocities are updated with the formula:
+\begin{equation*}
+\textbf{u}^{n+1} = \textbf{m}^{n+1} - \nabla \chi^{n+1}
+\end{equation*}
+Then pressure is updated as:
+\begin{equation*}
+p^{n+1/2} = \dfrac{\chi^{n+1} - \chi^n}{\Delta t} - \dfrac{1}{2\,Re}\,\nabla^2(\chi^{n+1} + \chi^n) = \dfrac{\chi^{n+1} - \chi^n}{\Delta t} - \dfrac{1}{2\,Re}\,\nabla \cdot (\textbf{m}^{n+1} + \textbf{m}^n)
+\end{equation*}
+
+\emph{Shen et.al} has proven that through normal mode analysis in square domain and numerical results that only Gauge method shows fully second order Pressure error convergence in general domains. Later we demonstrate through numerical results that this is true. Recently Guermond and Shen have also proposed a fully second order accurate scheme called ``Consistent" splitting method. They have shown that it is equivalent to the Gauge method \cite{wong2006consistent,pyo2005normal,guermond2006overview}. However it is more suitable for finite element schemes whereas the original Gauge method we consider here is more designed for finite difference \cite{pyo2005normal}\\
+
+In this project the ``Consistent splitting" method is not presented due to limited time and also because it is equivalent to Gauge method. There is no point of being duplicative here.
+
+%_________________________
+Old chapter 2
+\chapter{Derivation of Navier Stokes Equations}
+\label{chapter2}
+There are many ways described in literature in which Navier Stokes can be derived. In fact, during the earlier years of the theory establishment, the equations were re-derived many times using different methods, such as the molecular attraction and repulsion argument used by Navier. There are also different forms the equations can take. For instance the incompressible and compressible forms and stream function formulation. In this chapter, we present a simple direct method to derive the 3-D Incompressible Navier Stokes equations in Cartesian coordinates via first physics principles.\\
+
+\paragraph{Problem set up}
+We want to develop a mathematical model which describes the motion of a fluid in a region of space. \\
+Let $D$ denote the spatial domain filled with a fluid such as water (or gases). Further we take $D$ as a bounded subset of $\mathbb{R}^3$. We are focused on the motion of an arbitrary fluid particle in $D$. Let $\textbf{x} \in D$ be a vector field that describes the location of the fluid particle. In $3D$, $\textbf{x} = (x(t), y(t), z(t), t)$. Let $u(\textbf{x}(t), t) = \left( u(x,y,z,t),\,v(x,y,z,t),\,w(x,y,z,t)\right)$ be the spatial velocity of the fluid which is the time derivative of $\textbf{x}(t)$. Our mathematical model depends on several basic assumptions and physics principals.\\
+
+\section{Continuum hypothesis}
+This is the fundamental assumption we assume and it basically means that we are considering the fluid as continuous matter consisted of infinitesimal points. Strictly speaking this assumption is obviously "Wrong" as the fluid is not continuous but rather made up of discrete molecules. They are not infinitesimal points but rather have physical dimension that can be measured. Nevertheless the continuum hypothesis does lead to very accurate results for most macroscopic phenomena \cite{chorin1990mathematical}.\\
+
+It follows from the hypothesis that we assume the functions such as $u$ and density $\rho$ are smooth too. This means for any sub-region $W$ of $D$, the fluid has a well-defined density:
+\begin{equation}
+m(W,t) = \int_W\,\rho(\textbf{x},t)\,dV
+\end{equation}
+where $dV$ is the volume of $W$. We also denote $W$ as the control volume.\\
+
+However this is not enough to derive the equation of motion of fluid particles. We need further two conservation laws:
+Conservation of mass; Balance of momentum (Newton's second law of motion) and Conservation of energy \cite{chorin1990mathematical}. We will consider these fundamental principles one by one throughout the derivation. In fact in the case of incompressible flow equations which is what we are aiming to achieve, the conservation of energy is replaced by the incompressibility constraint as pressure is not a thermodynamic variable in this case.
+
+\section{Conservation of mass}
+As first demonstrated by Antoine Lavoisier in 1789 using chemical reactions (although this is still disputable) (\textbf{citation}), this is one of the most fundamental laws in classical physics. It states that the mass of a closed system (\textbf{closed?}) must remain constant over time. Hence in the context of our derivation, this means that in a fixed subregion $W$, the rate of change of of mass in $W$ must be equal to the rate of which mass is crossing the boundary $\partial W$ in the inward direction. This can be clearly illustrated by the following equation:\\
+
+\begin{equation*}
+\dfrac{d}{dt} m(W, t) = \dfrac{d}{d t} \int_W \rho (\textbf{x}, t) \, \, \, dV = - \int_{\partial W} \rho \,\textbf{u} \cdot \textbf{n} \, \, \, dA
+\end{equation*}
+where $\textbf{n}$ is the surface normal to the boundary $\partial W$ (defined to take the outward direction) and $A$ is the area of the interface along the boundary between $W$ and the rest of $D$.\\
+
+Because both the density and its partial derivative is assumed to be continuous and hence we can use Leibniz's rule to bring the differentiation into the integral:
+\begin{equation}
+\int_W \dfrac{\partial \rho}{\partial t} (\textbf{x}, t) \, \, \, dV = - \int_{\partial W} \rho \textbf{u} \cdot \textbf{n} \, \, \, dA
+\end{equation}
+This is called the "Integral form" of the law of conservation of mass.\\
+
+By applying the divergence theorem we arrive at the "Differential form" of the law of conservation of mass:
+\begin{dgroup}
+\begin{dmath}
+\int_W \dfrac{\partial \rho}{\partial t} (\textbf{x}, t) \, \, \, dV + \int_W \nabla (\rho \textbf{u}) \, \, \, dV = 0
+\end{dmath}
+\intertext{$\Rightarrow$}
+\begin{dmath}
+\dfrac{\partial \rho}{\partial t} (\textbf{x}, t) + \nabla \cdot (\rho \textbf{u}) = 0
+\end{dmath}
+\end{dgroup}
+Where $\nabla \cdot = \sum_{i=1}^{n} \dfrac{\partial}{\partial x_i}$ is the divergence operator in a n-dimensional vector space.\\
+This equation is also known as the "Continuity Equation"\\
+Differential form is very important in the subsequent derivations and analysis. However if the density and velocity are do not have continuous partial derivatives then we would need to use the Integral form of the conservation law \cite{chorin1968numerical}.
+
+\subsection{Balance of Momentum}
+Lagrangian derivative\\
+
+We use a standard Euclidean coordinates and in 3D the path followed by a fluid particle is defined as: $\textbf{x} = (x(t), y(t), z(t))$ (\textbf{a graph of the coordinate system is needed}). Hence the path or trajectory followed by the particle is varying with respect to time. The velocity of such a particle at a particular location and at an instant time is given by $\dfrac{d \textbf{x}}{d t} = \textbf{u} (x(t), y(t), z(t))$ which is just an ordinary derivative. The question now comes as how should we measure the change in velocity? This introduces the concept of acceleration: $\textbf{a} (t) = \dfrac{d }{d t} \textbf{u}$ which is merely the time derivative of the velocity. An intrinsic approach to find $\textbf{a} (t)$ is using the standard Eulerian derivative which is simply written as $\partial_t \textbf{u} = \dfrac{\partial \textbf{u}}{\partial t}$. This is indeed a valid approach but only when we are measuring the velocity at a fixed point. Nevertheless, in our case because of the (space and time dependent) velocity field presented in the region, the fluid particles are constantly being transported throughout the domain $D$. As a result, using the Eulerian approach which sets the reference point fixed in space does not help us to track down the path of a fluid particle. Luckily the Lagrangian approach solves this problem as it sets the reference point to be moving along with the fluid particle. Hence this allows tracking of the particle possible. This might sounds difficult to formulate but we can actually express the Lagrangian derivative in terms of the Eulerian derivative. By using Chain rule the acceleration of a fluid particle is given by:
+\begin{dgroup}
+\begin{dmath}
+\textbf{a} (t) = \dfrac{d}{d t} \textbf{u} (x(t), y(t), z(t))
+= \dfrac{\partial \textbf{u}}{\partial x} \dfrac{d\,x}{dt} + \dfrac{\partial \textbf{u}}{\partial y} \dfrac{d\,y}{dt} + \dfrac{\partial \textbf{u}}{\partial z} \dfrac{d\,z}{dt} + \dfrac{\partial \textbf{u}}{\partial t}
+\end{dmath}
+\intertext{where $\hat{x}, \hat{y}, \hat{z}$ are unit directional vectors in the x, y and z directions respectively\\
+Rewriting this equation in a concise way we obtained:}
+\begin{dmath}
+\textbf{a} (t) = \partial_t \textbf{u} + (\textbf{u} \cdot \nabla) \textbf{u}
+\end{dmath}
+\end{dgroup}
+The Lagrangian derivative (also referred as the material derivative) for any space-time dependent function (scalar or vector) can therefore be defined as \cite{chorin1968numerical}
+\begin{equation}
+\dfrac{D}{D t} = \partial_t + \textbf{u} \cdot \nabla
+\end{equation}
+
+Forces acting on the fluid:\\
+Let's consider the control volume $W$ again. There are two classes of forces acting on the control volume: surface force and body force.\\
+Let's consider the surface force first. The force is the force acting by the rest of the fluid across the surface of the control volume. It can be broken down into the normal stress (force acting normally to the surface $S$) and shear stress (which could have tangential forces too). The normal stress is related to pressure which is represented by a scalar field $p(\textbf{x},t)$. The shear stress ($\textbf{$\sigma$}$) is a vector field because it could have both normal and tangential forces. In ideal flow (Euler's inviscid flow) only considers the normal stress which does not consider the transport of momentum across the surface $S$ between the control volume and the rest of the fluid. This is clearly non-realistic and thus this is often coined as ideal or perfect flow. Hence in our derivation of the more general Navier Stokes equations, the shear stress must be included. Thus the total surface force (per unit area) is written as:
+\begin{equation}
+- p(\textbf{x},t) \textbf{n} + \textbf{$\sigma$} (\textbf{x},t)\cdot \textbf{n}
+\end{equation}
+
+Now we can integrate this to find the total surface force across $\partial W$:
+\begin{dgroup}
+\begin{dmath}
+\textbf{S}_{\partial W} = - \int_{\partial W} p \textbf{n}\,\,\,dA + \int_{\partial W} \textbf{$\sigma$}\cdot\textbf{n}\, \, \, dA
+\end{dmath}
+\intertext{where A is the area of the surface $S$.\\
+Consider the two integrals separately: for pressure:\\
+If $\textbf{e}$ is any fixed unit vector in space (can be in x, y or z directions), then}
+\begin{dmath}
+\textbf{e} \cdot S_{\partial W} = - \int_{\partial W} p \textbf{n} \, \, \, dA \condition{by the divergence theorem we obtain}
+= - \int_{W} \nabla \cdot (p \textbf{e})\, \, \, dV = - \int_W (\nabla p) \cdot \textbf{e} \, \, \, dV
+\end{dmath}
+\intertext{by dropping the unit vector $\textbf{e}$ we obtain the total surface force as}
+\begin{dmath}
+S_{\partial W} = - \int_W \nabla p \, \, \, dV
+\end{dmath}
+\intertext{\\
+For the shear stress:
+By using divergence theorem
+\\}
+\begin{dmath}
+\int_{\partial W} \textbf{$\sigma$}\cdot\textbf{n}\, \, \, dA = \int_{W}\nabla \cdot \textbf{$\sigma$}\, \, \, dV
+\end{dmath}
+\end{dgroup}
+If there is also a body force applied to the fluid with force density $\textbf{f}$ then:
+\begin{equation}
+\textbf{F} = \int_W \rho \textbf{f} \, \, \, dV
+\end{equation}
+Combine the surface and body forces the total force (density) is therefore:
+\begin{equation}
+force \, \, (per \, \, \, unit \, \, \, volume) = - \nabla p + \nabla \cdot \textbf{$\sigma$}+\textbf{f}
+\end{equation}
+Hence by Newton's second law of motion which is the conservation momentum wee obtained:
+\begin{dgroup}
+\begin{dmath}
+\rho \dfrac{D \textbf{t}}{D t} = -\nabla p + \nabla \cdot \textbf{$\sigma$}+\rho \textbf{f}
+\end{dmath}
+\intertext{where $D$ is the Lagrangian (material) derivative.\\
+Or if we expand the Lagrangian derivative:}
+\begin{dmath}
+\rho \dfrac{\partial \textbf{u}}{\partial t} = - \rho (\textbf{u} \cdot \nabla) \textbf{u} - \nabla p + \nabla \cdot \textbf{$\sigma$}+\rho \textbf{f}
+\end{dmath}
+\end{dgroup}
+This is the differential form of the conservation of momentum.\\
+
+\subsection{Stress tensor}
+The stress $\textbf{$\sigma$}$ is closely related to the rate of strain or deformation.\\
+
+First we demonstrate that the velocity field of the fluid can be separated into sum of (rigid) translation, a deformation and (rigid) rotation.\\
+
+If we consider the fluid particle initially at position $\textbf{x}$ in $\mathbb{R}^3$, then let it move a small distance $h$ along the path $\textbf{h}$ (so $h$ is the length of the vector $\textbf{h}$). We write the velocity field at point ($\textbf{x}+\textbf{h}$) as:
+\begin{equation}
+\textbf{u}(\textbf{x}+\textbf{h}) = \textbf{u}(\textbf{x}) + \textbf{D}(\textbf{x})\cdot\textbf{h}+\dfrac{1}{2}\textbf{$\xi$}(\textbf{x}) \times \textbf{h} + \mathcal{O}(h^2)
+\end{equation}
+where $\textbf{D}(\textbf{x})$ is called the deformation tensor, in 3D, it is a symmetric matrix; $\textbf{$\xi$}$ is called the rotation vector. Thus the velocity field is now separated into sum of (rigid) translation, a deformation and (rigid) rotation.\\
+
+To find $\textbf{D}(\textbf{x})$ and $\textbf{$\xi$}(\textbf{x})$ we can Taylor expand the above expression for $\textbf{u}(\textbf{x}+\textbf{h})$ at point $\textbf{x}$. This lead to
+\begin{equation}
+\textbf{u}(\textbf{x}+\textbf{h}) = \textbf{u}(\textbf{x}) = \nabla\textbf{u}(\textbf{x}) \cdot \textbf{h} + \mathcal{O}{h^2}
+\end{equation}
+In 3D, we can separate the matrix $\nabla\textbf{u}(\textbf{x})$ as one symmetric and antisymmetric part by simple algebra. Define:
+\begin{dgroup}
+\begin{equation}
+\textbf{D} = \dfrac{1}{2}[\nabla \textbf{u}+(\nabla \textbf{u})^T]
+\end{equation}
+\begin{dmath}
+\textbf{S} = \dfrac{1}{2}[\nabla \textbf{u}-(\nabla \textbf{u})^T]
+\end{dmath}
+\end{dgroup}
+so that $\nabla \textbf{u} = \textbf{D} + \textbf{S}$.\\
+
+We are more interested in the deformation matrix $\textbf{D}$ which formally is:
+\begin{equation*}
+\begin{bmatrix}
+2\partial_x\textbf{u} & \partial_y\textbf{u}+\partial_x\textbf{v}& \partial_z\textbf{u}+\partial_x\textbf{w}\\
+\partial_x\textbf{v}+\partial_y\textbf{u} & 2\partial_y\textbf{v} & \partial_z\textbf{v}+\partial_y\textbf{w}\\
+\partial_x\textbf{w}+\partial_z\textbf{u} & \partial_y\textbf{w}+\partial_z\textbf{v}& 2\partial_z\textbf{w}\\
+\end{bmatrix}
+\end{equation*}
+
+For Newtonian flows we have the nice property that the stress tensor $\textbf{$\sigma$}$ is a linear function of $\textbf{D}$. In fact we can write $\textbf{$\sigma$}$ as:
+\begin{equation}
+2\mu \textbf{D} + \lambda\nabla \cdot \textbf{u}
+\end{equation}
+where we introduce the terms: $\mu$ is the first coefficient of viscosity and $\lambda$ the second coefficient of viscosity.\\
+
+Substitute this back into our balance of momentum equation (the part where $\nabla \cdot \textbf{$\sigma$}$) and after some algebra we recover the Navier Stokes equations.\\
+In a compact form:
+\begin{equation}
+\rho \dfrac{D\textbf{u}}{Dt} = -\nabla p + (\lambda + \mu)\nabla \,(\nabla \cdot\textbf{u}) + \mu \nabla^2 \textbf{u}
+\end{equation}
+
+\subsection{Incompressibility}
+The derivation of conservation of energy requires advanced thermodynamics and hence we exclude the details here. However as shown by Chorin in his well cited book ``A mathematical Introduction to Fluid mechanics", the incompressibility is a fprm of conservation of energy. If we assume the total energy equals to the kinetic energy, then the fluid must be incompressible, otherwise pressure must be zero \cite{chorin1990mathematical}.\\
+
+For an incompressible flow, all the energy is in the form of kinetic energy. Also incompressibility implies that the fluid cannot be compressed or stretched. Hence this leads to the fact that the density is constant over time ($\dfrac{\partial \rho}{\partial t} = 0$). If we go back to the continuity equation this results in:
+\begin{dgroup}
+\begin{dmath}
+\dfrac{D \rho}{D t} = \nabla \cdot (\rho \textbf{u}) = 0
+\end{dmath}
+\intertext{if further assume that the density is also constant in space then we can drop $\rho$ in the previous equation and obtain}
+\begin{dmath}
+\nabla \cdot \textbf{u} = 0
+\end{dmath}
+\end{dgroup}
+Which is the well-known divergence free constraint.\\
+
+If we add this divergence free constraint into the our Navier Stokes equations in the previous subsection we find the momentum equation greatly simplifies:
+\begin{equation}
+\dfrac{D\textbf{u}}{Dt} = -\nabla p + \nu \nabla^2\textbf{u}
+\end{equation}
+Expand the material derivative we recover the Incompressible Navier Stokes equations:
+\begin{equation}
+\begin{cases}
+\partial_t\textbf{u} + (\textbf{u} \cdot \nabla)\textbf{u} = -\nabla p + \nu \nabla^2\textbf{u}\\
+\nabla \cdot \textbf{u}=0\\
+\end{cases}
+\end{equation}
+
+\subsection{Non-dimensionalisation}
+Characteristic length:
+\begin{equation}
+\textbf{u}' = \dfrac{\textbf{u}}{U},\,\,\,\textbf{x}' = \dfrac{\textbf{x}}{L},\,\,\,\textbf{t}'\dfrac{t}{T}
+\end{equation}
+substitute back into the Navier stokes equations and dropping the ``'" we obtain the non-dimensionalised Navier Stokes equations:
+\begin{equation}
+\partial_t \textbf{u} + (\textbf{u} \cdot \nabla)\textbf{u} = -\nabla p + R\nabla^2\textbf{u}
+\end{equation}
+where we have defined $R = \dfrac{LU}{\nu}$ to be the Reynolds number
+
