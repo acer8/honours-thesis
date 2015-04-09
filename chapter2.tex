@@ -3,20 +3,18 @@
 There are many ways described in literature in which Navier Stokes can be derived. In fact, during the earlier years of the theory establishment, the equations were re-derived many times using different methods, such as the molecular attraction and repulsion argument used by Navier. There are also different forms the equations can take. For instance the incompressible and compressible forms and stream function formulation. In this chapter, we present a simple direct method to derive the 3-D Incompressible Navier Stokes equations in Cartesian coordinates via first physics principles.\\
 
 \paragraph*{Problem set up}
-We want to develop a mathematical model which describes the motion of a fluid in a region of space. \\
-We use a standard Euclidean coordinates and in $3D$. Let $\Omega$ denote the spatial domain filled with a fluid such as water (or gases). Further we take $\Omega$ as a bounded subset of $\mathbb{R}^3$. We are focused on the motion of an arbitrary fluid particle in $\Omega$. Let $\textbf{x} \in \Omega$ be a vector field that describes the location of the fluid particle. In $3D$, $\textbf{x} = (x(t), y(t), z(t), t)$. Let $u(\textbf{x}(t), t) = \left( u(x,y,z,t),\,v(x,y,z,t),\,w(x,y,z,t)\right)$ be the spatial velocity of the fluid which is the time derivative of $\textbf{x}(t)$. Our mathematical model depends on several basic assumptions and physics principals.\\
+We want to develop a mathematical model which describes the motion of a fluid in a region of space. Hence we have used 3D Euclidean coordinates. Let $\Omega$ denotes the spatial domain filled with a fluid such as water (or gases). More precisely, we consider $\Omega$ as a bounded subset of $\mathbb{R}^3$. We are focused on the motion of an arbitrary fluid particle in $\Omega$. Let $\textbf{x} \in \Omega$ be a vector field that describes the location of the fluid particle. In 3D, we use the notation that $\textbf{x} = (x(t), y(t), z(t), t)$. Further, let $u(\textbf{x}(t), t) = \left( u(x,y,z,t),\,v(x,y,z,t),\,w(x,y,z,t)\right)$ be the spatial velocity of the fluid which is the time derivative of $\textbf{x}(t)$. Our mathematical model depends on several basic assumptions and physics principals.\\
 
 \section{Continuum hypothesis}
-This is the fundamental assumption we assume and it basically means that we are considering the fluid as continuous matter consisted of infinitesimal points. Strictly speaking this assumption is obviously "Wrong" as the fluid is not continuous but rather made up of discrete molecules. They are not infinitesimal points but rather have physical dimension that can be measured. Nevertheless the continuum hypothesis does lead to very accurate results for most macroscopic phenomena \cite{chorin1990mathematical}.\\
+This is the fundamental assumption and it basically means that we are considering the fluid as a continuous matter consisted of infinitesimal points. Strictly speaking this assumption is obviously "Wrong" as the fluid is not continuous but rather made up of discrete molecules. Therefore they are not infinitesimal points but rather have physical dimensions that can be measured. Nevertheless the continuum hypothesis does lead to very accurate results for most macroscopic phenomena. \cite{chorin1990mathematical}.\\
 
-It follows from the hypothesis that we assume the functions such as $u$ and density $\rho$ are smooth too. This means for any sub-region $W$ of $\Omega$, the fluid has a well-defined density:
+It follows from the hypothesis that we assume the functions such as velocity $u$ and density $\rho$ are smooth too. This means for any sub-region $W \subset \Omega$, the fluid has a well-defined density:
 \begin{equation}
 m(W,t) = \int_W\,\rho(\textbf{x},t)\,dV
 \end{equation}
 where $dV$ is the volume of $W$. We also denote $W$ as the control volume.\\
 
-However this is not enough to derive the equation of motion of fluid particles. We need further two conservation laws:
-Conservation of mass; Balance of momentum (Newton's second law of motion) and Conservation of energy \cite{chorin1990mathematical}. We will consider these fundamental principles one by one throughout the derivation. In fact in the case of incompressible flow equations which is what we are aiming to achieve, the conservation of energy is replaced by the incompressibility constraint as pressure is not a thermodynamic variable in this case.
+However this is not enough to derive the equation of motion of fluid particles. We need more laws and theorems from classical physics, namely: Conservation of mass; Balance of momentum (Newton's second law of motion) and Conservation of energy \cite{chorin1990mathematical}. We will consider these fundamental principles one by one throughout the derivation. In fact in the case of incompressible flow equations which is what we are aiming to achieve, the conservation of energy is replaced by the incompressibility constraint as pressure is not a thermodynamic variable in this case.
 
 \section{Conservation of mass}
 This is one of the most and earliest fundamental laws in classical physics. It states that the mass of a closed system must remain constant over time. Hence in the context of our derivation, this means that in the control volume $W$, the rate of change of mass inside is equal to the rate of which mass is crossing the boundary $\partial W$ in the inward direction. This is formally expressed in the following equation:\\
@@ -26,18 +24,18 @@ This is one of the most and earliest fundamental laws in classical physics. It s
 \end{equation}
 where $\textbf{n}$ is the surface normal to the boundary $\partial W$ (defined to take the outward direction) and $A$ is the area of the interface along the boundary between $W$ and the rest of $D$.\\
 
-Because both density and its partial derivatives is assumed to be continuous and hence we can use Leibniz's rule to bring the differentiation into an integral:
+Because both density and its partial derivatives are assumed to be continuous and hence we can use Leibniz's integral rule to bring the differentiation operator in the above equation inside the integral:
 \begin{equation}
 \int_W \dfrac{\partial \rho}{\partial t} (\textbf{x}, t) \, \, \, dV = - \int_{\partial W} \rho \textbf{u} \cdot \textbf{n} \, \, \, dA
 \end{equation}
 This is called the "Integral form" of the law of conservation of mass.\\
 
-By applying the divergence theorem we arrive at the "Differential form" of the law of conservation of mass:
 \begin{dgroup}
+\intertext{By applying the divergence theorem}
 \begin{dmath}
 \int_W \dfrac{\partial \rho}{\partial t} (\textbf{x}, t) \, \, \, dV + \int_W \nabla (\rho \textbf{u}) \, \, \, dV = 0
 \end{dmath}
-\intertext{$\Rightarrow$}
+\intertext{we then arrive at the "Differential form" of the law of conservation of mass:}
 \begin{dmath}
 \dfrac{\partial \rho}{\partial t} (\textbf{x}, t) + \nabla \cdot (\rho \textbf{u}) = 0
 \end{dmath}
@@ -48,19 +46,18 @@ This equation is also known as the "Continuity Equation". Differential form is v
 \section{Balance of Momentum}
 \subsection{Lagrangian derivative}
 
-In our spatial domain $\Omega$, recall the path followed by a fluid particle is: $\textbf{x} = (x(t), y(t), z(t))$ . Hence the path or trajectory followed by the particle is varying with respect to time. The velocity of such a particle at a particular location and at an instant time is given by $\dfrac{d \textbf{x}}{d t} = \textbf{u} (x(t), y(t), z(t))$ which is just an ordinary derivative. The question now comes as how should we measure the change in velocity? This introduces the concept of acceleration: $\textbf{a} (t) = \dfrac{d }{d t} \textbf{u}$ which is merely the time derivative of the velocity. An intrinsic approach to find $\textbf{a} (t)$ is using the standard Eulerian derivative which is simply written as $\partial_t \textbf{u} = \dfrac{\partial \textbf{u}}{\partial t}$. This is indeed a valid approach but only when we are measuring the velocity at a fixed point. Nevertheless, in our case because of the (space and time dependent) velocity field presented in the region, the fluid particles are constantly being transported throughout the domain $\Omega$. As a result, using the Eulerian approach which sets the reference point fixed in space does not help us to track down the path of a fluid particle. Fortunately the Lagrangian approach solves this problem because it sets the reference point to be moving along with the fluid particle. Hence this allows tracking of the particle possible. This might sounds difficult to formulate but we can actually express the Lagrangian derivative in terms of the Eulerian derivative. By using Chain rule to the acceleration of a fluid particle we get:
+In our spatial domain $\Omega$, recall the path followed by a fluid particle is: $\textbf{x} = (x(t), y(t), z(t))$ . Hence the path or trajectory followed by the particle is varying with respect to time. The velocity of such a particle at a particular location and at an instant time is given by $\dfrac{d \textbf{x}}{d t} = \textbf{u} (x(t), y(t), z(t))$ which is just an ordinary derivative. The question then is how should we measure the change in velocity? This introduces the concept of acceleration: $\textbf{a} (t) = \dfrac{d }{d t} \textbf{u}$ which is merely the time derivative of the velocity. An intrinsic approach to find $\textbf{a} (t)$ is using the standard Eulerian derivative which is simply written as $\partial_t \textbf{u} = \dfrac{\partial \textbf{u}}{\partial t}$. Here we have used the standard ``subscript" notation to indicate derivatives (i.e $\textbf{u}_t$ means the time derivative of velocity $\textbf{u}$). The Eulerian approach is indeed valid but only when we are measuring the velocity at a fixed point. Nevertheless, in our case because of the (space and time dependent) velocity field presented in the region, the fluid particles are constantly being transported throughout the domain $\Omega$. As a result, using the Eulerian approach which sets the reference point fixed in space does not help us to track down the path of a fluid particle. Fortunately the Lagrangian approach solves this problem because it sets the reference point to be moving along with the fluid particle, thus making the tracking of the particles possible. This might sounds difficult to formulate but we can actually express the Lagrangian derivative in terms of the Eulerian derivative. By using Chain rule to the acceleration of a fluid particle we obtained:
 \begin{dgroup}
 \begin{dmath}
 \textbf{a} (t) = \dfrac{d}{d t} \textbf{u} (x(t), y(t), z(t))
 = \dfrac{\partial \textbf{u}}{\partial x} \dfrac{d x}{dt} + \dfrac{\partial \textbf{u}}{\partial y} \dfrac{d y}{dt} + \dfrac{\partial \textbf{u}}{\partial z} \dfrac{d z}{dt} + \dfrac{\partial \textbf{u}}{\partial t}
 \end{dmath}
 \intertext{where $\hat{x}, \hat{y}, \hat{z}$ are unit directional vectors in the x, y and z directions respectively\\
-Rewriting this equation in a concise way we obtained:}
+By rewriting this equation in a concise way we obtained:}
 \begin{dmath}
 \textbf{a} (t) = \partial_t \textbf{u} + (\textbf{u} \cdot \nabla) \textbf{u}
 \end{dmath}
 \end{dgroup}
-where we have used the standard ``subscript" notation to indicate derivatives (i.e $\textbf{u}_t$ means the time derivative of velocity $\textbf{u}$)\\
 
 The Lagrangian derivative (also referred as the material derivative) for any space-time dependent function (scalar or vector) can therefore be defined as \cite{chorin1968numerical}
 \begin{equation}
@@ -70,7 +67,7 @@ The Lagrangian derivative (also referred as the material derivative) for any spa
 \subsection{Forces acting on the fluid}
 To fully understand how the fluid motion in $\Omega$ is governed, we need to understand the forces acting on the fluid substances. Let's consider the control volume $W$ again. There are two classes of forces acting on fluid in $W$: Surface forces and Body forces.\\
 
-Let's consider the surface forces first. It is the force acting across the surface $S$ of the control volume by the rest of the fluid. The stress which is the force per unit area can be broken down into the normal stress (acting normally to the surface $S$) and viscous stress (acting tangentially to the surface). The normal stress is related to the concept of pressure which is represented by a scalar field $p(\textbf{x},t)$. The viscous stress tensor ($\textbf{$\sigma$}$) describes the viscous force. In $3D$, it is just a matrix. In an ideal flow (Euler's inviscid flow) only the normal stress is considered, which neglects the transport of momentum across the surface $S$ between the control volume and the rest of the fluid. This is clearly non-realistic and thus this is why it is coined as ideal or perfect flow. Hence in our derivation of the more general Navier Stokes equations, the viscous stress must be included. Thus the total surface force (per unit area) is written as:
+Let's consider the surface force first. It is the force acting across the surface $S$ of the control volume ($W$) by the rest of the fluid. The stress which is the force per unit area can be broken down into the normal stress (acting normally to the surface $S$) and viscous stress (acting tangentially to the surface). The normal stress is related to the concept of pressure which is represented by a scalar field $p(\textbf{x},t)$. The viscous stress tensor ($\textbf{$\sigma$}$) describes the viscous force. In 3D, it is just a matrix. In an ideal flow (Euler's inviscid flow) only the normal stress is considered, which neglects the transport of momentum across the surface $S$ between the control volume $W$ and the rest of the fluid. This is clearly non-realistic and thus this is why it is coined as ideal or perfect flow. Hence in our derivation of the more general Navier Stokes equations, the viscous stress must be included. This makes the total surface force (per unit area) to be written as:
 \begin{equation}
 - p(\textbf{x},t) \textbf{n} + \textbf{$\sigma$} (\textbf{x},t)\cdot \textbf{n}
 \end{equation}
@@ -81,19 +78,20 @@ Now we can integrate this to find the total surface force across $\partial W$ by
 \textbf{S}_{\partial W} = - \int_{\partial W} p \textbf{n}\,\,\,dA + \int_{\partial W} \textbf{$\sigma$}\cdot\textbf{n}\, \, \, dA
 \end{dmath}
 \intertext{where $A$ is the area of the surface $S$.\\
-Consider the two integrals separately: for pressure:\\
+Consider the two integrals separately.\\
+For pressure:\\
 If $\textbf{e}$ is any fixed unit vector in space, then}
 \begin{dmath}
 - \textbf{e} \cdot \int_{\partial W} p \textbf{n} =  - \int_{\partial W} p (\textbf{e} \cdot \textbf{n}) \, \, \, dA 
 = - \int_{W} \nabla \cdot (p \textbf{e})\, \, \, dV \condition{by the divergence theorem }
 = \textbf{e} \cdot - \int_W \nabla p \, \, \, dV 
 \end{dmath}
-\intertext{by dropping the unit vector $\textbf{e}$ we obtain the total surface force as}
+\intertext{by dropping the unit vector $\textbf{e}$ we obtained the total surface force as}
 \begin{dmath}
 - \int_{\partial W} p \textbf{n} \,\,\,dA = - \int_W \nabla p \, \, \, dV
 \end{dmath}
 \intertext{\\
-For the viscous stress:
+For the viscous stress:\\
 By using divergence theorem
 \\}
 \begin{dmath}
@@ -107,16 +105,16 @@ Hence the total surface force is:
 \end{dmath}
 \end{dgroup}
 
-Now if there is also a body force applied to the fluid, usually it is the gravity. Sometimes it can also be an external forcing term. Assume the body force $F$ has density $\textbf{f}$ then:
+Usually there is also a body force applied to the fluid and in general it is the gravity. Sometimes it can also be an external forcing term. Nevertheless, let's put the body force into our derivation. Assume the body force $F$ has density $\textbf{f}$ then:
 \begin{equation}
 \textbf{F} = \int_W \rho \textbf{f} \, \, \, dV
 \end{equation}
 
-Combine the surface and body force densities we obtain the total force density:
+Combine the surface and body force densities we obtained the total force density:
 \begin{equation}
 force \, \, (per \, \, \, unit \, \, \, volume) = - \nabla p + \nabla \cdot \textbf{$\sigma$}+\textbf{f}
 \end{equation}
-Hence by Newton's second law of motion which is the conservation momentum wee obtained:
+Hence by Newton's second law of motion which is also called the conservation of momentum we obtained:
 \begin{dgroup}
 \begin{dmath}
 \rho \dfrac{D \textbf{t}}{D t} = -\nabla p + \nabla \cdot \textbf{$\sigma$}+\rho \textbf{f}
@@ -129,10 +127,10 @@ Or if we expand the Lagrangian derivative:\\
 \rho \dfrac{\partial \textbf{u}}{\partial t} = - \rho (\textbf{u} \cdot \nabla) \textbf{u} - \nabla p + \nabla \cdot \textbf{$\sigma$}+\rho \textbf{f}
 \end{dmath}
 \end{dgroup}
-This is the differential form of the conservation of momentum.\\
+We then arrive at the differential form of the conservation of momentum.\\
 
 \section{Stress tensor for Newtonian fluid}
-The stress tensor $\textbf{$\sigma$}$ is closely related to the rate of strain or deformation. In fact for Newtonian flow $\textbf{$\sigma$}$ is a linear function of rate of strain.\\
+The stress tensor $\textbf{$\sigma$}$ is closely related to the rate of strain or deformation. In fact for Newtonian flows $\textbf{$\sigma$}$ is a linear function of the rate of strain.\\
 
 First we demonstrate that the velocity field of the fluid can be separated into sum of (rigid) translation, a deformation and (rigid) rotation.\\
 
@@ -140,14 +138,14 @@ If we consider the fluid particle initially at position $\textbf{x}$ in $\mathbb
 \begin{equation}
 \textbf{u}(\textbf{x}+\textbf{h}) = \textbf{u}(\textbf{x}) + \textbf{D}(\textbf{x})\cdot\textbf{h}+\dfrac{1}{2}\textbf{$\xi$}(\textbf{x}) \times \textbf{h} + \mathcal{O}(h^2)
 \end{equation}
-where $\textbf{D}(\textbf{x})$ is called the deformation tensor, in 3D, it is a symmetric matrix; $\textbf{$\xi$}$ is called the rotation vector. 
+where $\textbf{D}(\textbf{x})$ is called the deformation tensor and in 3D, it is a symmetric matrix; $\textbf{$\xi$}$ is called the rotation vector. 
 %Thus the velocity field is now separated into sum of (rigid) translation, a deformation and (rigid) rotation.\\
 
 To find $\textbf{D}(\textbf{x})$ and $\textbf{$\xi$}(\textbf{x})$ we can Taylor expand the above expression for $\textbf{u}(\textbf{x}+\textbf{h})$ at point $\textbf{x}$. This lead to
 \begin{equation}
 \textbf{u}(\textbf{x}+\textbf{h}) = \textbf{u}(\textbf{x}) = \nabla\textbf{u}(\textbf{x}) \cdot \textbf{h} + \mathcal{O}(h^2)
 \end{equation}
-In $3D$, we can separate the matrix $\nabla\textbf{u}(\textbf{x})$ as one symmetric and antisymmetric part by simple algebra. Define:
+In the context of 3D, we can separate the matrix $\nabla\textbf{u}(\textbf{x})$ as one symmetric and antisymmetric part by simple algebra. Hence we can Define:
 \begin{dgroup}
 \begin{equation}
 \textbf{D} = \dfrac{1}{2}[\nabla \textbf{u}+(\nabla \textbf{u})^T]
@@ -173,14 +171,14 @@ For Newtonian flows we have the nice property that the stress tensor $\textbf{$\
 \end{equation}
 where we introduce the terms: $\mu$ is the first coefficient of viscosity and $\lambda$ the second coefficient of viscosity \cite{chorin1990mathematical}. Here we only give a basic introduction to stress tensors, more details can be found in textbooks in fluid dynamics, for instance the well-cited book by Chorin \cite{chorin1990mathematical}\\
 
-Substitute this expression of $\textbf{$\sigma$}$ back into our balance of momentum equation (the part with $\nabla \cdot \textbf{$\sigma$}$) and after some algebra we recover the Navier Stokes equations.\\
-In a compact form:
+Substitute this expression of $\textbf{$\sigma$}$ back into our balance of momentum equation (the part with $\nabla \cdot \textbf{$\sigma$}$) and after some algebra we recovered the Navier Stokes equations.\\
+In a compact form it is stated as:
 \begin{equation}
 \rho \dfrac{D\textbf{u}}{Dt} = -\nabla p + (\lambda + \mu)\nabla \,(\nabla \cdot\textbf{u}) + \mu \nabla^2 \textbf{u} + \rho \textbf{f}
 \end{equation}
 
 \subsection{Incompressibility}
-Now we have 4 equations (balance of momentum (for $u,\,v\,w$ and continuity equation) corresponds to 5 unknowns, namely the velocities: $u,\,v,\,w$, pressure $p$ and density $\rho$. Obviously these are not enough to provide a complete solutions to our fluid flow problem. This is when the conservation of energy comes into play. However the derivation of conservation of energy requires advanced thermodynamics and we exclude the details here. We need to find another constraint to replace it. Because we are working with incompressible flows, this implies that the fluid actually cannot be compressed or stretched. Hence this leads to the fact that the density is constant over time ($\dfrac{\partial \rho}{\partial t} = 0$). If we go back to the continuity equation this results in:
+Now we have 4 equations (balance of momentum (for $u,\,v,\,w$ and continuity equation) corresponding to 5 unknowns, namely the velocities: $u,\,v,\,w$, pressure $p$ and density $\rho$. Obviously these are not enough to provide a complete set of solutions to our fluid flow problem. This is when the conservation of energy comes into play. However the derivation of conservation of energy requires advanced thermodynamics and we exclude the details here. We need to find another constraint to replace it. Because we are working with incompressible flows, this implies that the fluid actually cannot be compressed or stretched. Hence this leads to the fact that the density is constant over time ($\dfrac{\partial \rho}{\partial t} = 0$). If we go back to the continuity equation this results in:
 \begin{dgroup}
 \begin{dmath}
 \dfrac{D \rho}{D t} = \nabla \cdot (\rho \textbf{u}) = 0
@@ -192,32 +190,36 @@ Now we have 4 equations (balance of momentum (for $u,\,v\,w$ and continuity equa
 \end{dgroup}
 This is the well-known divergence free constraint. This is the additional constraint we need to complete the derivation. Now we have 4 equations (balance of momentum and incompressibility constraint) for 4 unknowns: velocities and pressure. The density drops out.\\
 
-If we add this divergence free constraint into the our Navier Stokes equations in the previous subsection we find the momentum equation greatly simplifies:
+If we add this divergence free constraint into our Navier Stokes equations in the previous subsection we find the momentum equation greatly simplifies:
 \begin{equation}
 \dfrac{D\textbf{u}}{Dt} = -\nabla p + \nu \nabla^2\textbf{u} + \textbf{f}
 \end{equation}
-Expand the material derivative we finally recover the set of Navier Stokes equations for Incompressible Newtonian flow::
+By expanding the material derivative we have finally derived the set of Navier Stokes equations for Incompressible Newtonian flow::
 \begin{equation}
 \begin{cases}
 \partial_t\textbf{u} + (\textbf{u} \cdot \nabla)\textbf{u} = -\nabla p + \nu \nabla^2\textbf{u} + \textbf{f}\\
 \nabla \cdot \textbf{u}=0\\
 \end{cases}
 \end{equation}
-The part $(\textbf{u} \cdot \nabla)\textbf{u}$ is called the advective inertial force or convection term whereas $\nabla^2\textbf{u}$ is referred to viscous force.
+The part $(\textbf{u} \cdot \nabla)\textbf{u}$ is called the advective inertial force or convection term whereas $\nabla^2\textbf{u}$ is referred to viscous force. $\nabla^2 \textbf{u}$ is the vector Laplacian and it is defined as
+\begin{equation*}
+\nabla^2 \textbf{u} = \nabla \,(\nabla \cdot \textbf{u}) - \nabla \times (\nabla \times \textbf{u})
+\end{equation*}
 
 \paragraph*{Non-dimensionalisation}
-In practice, fluid motion is best analysed in the non-dimensionalised Navier Stokes form. This is done by dividing the physical variables: velocities, time and displacement of a flow by their characteristic scales so the these variables are now dimensionless. The choice of characteristic scales vary between flow problems and depends on the geometry of the flow too. For instance, for flow passing a sphere, the characteristic length $L$ is usually taken to be the diameter of the sphere and the characteristic velocity $U$ is taken to be the velocity at infinity. Time also has a characteristic scale which is taken to be the ratio between $U$ and $L$. \cite{chorin1990mathematical}\\
+In practice, fluid motion is best analysed in the non-dimensionalised Navier Stokes form. This is done by dividing the physical variables: velocities, time and displacement of a flow by their characteristic scales so that these variables are now dimensionless. We would have 3 characteristic scales, namely $L$ for length, $U$ for velocity and $T$ for time. The choice of characteristic scales vary between flow problems and it depends on the geometry of the flow too. For instance, for flows passing a sphere, the characteristic length $L$ is usually taken to be the diameter of the sphere and the characteristic velocity $U$ is taken to be the velocity at infinity. Time also has a characteristic scale which is taken to be the ratio between $U$ and $L$. \cite{chorin1990mathematical}\\
 
-Hence by non-dimensionalisation
+In the derivation and subsequent numerical investigations, we are not too concerned about the exact choices for $L,\,U$ and $T$. However they must be introduced in the non-dimensionalisation process.\\
+Define
 \begin{equation}
 \textbf{u}' = \dfrac{\textbf{u}}{U},\,\,\,\textbf{x}' = \dfrac{\textbf{x}}{L},\,\,\,\textbf{t}'=\dfrac{t}{T}
 \end{equation}
-If we substitute these back into the Navier stokes equations we obtain the non-dimensionalised Navier Stokes equations:
+If we substitute these back into the Navier stokes equations we obtained the non-dimensionalised Navier Stokes equations:
 \begin{equation}
 \begin{cases}
 \partial_t \textbf{u} + (\textbf{u} \cdot \nabla)\textbf{u} = -\nabla p + \dfrac{1}{R}\nabla^2\textbf{u}+\textbf{f}\\
 \nabla \cdot \textbf{u}=0\\
 \end{cases}
 \end{equation}
-where we have defined $R = \dfrac{LU}{\nu}$ to be the Reynolds number. The magnitude of parameter Reynolds number describes the ratio between advective inertial force and viscous force. This leads to the important concept of ``Dynamic similarity" which states two flows with the same geometry and Reynolds number would result in similar flow patterns. This is very important in fluid dynamics analysis. Therefore the non-dimensionalised Navier Stokes equations are more commonly used. In our subsequent numerical analysis we will be using the non-dimensionalised form too.
+where we have defined $R = \dfrac{LU}{\nu}$ to be the Reynolds number. The magnitude of parameter Reynolds number describes the ratio between advective inertial force and viscous force. This leads to the important concept of ``Dynamic similarity" which states that two flows with the same geometry and Reynolds number would result in similar flow patterns. This is very important in fluid dynamics analysis. Therefore the non-dimensionalised Navier Stokes equations are more commonly used. In our subsequent numerical analysis we will be using the non-dimensionalised form too.
 
