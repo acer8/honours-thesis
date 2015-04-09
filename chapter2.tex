@@ -6,7 +6,7 @@ There are many ways described in literature in which Navier Stokes can be derive
 We want to develop a mathematical model which describes the motion of a fluid in a region of space. Hence we have used 3D Euclidean coordinates. Let $\Omega$ denotes the spatial domain filled with a fluid such as water (or gases). More precisely, we consider $\Omega$ as a bounded subset of $\mathbb{R}^3$. We are focused on the motion of an arbitrary fluid particle in $\Omega$. Let $\textbf{x} \in \Omega$ be a vector field that describes the location of the fluid particle. In 3D, we use the notation that $\textbf{x} = (x(t), y(t), z(t), t)$. Further, let $u(\textbf{x}(t), t) = \left( u(x,y,z,t),\,v(x,y,z,t),\,w(x,y,z,t)\right)$ be the spatial velocity of the fluid which is the time derivative of $\textbf{x}(t)$. Our mathematical model depends on several basic assumptions and physics principals.\\
 
 \section{Continuum hypothesis}
-This is the fundamental assumption and it basically means that we are considering the fluid as a continuous matter consisted of infinitesimal points. Strictly speaking this assumption is obviously "Wrong" as the fluid is not continuous but rather made up of discrete molecules. Therefore they are not infinitesimal points but rather have physical dimensions that can be measured. Nevertheless the continuum hypothesis does lead to very accurate results for most macroscopic phenomena. \cite{chorin1990mathematical}.\\
+This is the fundamental assumption and it basically means that we are considering the fluid as a continuous matter consisted of infinitesimal points. Strictly speaking this assumption is obviously ``Wrong'' as the fluid is not continuous but rather made up of discrete molecules. Therefore they are not infinitesimal points but rather have physical dimensions that can be measured. Nevertheless the continuum hypothesis does lead to very accurate results for most macroscopic phenomena. \cite{chorin1990mathematical}.\\
 
 It follows from the hypothesis that we assume the functions such as velocity $u$ and density $\rho$ are smooth too. This means for any sub-region $W \subset \Omega$, the fluid has a well-defined density:
 \begin{equation}
@@ -73,37 +73,33 @@ Let's consider the surface force first. It is the force acting across the surfac
 \end{equation}
 
 Now we can integrate this to find the total surface force across $\partial W$ by the use of divergence theorem:
-\begin{dgroup}
-\begin{dmath}
+\begin{equation}
 \textbf{S}_{\partial W} = - \int_{\partial W} p \textbf{n}\,\,\,dA + \int_{\partial W} \textbf{$\sigma$}\cdot\textbf{n}\, \, \, dA
-\end{dmath}
-\intertext{where $A$ is the area of the surface $S$.\\
+\end{equation}
+where $A$ is the area of the surface $S$.
+
 Consider the two integrals separately.\\
 For pressure:\\
-If $\textbf{e}$ is any fixed unit vector in space, then}
-\begin{dmath}
+If $\textbf{e}$ is any fixed unit vector in space, then
+\begin{dmath*}
 - \textbf{e} \cdot \int_{\partial W} p \textbf{n} =  - \int_{\partial W} p (\textbf{e} \cdot \textbf{n}) \, \, \, dA 
 = - \int_{W} \nabla \cdot (p \textbf{e})\, \, \, dV \condition{by the divergence theorem }
 = \textbf{e} \cdot - \int_W \nabla p \, \, \, dV 
-\end{dmath}
-\intertext{by dropping the unit vector $\textbf{e}$ we obtained the total surface force as}
-\begin{dmath}
+\end{dmath*}
+by dropping the unit vector $\textbf{e}$ we obtained the total surface force as
+\begin{equation}
 - \int_{\partial W} p \textbf{n} \,\,\,dA = - \int_W \nabla p \, \, \, dV
-\end{dmath}
-\intertext{\\
+\end{equation}
 For the viscous stress:\\
 By using divergence theorem
-\\}
 \begin{dmath}
 \int_{\partial W} \textbf{$\sigma$}\cdot\textbf{n}\, \, \, dA = \int_{W}\nabla \cdot \textbf{$\sigma$}\, \, \, dV
 \end{dmath}
-\intertext{\\
 Hence the total surface force is:
-\\}
 \begin{dmath}
 \textbf{S}_{\partial W} = - \int_W \nabla p \, \, \, dV + \int_{W}\nabla \cdot \textbf{$\sigma$}\, \, \, dV
 \end{dmath}
-\end{dgroup}
+
 
 Usually there is also a body force applied to the fluid and in general it is the gravity. Sometimes it can also be an external forcing term. Nevertheless, let's put the body force into our derivation. Assume the body force $F$ has density $\textbf{f}$ then:
 \begin{equation}
@@ -112,12 +108,12 @@ Usually there is also a body force applied to the fluid and in general it is the
 
 Combine the surface and body force densities we obtained the total force density:
 \begin{equation}
-force \, \, (per \, \, \, unit \, \, \, volume) = - \nabla p + \nabla \cdot \textbf{$\sigma$}+\textbf{f}
+\text{force (per unit volume)} = - \nabla p + \nabla \cdot \textbf{$\sigma$}+\textbf{f}
 \end{equation}
 Hence by Newton's second law of motion which is also called the conservation of momentum we obtained:
 \begin{dgroup}
 \begin{dmath}
-\rho \dfrac{D \textbf{t}}{D t} = -\nabla p + \nabla \cdot \textbf{$\sigma$}+\rho \textbf{f}
+\rho \dfrac{D \textbf{u}}{D t} = -\nabla p + \nabla \cdot \textbf{$\sigma$}+\rho \textbf{f}
 \end{dmath}
 \intertext{\\
 where $D$ is the Lagrangian (material) derivative.\\
