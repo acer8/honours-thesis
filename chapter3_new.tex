@@ -1,0 +1,792 @@
+\chapter{Numerical Methods}
+\label{chapter3}
+\section{Motivation}
+In this chapter we will develop and investigate into the popular numerical solvers to the Incompressible Navier Stokes equations based on the Projection methods.\\
+
+We have 2 types of variables to solve for: velocities ($\textbf{u}$) and pressure $p$. Intuitively we are looking for numerical schemes which given the velocities and pressure at the initial time step with boundary conditions, computes the velocity and pressure at a later time.\\
+
+Let us consider the Navier Stokes equations in spatial domain $\Omega \subset \mathbb{R}^2$ and time interval: $[0,T],\,T>0$ with given initial value and boundary conditions outlined below:
+\begin{equation}
+\begin{cases}
+\partial_t \textbf{u} + (\textbf{u} \cdot \nabla)\textbf{u} = -\nabla p + \dfrac{1}{R}\nabla^2\textbf{u} + \textbf{f}\\
+\nabla \cdot \textbf{u}=0\\
+\textbf{u}(x,y,t=0) = \textbf{u}_0\,\,\,\text{   $x,\,y\,\in \Omega$}\\
+\textbf{u}(x,y,t) = \textbf{u}_b\,\,\,\text{   $x,\,y\,\in \partial\Omega$ and $t\,\in [0,T]$}
+\end{cases}
+\end{equation} 
+Here $\textbf{u}$ with subscript $b$ denotes the boundary velocity values specified by the problem.\\
+
+We have taken $\textbf{u}(\textbf{x},t)$ to be the smooth analytical solution whereas $\textbf{u}^n$ with the superscript $n$ is used to denote the numerical solution discretised at time iteration $n$. This corresponds to the time at $t^n = \Delta t\,n$ with $n = 0,1,\cdots N$ where $N\,\in \mathbb{N}$ is the maximum iteration. The time stepping is determined by the ratio: $\Delta t=\dfrac{T}{N}$. Same notation holds for pressure.\\
+
+Let us first consider a ``quasi" first order backward Euler discretisation in time to the above initial value problem. Assume we have the knowledge of $\textbf{u}^n$ and $p^n$ for some time iteration $n$. We call it a quasi method because the non-linear convective and the external body force term at the right hand side of \eqref{eq:backward Euler discretisation} are discretised at the $n$th iteration instead of $n+1$. The standard backward Euler approach usually satisfies the equation: $y^{n+1} = y^n + \Delta t f(y^{n+1},t^{n+1})$ for some variable $y$ and a function $f$. Bounded by the implicit nature of the scheme, backward Euler methods are numerically more stable than their explicit forward counterparts \cite{gear1971simultaneous}. However this is not our main discussion point. We have done it in a ``quasi" way because we want to reduce our analytical complexity yet illustrate the direct Navier Stokes solver is computationally expansive.\\
+
+\begin{equation}\label{eq:backward Euler discretisation}
+\begin{cases}
+\dfrac{\textbf{u}^{n+1} - \textbf{u}^n}{\Delta t} = - \nabla_h p^{n+1} - (\textbf{u}^n\cdot\nabla_h)\textbf{u}^n + \dfrac{1}{R}\nabla_h^2\textbf{u}^{n+1} + \textbf{f}^{\,n}\\
+\nabla_h \cdot \textbf{u}^{n+1} = 0\\
+\end{cases}
+\end{equation}\\
+
+the subscript ``$h$" refers to numerically discretised operators (e.g. $\nabla_h \cdot$ means the numerical divergence operator).
+This is an implicit scheme in time for the viscous term.
+
+The above equations can then be rearranged into a block matrix form:\\
+\begin{equation}\label{backward Euler matrix form}
+\begin{bmatrix}
+A & \Delta t \nabla_h\\
+-\Delta t \nabla_h \cdot & 0\\
+\end{bmatrix}
+\begin{bmatrix}
+\textbf{u}^{n+1}\\
+p^{n+1}\\
+\end{bmatrix}
+= \begin{bmatrix}
+\textbf{F}^n\\
+0
+\end{bmatrix}
+\end{equation}\\
+
+Where for simplicity we have defined $A = I - \dfrac{\Delta t}{R}\nabla_h^2$ ($I$ stands for the identity matrix) and
+$\textbf{F}^n = \textbf{u}^n  - \Delta t(\textbf{u}^n\cdot\nabla_h)\textbf{u}^n + \textbf{f}^{\,n}$. Further assume the discrete divergence and gradient operators are skew adjoint i.e. $-\nabla_h \cdot = (\nabla_h)^T$, then we obtained a symmetric block matrix \cite{maria2003application}\\
+
+\begin{equation}\label{backward Euler symmetric block matrix form}
+\begin{bmatrix}
+A & \Delta t \nabla_h\\
+\Delta t \nabla_h^T & 0\\
+\end{bmatrix}
+\begin{bmatrix}
+\textbf{u}^{n+1}\\
+p^{n+1}\\
+\end{bmatrix}
+= \begin{bmatrix}
+\textbf{F}^n\\
+0
+\end{bmatrix}
+\end{equation}\\
+This block matrix is actually indefinite in the sense that it has both positive and negative eigenvalues. Hence this leads to a saddle point problem when solving it. This causes many trouble in practice.\\
+
+First if we consider this as an optimisation problem, then such a saddle point problem makes it hard to find the minimiser ($\textbf{u}^{n+1}$). We will illustrate this in the following simple analysis.\\
+
+The previous numerical scheme is equivalent to the constraint optimisation problem and essentially we want to minimise the energy 
+\begin{equation*}\label{energy optimisation formulation}
+J = \dfrac{1}{2}{\textbf{u}^{n+1}}^T A\textbf{u}^{n+1} - {\textbf{F}^n}^T\textbf{u}^{n+1}
+\end{equation*}
+subject to the divergence free constraint:
+\begin{equation*}
+-\Delta t \nabla_h \cdot \textbf{u}^{n+1} = \Delta t \nabla_h^T \textbf{u}^{n+1} = 0
+\end{equation*}
+The optimisation problem is tackled by the common Lagrangian approach. The Lagrangian function is defined as:
+\begin{equation*}\label{eq:Lagrangian function}
+\Lambda = \dfrac{1}{2}{\textbf{u}^{n+1}}^T A\textbf{u}^{n+1} - {\textbf{F}^n}^T\textbf{u}^{n+1} + \Delta t \lambda \nabla_h^T \textbf{u}^{n+1}
+\end{equation*}
+where $\lambda \in \mathbb{R}$ is called the Lagrange multiplier.\\
+
+The solutions (or minimisers) are obtained by taking the gradient of $\Lambda$ (differentiate with respect to $\textbf{u}^{n+1}$)
+\begin{equation*}
+\nabla_h \Lambda =  A\textbf{u}^{n+1} - \textbf{F}^n +  \Delta t \lambda \nabla_h = 0
+\end{equation*}
+However by solving for this equation we will find that the critical points obtained are saddle points.\\
+
+Interestingly if we combine the above equation with the divergence free constraint we recover a block matrix similar to what we considered before for the numerical scheme \eqref{backward Euler symmetric block matrix form}. Now we find that the velocity variable presents in both formulations, but the pressure is replaced by the Lagrange multiplier in the optimisation formulation.
+
+\begin{equation}\label{eq:disrecte optimisation problem in symmetric block matrix form}
+\begin{bmatrix}
+A & \Delta t \nabla_h\\
+\Delta t \nabla_h^T & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+\textbf{u}^{n+1}\\
+\lambda
+\end{bmatrix}
+= \begin{bmatrix}
+\textbf{F}^n\\
+0
+\end{bmatrix}
+\end{equation}
+
+Therefore from the numerical optimisation point of view we see that in incompressible flows, the pressure is merely a mathematical constant added to preserve the divergence free constraint. Hence it is not a thermodynamic variable
+\cite{maria2003application,perot1993analysis}\\
+
+Second we want to illustrate that the coupled numerical scheme presented is computationally very expensive to solve. Intuitively we could solve it by performing Gaussian elimination to the block matrix in \eqref{backward Euler symmetric block matrix form}. 
+
+%\begin{equation*}
+%\begin{array}{| l c | r |}
+%A & D^T & \textit{F} \\
+%D & 0 & 0 \\
+%\end{array}
+%\sim \begin{array}{| l c | r |}
+%I & 0 & A^{-1} (I - D^T (DA^{-1}D^T)^{-1} DA^{-1})F \\
+%0 & I & (DA^{-1}D^T)^{-1}DA^{-1}F \\
+%\end{array}
+%\end{equation*}
+
+Then we can see that the velocity and pressure are solved together in two steps:
+\begin{dgroup}
+\begin{dmath}
+\textbf{u}^{n+1} = A^{-1}\,(\textbf{F}^n - \nabla_h (\nabla_h^T A^{-1}\nabla_h)^{-1}(\nabla_h^T A^{-1}\textbf{F}^n))
+\end{dmath}
+\intertext{and\\
+}
+\begin{dmath}
+p^{n+1} = (\nabla_h^T A^{-1} \nabla_h)^{-1}(\nabla_h^T A^{-1} \textbf{F}^n)
+\end{dmath}
+\end{dgroup}
+
+Since $A$ contains a Laplace term and so the method involves calculating Laplacian and its inverses many times in each time iteration which clearly indicates huge computational costs! We really want to find alternative ways to solve for $\textbf{u}^{n+1}$ and $p^{n+1}$. This leads to the development of Projection methods.
+
+
+\section{Projection method}
+In the first half of last century, when the computer digital power was not as strong as it stands today, the coupled solver does give raise serious issues in lack of efficiency. Therefore some researchers in the late 1960s including Chorin and Temam started to think methods to decouple velocity and pressure. The idea is to split the relation between these two quantities and solving them individually (or successively). For instance, solve for velocity at iteration $n+1$ and then correct it by imposing the divergence free constraint. The pressure can then be solved accordingly. The question now is how to find a way to correct the divergence of velocity? Both Chorin and Temam turned to the Helmholtz Hodge Decomposition theorem and used it as a theoretical foundation for their numerical methods \cite{chorin1968numerical,chorin1990mathematical,temam1969approximation,brown2001accurate,maria2003application}. Later this type of decoupling method was coined to be the famous $\emph{Projection Method}$ or $\emph{Splitting method}$ or sometimes $\emph{Fractional Step Method}$ \cite{kim1985application,brown2001accurate}.\\
+
+In this section we talk about the original idea of projection method and how it is used to solve the Navier Stokes equations.
+
+\section{Helmholtz Hodge decomposition (HHD) Theorem}
+The Helmholtz theorem or Helmholtz Hodge decomposition theorem is a fundamental theorem in vector calculus. It basically states that for any smooth vector field in the subset of $\mathbb{R}^2$ or $\mathbb{R}^3$, it can be uniquely decomposed into the sum of irrotational (curl free) and solenoid (divergence free) vector fields \cite{arfken2005mathematical,chorin1990mathematical}. For the sake of simplicity, the complete proof of the theorem is not included, but we rather focus on the application of the theorem to projection methods. Nevertheless, we will show the important results of the theorem, namely the orthogonality, existence and uniqueness of the decomposition. More detailed description of the theorem can be found in many textbooks and papers, for instance the book by Arfken \cite{arfken2005mathematical}.\\
+
+\begin{theorem}
+Let $\Omega$ be a bounded regular domain of $\mathbb{R}^3$, let $\textit{L}^2 (\Omega)$ denote the space of $\textit{L}^2$ integrable vector functions on $\Omega$ with the standard $\textit{L}^2$ inner product, and $H^1\,(\Omega)$ denote the Sobolev space so that the first derivative of $\textit{L}^2$ integrable vector functions on $\Omega$ is also contained in $\textit{L}^2\,(\Omega)$.\\
+Then\\
+$\forall \textbf{w} \, \in \, \textit{L}^2 (\Omega), \, \exists \, \nabla \phi \in \textit{L}^2\,(\Omega) \,\,\,(\text{with    $\phi \in H^1\,(\Omega)$})\, \text{   and   } \, \textbf{u} \in \textit{L}^2\,(\Omega)$ such that
+\begin{dgroup}
+\begin{dmath}\label{eq:general HHD}
+\textbf{w} = \nabla \phi + \textbf{u}
+\end{dmath}
+\intertext{with }
+\begin{dmath}\label{eq:solenoid part}
+\nabla \cdot \textbf{u} = 0
+\end{dmath}
+\begin{dmath}\label{eq:curl free part}
+\nabla \times \nabla \phi = 0
+\end{dmath}
+\intertext{Provided the boundary condition:}
+\begin{dmath*}
+\textbf{u} \, \text{ parallel to } \partial \Omega\,\,\,(\text{i.e. $\textbf{u}\cdot\textbf{n}=0$ on $\partial \Omega$})
+\end{dmath*}
+\end{dgroup}
+where $\textbf{n}$ is the unit vector normal to $\partial \Omega$
+\end{theorem}
+
+Further as we shall see shortly the decomposition is orthogonal. This partly follows from the boundary condition provided in the theorem. The uniqueness then follows from the orthogonality condition.\\
+ 
+Note that the boundary condition can actually be done in two ways. Intuitively, we can make $\textbf{u}$ parallel to $\partial \Omega$ by enforcing its normal component to vanish, i.e. make $\textbf{n} \cdot \textbf{u} = 0$ without specifying its tangential component; or alternatively, although less direct we can make $\textbf{n} \times \nabla \phi = 0$ so that the vector tangential component of $\textbf{u}$ is the same as the vector tangential component of $\textbf{w}$, the normal component of $\textbf{u}$ is rather undetermined. In fact both ways will retain the orthogonality, existence and uniqueness of the decomposition. For the sake of simplicity, we only show the demonstration for the vanishing normal component case. However detailed proof for the other case can be found in Denaro's paper \cite{maria2003application}. I point this out because the second case when  $\textbf{n} \times \nabla \phi = 0$ will lead to the potential vorticity formulation of projection method, which is another robust solver. We have not implemented this method in our numerical solver due to time limitations. In addition, this implies that the Helmholtz decomposition only requires the specification of one boundary condition (normal or tangential) for $\textbf{w}$. This is a controversial issue in projection methods, because the projected divergence free vector field $\textbf{u}$ (which is taken to be the velocity solution to the Navier Stokes equations) is not guaranteed to satisfy all the physical boundary conditions that the Navier Stokes problem require \cite{maria2003application}.\\
+
+With the boundary condition $\textbf{n} \cdot \textbf{u} = 0$ provided, we demonstrate the existence, uniqueness and orthogonality of the Helmholtz decomposition.\\
+
+First the existence of decomposition:\\
+
+By taking divergence on equation \eqref{eq:solenoid part} we arrive at the following relations:\\
+\begin{dgroup}
+\begin{dmath}
+\nabla \cdot \textbf{w} = \nabla^2 \phi \condition{   on $\Omega$}
+\end{dmath}
+\intertext{\\
+Then by taking the scalar normal component of $\textbf{w}$ along the boundary we obtain.\\
+}
+\begin{dmath}
+\textbf{n} \cdot \textbf{w} = \textbf{n} \cdot \nabla \phi
+= \dfrac{\partial \phi}{\partial \textbf{n}} \condition{   on $\partial \Omega$ provided $\textbf{u}\cdot\textbf{n}=0$}
+\end{dmath}
+\intertext{\\
+This is essentially a Poisson problem over variable $\phi$ with a Neumann boundary condition. Further, this is a well studied mathematical problem and as proved by R. Courant and D. Hilbert in 1953, \cite{courant1966methods,chorin1990mathematical,maria2003application} this problem has a unique solution (up to the addition of a constant) provided $\int_{\Omega} f dV = \int_{\partial \Omega} g dS$. With the notation $f = \nabla^2 \phi$ and $g = \dfrac{\partial \phi}{\partial \textbf{n}}$, this is rather immediate from the divergence theorem. \\
+}
+\begin{dmath}
+\int_{\Omega} f dV = \int_{\Omega} \nabla^2 \phi dV
+= \int_{\Omega} \nabla \cdot (\nabla \phi) dV 
+= \int_{\partial \Omega} \nabla \phi \cdot \textbf{n} dS
+= \int_{\partial \Omega} g dS
+\end{dmath}
+\end{dgroup}
+
+We now demonstrate the orthogonality property of the decomposition. Followed by the decomposition, let $V$ denote the subspace of $\textit{L}^2\,(\Omega)$ that contains the curl free vector fields ($\nabla \phi$, with $\phi \in H^1(\Omega)$) and $H$ be the subspace of $\textit{L}^2\,(\Omega)$ that contains all the divergence free vector fields ($\textbf{u}$).\\
+
+Hence we can write $H$ formally as:
+\newtheorem{mydef}{Definition}
+\begin{mydef}
+\begin{dmath}\label{eq:set H set of square integrable divergence free and parrallel boundary}
+H = \lbrace {\textbf{u} \in \textit{L}^2 (\Omega): \nabla \cdot \textbf{u} = 0, \textbf{u} \cdot \textbf{n} |_{\partial \Omega} = 0} \rbrace 
+\end{dmath}
+\end{mydef}
+
+The orthogonality property is shown in the sense that the inner product between any elements in $\textit{V}$ and $\textit{H}$ is zero. Indeed orthogonality depends on the structure of the vector space we are working with. In our case, we have $\textit{L}^2 (\Omega),\,\Omega \subset \mathbb{R}^3$ with the standard $\textit{L}^2$ inner product defined as:
+\\
+\begin{equation*}
+< \textbf{w}, \textbf{v} > = \int_{\Omega} \textbf{u} \cdot \textbf{v} \, dV
+\end{equation*}
+for any $\textbf{w}$ and $\textbf{v} \in \textit{L}^2 (\Omega)$.\\
+
+The demonstration of orthogonality is illustrated below\\
+
+$\forall \nabla \phi \in V$ (with $\phi \in H^1(\Omega)$) and $\textbf{u} \in H$ and by the decomposition.
+\begin{dgroup}
+\begin{dmath}
+\int_{\Omega} \nabla \phi \cdot \textbf{u} \, dV
+= \int_{\Omega} \nabla \cdot (\phi \textbf{u}) - \int_{\Omega} \phi (\nabla \cdot \textbf{u}) \, dV
+\end{dmath}
+\intertext{\\
+this is done by using the vector calculus identity - Product rule of a scalar and vector field: \\
+($\nabla \cdot (A \textbf{B}) = \textbf{B} \cdot \nabla A + A (\nabla \cdot \textbf{B}$), where $A = \phi, \textbf{B} = \textbf{u}$)\\
+Because by decomposition, $\textbf{u}$ is divergence free, hence the second integral vanishes.\\
+By applying Divergence Theorem to the remaining integral in the equation above we observed that the decomposed components $\nabla \phi$ and $\textbf{u}$ are orthogonal because their dot product vanishes}
+\begin{dmath}
+\int_{\Omega} \nabla \phi \cdot \textbf{u} \, dV = \int_{\partial \Omega} \phi \textbf{u} \cdot \textbf{n} dS
+= 0 \condition{   by construction $\textbf{u} \cdot \textbf{n} = 0$}
+\end{dmath}
+\end{dgroup}
+
+We now give a simple demonstration of uniqueness.\\
+Suppose that the decomposition is not unique. \\
+Then $\exists \nabla \phi, \nabla \phi' \in V$ (with $\phi,\,\phi' \in H^1(\Omega)$) and $\textbf{u}, \textbf{u}' \in H$, such that they both constitute valid Helmholtz decompositions (Note that the prime sign $'$ is just used to distinguish between vector fields). Hence\\
+\begin{align*}
+\textbf{w} &= \nabla \phi + \textbf{u}, \\
+\textbf{w} & = \nabla \phi' + \textbf{u}'
+\end{align*}
+with $\textbf{n}\cdot\textbf{u} = \textbf{n}\cdot\textbf{u}' =0$\\
+
+Taking their difference we obtain:
+\begin{equation}
+(\nabla \phi - \nabla \phi') + (\textbf{u} + \textbf{u}') = 0
+\end{equation}
+Then taking an inner product with ($\nabla \phi - \nabla \phi'$) \\
+(exactly the same result holds if we do an inner product with ($\textbf{u} - \textbf{u}'$))\\
+We then have
+
+\begin{dgroup}
+\begin{dmath}
+\int_{\Omega} (\nabla \phi - \nabla \phi' + \textbf{u} + \textbf{u}') \cdot (\nabla \phi - \nabla \phi') \, dV = 0
+= \int_{\Omega} (\nabla \phi - \nabla \phi') \cdot (\nabla \phi - \nabla \phi') + (\textbf{u} - \textbf{u}') \cdot (\nabla \phi - \nabla \phi') \, dV
+= \int_{\Omega} || \nabla \phi - \nabla \phi' ||_2^2 + (\textbf{u} \cdot \nabla \phi - \textbf{u}' \cdot \nabla \phi - \textbf{u} \cdot \nabla \phi' + \textbf{u}' \cdot \nabla \phi') \, dV
+\end{dmath}
+\intertext{where $|| \cdot||_2$ denotes the Euclidean $L_2$ norm\\
+
+with the help of orthogonality: ($< \nabla \phi \cdot \textbf{u}>$ = 0 and $<\nabla \phi' \cdot \textbf{u}'>$ = 0), the above equation simplifies to\\
+}
+\begin{dmath}
+\int_{\Omega} || \nabla \phi - \nabla \phi'||_2^2 - (\textbf{u}' \cdot \nabla \phi + \textbf{u} \cdot \nabla \phi') \, dV =0
+\end{dmath}
+\intertext{with the vanishing normal boundary condition: $\textbf{n}\cdot\textbf{u} = 0$ on $\partial\Omega$ imposed}
+\begin{dmath}
+\int_{\Omega} \textbf{u}' \cdot \nabla \phi \, dV 
+= \int_{\Omega} \nabla \cdot (\phi \textbf{u}') - \phi \nabla \cdot \textbf{u}' \, dV
+= \int_{\partial \Omega} \phi \textbf{u}' \cdot \textbf{n} \, dV \condition{   by apply divergence theorem}
+= 0
+\end{dmath}
+\intertext{\\
+$\int_{\Omega} \textbf{u} \cdot \nabla \phi' \, dV$ = 0 is done using exactly the same method.\\
+Hence this implies}
+\begin{dmath}
+\int_{\Omega} || \nabla \phi - \nabla \phi' ||_2^2 \, dV = 0
+\end{dmath}
+\end{dgroup}
+By the property of $\textit{L}^2$ norm, this is true if and only if $\nabla \phi = \nabla \phi'$.\\
+Therefore this implies $\textbf{u}' = \textbf{u}$. The decomposition is unique.\\
+
+Hence we have now demonstrated the uniqueness, existence and orthogonality property of the Helmoholtz Hodge Decomposition Theorem.
+
+\newpage
+\section{Application of Helmoholtz Hodge Decomposition Theorem to numerical solution of Navier Stokes Equations}
+In this subsection, we will talk about the use of Helmholtz decomposition theorem to the construction of Projection methods in solving incompressible Navier Stokes equations. We are focused on the primitive Projection method first proposed by Chorin and independently by Temam \cite{chorin1968numerical,temam1969approximation,brown2001accurate}. Its advantages and disadvantages are also discussed.\\
+
+\subsection{Chorin's Original projection method}
+Recall the momentum part of the non-dimensionalised Navier Stokes equations
+\begin{equation}\label{eq:momentum equation}
+\textbf{u}_t + \nabla \textit{p} = - \textbf{u} \cdot \nabla \textbf{u} + \dfrac{1}{R} \Delta \textbf{u}
+\end{equation}
+Chorin realised that the left hand side of the momentum equation is actually in the form of the Helmholtz Hodge Decomposition \cite{chorin1968numerical,chorin1990mathematical,brown2001accurate}
+\begin{equation}
+\textbf{w} = \textbf{u}_t + \nabla \textit{p} 
+\end{equation}
+and as to obtain an unique Helmholtz Hodge decomposition we also require that $\textbf{u}_t$ parallel to $\partial \Omega$ on the boundary $\partial \Omega$ and $\textbf{u}_t$ is orthogonal with $\nabla p$. It is clear that this imposes non-physical boundary conditions as in many cases, the normal component of velocity ($\textbf{u}_t \cdot \textbf{n}$) is not zero! This is a controversial issue and some researchers at first doubted the validity of such constructions \cite{perot1993analysis,brown2001accurate,shen1992error}. However as proved later by people including Chorin himself that the method is indeed convergent and accurate to at least first order \cite{chorin1969convergence,shen1992error,rannacher1992chorin,perot1993analysis,brown2001accurate}. 
+
+For now, let's assume $\textbf{u}_t$ is the divergence free component followed by the Helmholtz decomposition.Therefore, we note $\textbf{u}_t$ belongs to the set $H$ \eqref{eq:set H set of square integrable divergence free and parrallel boundary}.
+The above discussion naturally lead us to define a projection operator $\mathbb{P}$ which eliminates the gradient of pressure term and left the projected vector $\textbf{w}$ to be divergence free. Hence the projection operator maps the vector $\textbf{w}$ into the divergence free vector space $H$. 
+
+%\newtheorem{mydef}{Definition}
+\begin{mydef}
+Let $\textit{H}$ (as defined in Equation. 4.3) and $\textit{V}$ be two orthogonal subspaces of $\textit{L}^2 (\Omega)$ such that $\textit{L}^2 (\Omega) = \textit{H} \oplus \textit{V}$.\\
+
+Then the projection operator $\mathbb{P}$ is a linear map defined as follows:
+\begin{center}
+$\mathbb{P} (\textbf{w}): \textit{L}^2 (\Omega) \rightarrow \textit{H}$\\
+\end{center}
+$\forall \textbf{w} \in \textit{L}^2 (\Omega)$ and with the boundary condition required by Helmholtz Decomposition:
+\begin{center}
+$\textbf{w}_1 = \mathbb{P} (\textbf{w})$ parallel to $\partial \Omega$
+\end{center}
+We can also define $\mathbb{P}$ formally as:
+\begin{equation}\label{eq:definition of projection operator}
+\mathbb{P} = I - \nabla (\nabla \cdot \nabla)^{-1} \nabla \cdot
+\end{equation}
+Thus $\textit{V}$ can be written as:
+\begin{dmath*}\label{eq:set V}
+V = \lbrace { \textbf{w}_2 \in \textit{L}^2 (\Omega): \mathbb{P} (\textbf{u}) = 0} \rbrace 
+\end{dmath*}
+(recall from the Helmholtz theorem in previous section, $\textbf{w}_1 = \textbf{u}$ and $\textbf{w}_2 = \nabla \phi,\,\phi \in H^1(\Omega)$)\\
+\end{mydef}
+
+By construction, $\textit{V}$ and $\textit{H}$ are the Kernel and Range of $\mathbb{P}$ respectively. Below are some of the basic properties $\mathbb{P}$ has:\\
+$\forall \textbf{w}_1 \in \textit{H}$, $\textbf{w}_2 \in \textit{V}$; $\forall \textbf{w}$ and $\textbf{z}\in \textit{L}^2 (\Omega)$\\
+$\mathbb{P}$ is the identity operator on $\textit{H}$:
+\begin{dgroup}
+\begin{dmath}
+\mathbb{P} (\textbf{w}_1) = 
+\textbf{w}_1 - \nabla (\nabla \cdot \nabla)^{-1} \nabla \cdot \textbf{w}_1
+= \textbf{w}_1
+\end{dmath}
+\intertext{since $\nabla \cdot \textbf{w}_1 = 0$. \\
+In addition $\textit{V}$ is the null set of $\mathbb{P}$\\}
+\begin{dmath}
+\mathbb{P} (\textbf{w}_2) = \nabla \phi - \nabla (\nabla \cdot \nabla)^{-1} \nabla \cdot (\nabla \phi)
+= \nabla \phi - \nabla (\nabla \cdot \nabla)^{-1} (\nabla \cdot \nabla) \phi
+= \nabla \phi - \nabla \phi
+= 0
+\end{dmath}
+\end{dgroup}
+Further:\\
+$\mathbb{P}$ is idempotent because $\mathbb{P}(\mathbb{P}(\textbf{w})) = \mathbb{P} (\textbf{w})$\\
+$\mathbb{P}$ is linear since $\mathbb{P} (\textbf{w} + \textbf{z}) = \mathbb{P} (\textbf{w}) + \mathbb{P} (\textbf{z})$\\
+$\mathbb{P}$ is orthogonal projection by construction\\
+$\mathbb{P}$ is also self adjoint\\
+
+For the Navier Stokes equations $\textbf{u}_t \in \textit{H}$ and $\nabla \textit{p} \in \textit{V}$ because $\textbf{u}_t$ is divergence free.\\
+Hence if we apply $\mathbb{P}$ to the momentum equation we obtain:
+\begin{equation}
+\mathbb{P}(\textbf{u}_t + \nabla \textit{p}) = \textbf{u}_t = \mathbb{P}(-(\textbf{u} \cdot \nabla) \textbf{u} + \dfrac{1}{R} \Delta \textbf{u})
+\end{equation}
+
+Thus we have eliminated the Pressure term and decoupled the momentum equation. This is the fundamental idea of the Projection method. It is not only of theoretical interest to the analysis of Navier Stokes equations (e.g. see \cite{temam1995navier,fujita1964navier}) but also shedding light to the practical use in computing numerical solutions \cite{chorin1968numerical,temam1969approximation,brown2001accurate}.\\
+
+In this chapter we are mainly interested in constructing numerical solution using projection method. The task is at each iteration: given a divergence free velocity field $\textbf{u}$ which satisfies the momentum equation at time n and the correct boundary condition required by the problem, we perform the projection to update the velocity to time n+1 and still satisfies all the constraints.\\
+
+the Numerical discretisation is:\\
+For $n = 0,1,\cdots N$, where $N \in \mathbb{N}$, the time step is: $\Delta t = \dfrac{T_f - T_0}{N}$ where $T_f,\,T_0$ denotes the end time and start time respectively.
+
+\begin{equation}\label{eq:discrete projection on momentum equation}
+\textbf{u}^n_t = \mathbb{P} ((-\textbf{u}^{n} \cdot \nabla) \textbf{u}^{n} + \dfrac{1}{R} \Delta \textbf{u}^n)
+\end{equation}
+where $\textbf{u}^n$ denote the discretised velocity field at time $n\Delta t$.\\
+We now introduce the spatial discrete version of the projection operator
+\begin{equation}\label{eq: discrete projection opreator}
+\mathbb{P} = I - \nabla_h (\nabla_h \cdot \nabla_h)^{-1} \nabla_h \cdot
+\end{equation}
+where $\textit{I}$ is the identity matrix and $\nabla_h \cdot$ and $\nabla_h$ are the discrete approximation to divergence and gradient operators.\\
+
+As first developed by Chorin, this is called the $\emph{Exact Projection method }$ \cite{chorin1968numerical,almgren1996numerical,almgren2000approximate} because this is the direct discretisation of the projection operator (see $\emph{Definition 1}$). However this often introduces numerical instabilities especially in going to the limit of zero Mach number in reacting flows \cite{almgren1996numerical,almgren2000approximate,lal1993projection,minion1996projection}, and hence it was replaced by the so called $\emph{Approximate Projection methods}$ from the start of 1990s 
+\cite{brown2001accurate,almgren1996numerical,almgren2000approximate}. We will talk about the details in subsection $\emph{Variations in Projection Methods}$\\
+
+It is important to note that neither the diffusive nor the convective terms in \eqref{eq:discrete projection on momentum equation} belong to $\textit{V}$ or $\textit{H}$. $-\textbf{u} \cdot \nabla \textbf{u}$ is neither curl or divergence free and while $\dfrac{1}{R} \Delta \textbf{u}$ is divergence free but it may not be parallel to the boundary. Hence we cannot simply expand the right hand side of \eqref{eq:discrete projection on momentum equation}.\\
+We can get around this problem by introducing an auxiliary (or intermediate) vector field $\textbf{u}^*$ in between the time step $n$ and $n+1$ such that its derivative equals to the terms inside the projection operator in the right hand side of Equation \eqref{eq:discrete projection on momentum equation}\\
+\begin{dmath}\label{eq:definition of intermediate velocity field}
+\textbf{u}^*_t = \dfrac{\textbf{u}^* - \textbf{u}^n}{\Delta t} = (-\textbf{u}^{n} \cdot \nabla) \textbf{u}^{n} + \dfrac{1}{R} \Delta \textbf{u}^*
+\end{dmath}
+with backward Euler finite difference in time.\\
+Note that the auxiliary field $\textbf{u}^*$ does not satisfy the continuity constraint and it is simply used to advance to $\textbf{u}^{n+1}$ which analytically should satisfy the continuity equation. $\textbf{u}^*$ is then discarded after each iteration.
+\paragraph*{The dilemma here is:}
+we start with an intermediate vector field ($\textbf{u}^*$) which satisfies the correct boundary condition but is not divergence free. Then we update to the velocity field to the next time level by projecting $\textbf{u}^*$ to the divergence free space. However the updated velocity now generally don't satisfy the correct boundary condition anymore because of the condition that $\textbf{u}$ be parallel to $\partial \Omega$ on the boundary. For instance, in a 2D incompressible flow problem with homogeneous Dirichlet boundary condition: $\textbf{u}|_{\partial \Omega} = 0$, the numerical velocities $\textbf{u}^n$ might have non-zero tangential components in either of the two cases required by unique HHD. Therefore the projection method or at least the primitive version is inherently less accurate than the more cumbersome coupled iterative solvers. As discussed in the subsequent sections, we can fix this problem through imposing appropriate boundary constraints and better pressure correction \cite{brown2001accurate}.\\
+Assume $\textbf{u}^*_t \in \textit{L}^2 (\Omega)$ we can therefore project it onto the space of divergence free vector fields ($\textit{V}$ ) and decompose by the Helmholtz Hodge Decomposition theorem (HHD):
+%\begin{equation}
+%\begin{aligned}
+%\mathbb{P} (\textbf{u}^*_t) &= \textbf{u}_t, \, \text{where $\textbf{u}_t$ is divergence free, so} \\
+%\textbf{u}^*_t &= \textbf{u}_t + \nabla \textit{$\phi$}, \, \text{The smooth representation of the decomposition} \\
+%\rightarrow \textbf{u}_t - \textbf{u}^*_t &= \dfrac{\textbf{u}^{n+1} - \textbf{u}^n}{\Delta t} - \dfrac{\textbf{u}^* - \textbf{u}^n}{\Delta t} \\
+%&= -\nabla \textit{$\phi$} \\
+%\text{finally} \\
+%\textbf{u}^* &= \textbf{u}^{n+1} + \Delta t \nabla \textit{$\phi$} \\
+%\end{aligned}
+%\end{equation}
+%where $\nabla \phi \in \textit{V}$ is a curl free vector field resulting from HHD.\\
+\begin{equation*}
+\begin{aligned}
+\mathbb{P} (\textbf{u}^*_t) &= \textbf{u}_t \\
+\textbf{u}^*_t &= \textbf{u}_t + \nabla \textit{$\phi$}\\
+\Rightarrow \textbf{u}_t - \textbf{u}^*_t &= \dfrac{\textbf{u}^{n+1} - \textbf{u}^n}{\Delta t} - \dfrac{\textbf{u}^* - \textbf{u}^n}{\Delta t} \\
+&= -\nabla \textit{$\phi$} \\
+\end{aligned}
+\end{equation*}
+finally we arrived at the decomposition:
+\begin{equation}\label{eq:Chorin original decomposition}
+\textbf{u}^* = \textbf{u}^{n+1} + \Delta t \nabla \textit{$\phi$} \\
+\end{equation}
+where $\nabla \phi \in \textit{V}$ is a curl free vector field resulting from HHD.\\
+
+In Chorin's original work $\phi$ is simply the approximation to the pressure at time n+1 \cite{chorin1968numerical}. Usually $\textit{p}^n$ is a good guess as it satisfies the boundary conditions specified. We will soon see that this will inherently give first order accuracy to pressure along the boundary $\partial \Omega$. However, at the moment, we are just try to illustrate the basic algorithm for the primitive projection method.\\
+Replacing $\phi$ by $\textit{p}^{n+1}$ and using the spatial discrete projection operator the decomposition in \eqref{eq:Chorin original decomposition} becomes:
+\begin{equation}
+\textbf{u}^* = \textbf{u}^{n+1} + \Delta t \nabla_h \textit{p}^{n+1}
+\end{equation}
+In Exact Projection method, $\nabla_h \cdot \textbf{u}^{n+1}$ = 0 when the exact approximation of pressure at time n+1 used. However because we don't have access to the exact $\textit{p}^{n+1}$ (rather $\textit{p}^n$), hence as argued by Chorin \cite{chorin1968numerical} to ensure convergence of the primitive variables (at time n+1) the above decomposition is best done by using multi-step iterative methods.\\
+
+Let $m$ denote the number of iterations, we replace Equation 4.15 by a multi-steps iterative scheme:
+\begin{dgroup}
+\begin{dmath}\label{eq:Chorin original successive velocity updates}
+\textbf{u}^{n+1, m+1} = \textbf{u}^* - \Delta t \nabla_h f^m (\textit{p}) \condition{on $\Omega$ only}
+\end{dmath}
+\begin{dmath}\label{eq:Chorin original successive pressure updates}
+\textit{p}^{n+1, m+1} = \textit{p}^{n+1, m} - \lambda \nabla_h\cdot \textbf{u}^{n+1, m+1} \condition{on $\Omega$ and $\partial \Omega$}
+\end{dmath}
+\intertext{where $f^m$ is a function of $\textit{p}^{n+1, m+1}$ and $\textit{p}^{n+1, m}$ which converges to $\textit{p}^{n+1}$ as $|\textit{p}^{n+1, m+1} - \textit{p}^{n+1, m}| \rightarrow 0$; $\lambda$ is a constant to be determined. Hence this ensures \eqref{eq:Chorin original successive velocity updates} a converges to \eqref{eq:Chorin original decomposition} over successive iterations}
+\intertext{To start the iteration we define $\textit{p}^{n+1,m=1} = \textit{p}^n$. Then by substituting \eqref{eq:Chorin original successive pressure updates} into \eqref{eq:Chorin original successive velocity updates} we obtain}
+\begin{dmath}\label{eq:Chorin original successive pressure and velocity}
+\textit{p}^{n+1, m+1} - \textit{p}^{n+1, m} = - \lambda \nabla_h \cdot \textbf{u}^* + \Delta t \nabla_h \cdot (\nabla_h f^m (\textit{p}))
+\end{dmath}
+\end{dgroup}
+Note this condition only holds in interior points.\\
+
+Chorin argues that if $|\textit{p}^{n+1, m+1} - \textit{p}^{n+1, m}| \rightarrow 0$ then this is equivalent of solving the Poisson equation:
+\begin{equation}\label{eq:Chorin original Poisson equation}
+\nabla^2_h \textit{p}^{n+1} = \nabla_h \cdot (\nabla_h \textit{p}^{n+1}) = \dfrac{1}{\Delta t} \nabla_h \cdot \textbf{u}^*
+\end{equation}
+where $\nabla^2_h$ is the discrete Laplace operator.\\
+As \eqref{eq:Chorin original successive velocity updates} a is simply not defined along the boundary, appropriate boundary conditions must be chosen for $\textit{p}$. Note by taking the scalar normal component of \eqref{eq:Chorin original decomposition}
+\begin{dmath*}
+\textbf{n} \cdot \textbf{u}^* = \textbf{n}\cdot\textbf{u}^{n+1} + \Delta t \textbf{n}\cdot\nabla_h p^{n+1} \condition{   $\textbf{u}^{n+1} \in H$}
+=\Delta t \textbf{n}\cdot\nabla_h p^{n+1}
+\end{dmath*}
+we conclude that the pressure approximation satisfies a Neumann boundary condition:
+\begin{equation*}
+\textbf{n} \cdot \nabla_h \textit{p}^{n+1} = \dfrac{\partial p}{\partial n} |_{\partial \Omega} = \dfrac{1}{\Delta t} \textbf{n} \cdot \textbf{u}^* |_{\partial \Omega}
+\end{equation*}
+
+This non - physical boundary has caused some controversial discussions about the accuracy of projection method and questioned about the curl free field approximation to the true pressure value \cite{rannacher1992chorin,shen1992error}. This indeed affect the accuracy of projection especially along the boundary, but at least the original projection method as introduced by Chorin is at most first order accurate in time for both velocity and pressure \cite{brown2001accurate,shen1992error,rannacher1992chorin}. Higher order schemes were then devised in the later half of the century, These will be added in the subsection $\emph{Variations in Projection Methods}$.\\
+
+Hence we need to choose the function $f^m \textit{P}$ and $\lambda$ so that \eqref{eq:Chorin original successive pressure and velocity} is a rapidly converging iteration to solve the Poisson equation \eqref{eq:Chorin original Poisson equation} \cite{chorin1968numerical}. They can be specified after the spatial discretisation is done. However it is not our purpose here to present Chorin's full original method. (details can be found in his original paper \cite{chorin1968numerical}\\
+
+A standard version of Chorin's Projection method can be summarised into the following steps. The subscript ``h" for discrete operators is discarded for conciseness of writing.
+\begin{dgroup*}
+\intertext{Step 1: Calculate the intermediate velocity field}
+\begin{dmath*}
+\textbf{u}^* = \textbf{u}^n + \Delta t (- \textbf{u}^n \cdot \nabla) \textbf{u}^n + \dfrac{1}{R} \nabla^2 \textbf{u}^n
+\end{dmath*}
+\begin{dmath*}
+\textbf{u}^* |_{\partial \Omega} = \textbf{u} ((n+1) \Delta t) |_{\partial \Omega}
+\end{dmath*}
+\intertext{Step 2: Perform the Projection}
+\begin{dmath*}
+\textbf{u}^* = \textbf{u}^{n+1} + \Delta t \nabla \textit{p}^{n+1}
+\end{dmath*}
+\intertext{Step 3: Update pressure and velocity}
+\begin{dmath*}
+\nabla^2 p^{n+1} = \dfrac{1}{\Delta t} \nabla \cdot \textbf{u}^* \condition{$\dfrac{\partial p}{\partial n} |_{\partial \Omega} = \dfrac{1}{\Delta t} \textbf{n} \cdot \textbf{u}^* |_{\partial \Omega}$}
+\end{dmath*}
+\begin{dmath*}
+\textbf{u}^{n+1} = \textbf{u}^* - \Delta t \nabla p^{n+1}
+\end{dmath*}
+\end{dgroup*}
+where the Laplacian operator $\nabla^2$ is approximated by $\nabla \cdot (\nabla)$\\
+
+Chorin's exact Projection method although been widely used only showed first order convergence in time  \cite{chorin1968numerical,brown2001accurate,shen1992error,rannacher1992chorin}.Chorin has analysed the accuracy of his scheme only for periodic boundaries \cite{chorin1969convergence} and E. Liu, Jie Shen and Rannacher \cite{liu1996projection,shen1992error,rannacher1992chorin} and many other authors have extend this analysis to a general case.\\
+
+The accuracy in velocity can be readily improved by using higher order numerical methods (e.g. Crank Nicholson method $\cdots$), the pressure on the other hand is not so straightforward. It has even been suggested by authors like Perot that the Projection method is inherently first order accurate for pressure \cite{perot1993analysis}. Later we will see in the next section that we can lift up the accuracy in pressure by considering more advanced variations.
+
+\newpage
+\section{Variations in Projection methods}
+Since the birth of projection method in the 1960s, numerous effort has been made by researchers to improve the accuracy, especially for pressure. In this section we will consider the popular methods described in literature and then analyse the  ingredients that are necessary to obtain fully second order schemes in all primitive variables.
+
+\subsection{Approximate Projection method}
+First, we encounter the idea of ``Approximate" projection method as opposed to the ``Exact" method in Chorin's original method.\\
+
+The exact projection method means the final computed velocity must satisfy a discrete divergence constraint by applying the discrete orthogonal projection operator. There are however serious drawbacks of the Exact Projection method
+The major problem comes from the discrete Laplace operator. In Chorin's original work, the Laplace operator $\nabla^2_h$ is approximated by $\nabla_h\cdot (\nabla_h)$ which is the composition of discrete divergence and gradient operators \cite{chorin1968numerical,almgren1996numerical}. Let's denote this discrete Laplacian as $\textit{L}_E$. It has some nice properties such as skew adjoint ($\nabla_h \cdot = -\nabla_h^T$) and idempotent ($\textit{L}_E^2 = \textit{L}_E$) \cite{almgren1996numerical,almgren2000approximate}. In Chorin's original paper, a vertex centred grid was used where both velocities and pressures are specified at grid vertices \cite{chorin1968numerical,almgren1996numerical,almgren2000approximate}. Note this is not the Non - staggered grid where velocities and pressure values are placed at the same location. With a centred finite difference discretisation applied to both divergence ($\nabla_h \cdot$) and gradient ($\nabla_h$) operators, an expanded 5 point stencil with $2h$ spacing is formed (for simplicity, we let $h = \Delta x = \Delta y$).\\
+
+We illustrate $\textit{L}_E$ below in a 2D context with a squared vertex centred grid. Let $\textbf{u}_{i,j} = (u_{i,j}, v_{i,j})$ denote the discrete velocities at interior node location (i,j) and at an arbitrary time step. For spatial discretisation, $\textit{i}$ denotes the column (hence horizontal direction) and $\textit{j}$ denote the row (vertical direction). Now let's apply (2nd order accurate) centred finite difference to our divergence and gradient operators: \\
+\begin{dgroup}
+\begin{dmath}\label{eq:2D 2nd accurate discretisation to divergence operator}
+\nabla_h\cdot (\textbf{u}_{i,j}) = \dfrac{1}{2 \Delta x} (u_{i+1,j} - u_{i-1,j}) + \dfrac{1}{2 \Delta y} (v_{i,j+1} - v_{i,j-1})
+\end{dmath}
+\begin{dmath}
+\nabla_h \phi_{i,j} = (\partial_x (\phi_{i,j}), \partial_y (\phi_{i,j}))
+\end{dmath}
+\intertext{where}
+\begin{dmath}\label{eq:2D 2nd accurate discretisation to gradient operator x}
+\partial_x (\phi_{i,j}) = \dfrac{1}{2 \Delta x} (\phi_{i+1,j} - \phi_{i-1,j}) \condition{Horizontal direction}
+\end{dmath}
+\begin{dmath}\label{eq:2D 2nd accurate discretisation to gradient operator y}
+\partial_y (\phi_{i,j}) = \dfrac{1}{2 \Delta y} (\phi_{i,j+1} - \phi_{i,j-1}) \condition{Vertical direction}
+\end{dmath}
+\end{dgroup}
+
+As a composite function $\textit{L}_E = \nabla_h \cdot (\nabla_h\phi)$ can be therefore expressed by substituting \eqref{eq:2D 2nd accurate discretisation to gradient operator x} and \eqref{eq:2D 2nd accurate discretisation to gradient operator y} into \eqref{eq:2D 2nd accurate discretisation to divergence operator} and replacing $\textbf{u}_{i,j}$ with $\nabla_h \phi_{i,j}$.\\
+\begin{equation}\label{eq:2D 2nd accurate discretisation to exact projection operator}
+\textit{L}_E = \dfrac{1}{4 h^2} (\phi_{i-2,j} + \phi_{i+2,j} - 4 \phi_{i,j} + \phi_{i,j-2} + \phi_{i,j+2})
+\end{equation}
+This is different to the standard and compact 5 - point stencil to Laplace which is formed by directly approximate to the second derivatives.
+\begin{equation}\label{eq:2D 2nd accurate discretisation to approximate projection operator}
+\textit{L}_A = \dfrac{1}{h^2} (\phi_{i-1,j} + \phi_{i+1,j} - 4 \phi_{i,j} + \phi_{i,j-1} + \phi_{i,j+1})
+\end{equation}
+where $A$ stands for "Approximation" and we will soon see what this notation means.\\
+
+There are a lot of shortcomings for the wide 5 point stencils ($\textit{L}_E$ \eqref{eq:2D 2nd accurate discretisation to exact projection operator}) including more cells need to be implemented in order to calculate derivatives along the boundary and also introducing weak instabilities as a result of local grid decoupling \cite{brown2001accurate,almgren1996numerical,almgren2000approximate,howell1997adaptive,minion1996projection}.\\
+
+This wide 5 point stencil has no coupling (dependence) between adjacent nodes. This is referred to local grid decoupling and was analysed by many researchers in the late 1990s \cite{almgren1996numerical,almgren2000approximate,howell1997adaptive,minion1996projection}. As a result of the decoupling, the spatial grid can now be separated into 4 different non-interactive sub-grids \cite{howell1997adaptive,minion1996projection}. These sub-grids are locally isolated in a way that the value of $\textit{L}_{E (i,j)}$ depends only on the grid points inside. The sub-grids are independent of each other only except along the boundary.\\
+
+This local grid decoupling raises many issues. First it makes the implementation of iterative solvers like multi-grid method difficult \cite{almgren1996numerical,almgren2000approximate,howell1997adaptive}. Alterations to the stencil structure is needed. Second the null space of $\textit{L}_E$ contains oscillatory mode which cannot be easily removed by the projection operator when applied to velocities \cite{minion1996projection} (especially for flow resulting a sharp velocity gradient). Hence in situations like low Mach flow, marked oscillations are often observed \cite{lal1993projection}.\\
+
+There have been many methods proposed to get around this problem. For instance, Bell, Colella and Glaz have introduced a finite element discretisation on staggered grids \cite{bell1989second} of $\textit{L}_E$ resulting in a more compact stencil whereas other methods have also tried to alter the wide stencil so that multi-grid operators can be applied \cite{howell1997adaptive}. However the problem was still unsolved.\\
+
+The popular staggered grid structure was originally introduced by Harlow and Welch \cite{harlow1965numerical}. Instead of node centred or cell centred, MAC (or staggered) grid is more like a combination of the two. The horizontal velocity ($\textit{u}$) is stored on the vertical edges and vertical velocities ($\textit{b}$) is stored on the horizontal edges while the pressure node is stored at the cell centres. As a result, the more compact stencil $\textit{L}_A$ can be used and decoupling is avoided. However, because the horizontal and vertical velocities are now stored in different locations and hence makes calculations of the non-linear convections cumbersome \cite{almgren1996numerical,howell1997adaptive}. While transferring of velocity nodes to the cell centre is possible but this would make it impossible to find a discrete divergence $\nabla_h\cdot$ such that $\nabla_h \cdot \textit{u} = 0$.\\
+
+Finally, the approximation methods proposed by Almgren et al 1996 \cite{almgren1996numerical} provided a solution to this problem by relaxing the divergence constraint from a theoretical zero value to the truncation error of the method. \\
+Hence for a standard second order accurate scheme we have
+\begin{equation*}
+\nabla_h \cdot \textbf{u} = O(h^2)
+\end{equation*}
+A direct approximation to the Laplacian ($\Delta$) is therefore used and now $\nabla_h^2\approx \nabla_h \cdot (\nabla_h)$. However the projection operator (below) is now not idempotent.
+\begin{mydef}
+\begin{equation}\label{eq: definition of approximate projection method}
+\mathbb{P}_A = I - \nabla_h(L_A^{-1})\nabla_h \cdot
+\end{equation}
+\end{mydef}
+This method avoids the use of the wide $\textit{L}_E$ stencil while also supports the cell centred scheme which will be used in computing the non-linear convection terms. This method is shown to be very effective for more complicated spatial geometry and especially on adaptive meshes \cite{howell1997adaptive}\\
+
+The procedure for an approximate projection method is essentially the same as the exact method except the 5 point standard stencil $\textit{L}_A$ is used.\\
+
+In practice, modern projection methods combines the staggered grid with the approximate projection method to maximise performance \cite{brown2001accurate}.\\
+
+In the following section, we will consider recent variations in Projection methods with the aim of obtaining a fully second order accuracy in both space and time for all primitive variables. The approximation projection operator ($\mathbb{P}_A$) is used for the following analysis and the subscript is therefore discarded for simplicity.\\
+
+\subsection{Second order accurate schemes}
+
+At the time of construction, Chorin's Projection method and especially its efficiency was still considered to be a great progress in computational fluid dynamics. However there are still many drawbacks associated with it. In particular, as noted before there are a lot of controversial discussion about the choice of boundary conditions. For instance the intermediate velocity ($\textbf{u}^*$) and the projected velocity; the choice of specification of normal and tangential components of velocity boundaries. Among those issues, the most concerned and also the most critical issues is how should the pressure term to be recovered from the projection. This will soon to be shown to have determining impact on the overall accuracy of the method.\\
+
+As discussed in the previous section, Chorin's projection method was only shown to be first order accurate. Certainly Chorin's work has left space for improvements, however it was not until more than 20 years later when academics were able to obtain seconder order or semi-seconder order schemes (e.g. \cite{kim1985application,bell1989second}). The generalisation to seconder order accuracy in time for velocity variables were not difficult to achieve. However it is the pressure and especially along the boundary layer which causes problem. 
+
+Let us consider a general setup of the numerical scheme which most modern Projection methods use.\\
+Consider a second order time centred differencing scheme. Thus we are solving the primitive variables at time $n + 1/2$ step. This was proposed by a number of authors in 1980s including Goda \cite{goda1979multistep}, Bell \cite{bell1989second}, Kim and Moin \cite{kim1985application} and Van Kan \cite{van1986second}\\
+\begin{dgroup}
+\begin{dmath}
+\textbf{u}_t^{n+1/2} = \dfrac{\textbf{u}^{n+1} - \textbf{u}^n}{\Delta t} + \nabla p^{n+1/2}
+= -[(\textbf{u} \cdot \nabla)\textbf{u}]^{n+1/2} + \dfrac{1}{R} \Delta \textbf{u}^{n+1/2}
+\end{dmath}
+\intertext{second order Crank-Nicholson scheme is used to discretise the Diffusion term. For simplicity, the convection term is not being fully discretised for now.\\
+We therefore arrived at the numerical scheme of:}
+\begin{dmath}\label{eq:general 2nd scheme momentum equation}
+\dfrac{\textbf{u}^{n+1} - \textbf{u}^n}{\Delta t} + \nabla p^{n+1/2} = -[(\textbf{u} \cdot \nabla)\textbf{u}]^{n+1/2} + \dfrac{1}{2 R} \Delta (\textbf{u}^{n+1} + \textbf{u}^n)
+\end{dmath}
+\intertext{with the divergence constraint}
+\begin{dmath}
+\nabla \cdot \textbf{u}^{n+1} = 0
+\end{dmath}
+\intertext{and boundary condition}
+\begin{dmath}
+\textbf{u}^{n+1} = \textbf{u} ((n+1)\Delta t) |_{\partial \Omega}
+\end{dmath}
+\end{dgroup}
+the subscript ``h" for discrete operators is dropped for simplicity.\\
+
+It is worth to note that second order schemes other than centred finite difference and Crank Nicholson for implicit diffusion term would yield the same results in terms of accuracy (For instance, Pyo and Shen have used second-order backward difference formula (BDF2) for time derivative approximations) \cite{pyo2005normal}. We present the above algorithm because it has been implemented in our numerical solver.\\
+
+The numerical steps of this modified Projection method is summarised below:\\
+Step 1:
+Solve for intermediate velocity field $\textbf{u}^*$\\
+\begin{equation}\label{eq:general 2nd discretisation of momentum equation to sovle for u*}
+\dfrac{\textbf{u}^* - \textbf{u}^n}{\Delta t} + \nabla q = -[(\textbf{u} \cdot \nabla)\textbf{u}]^{n+1/2} + \dfrac{1}{2 R} \Delta (\textbf{u}^* + \textbf{u}^n)
+\end{equation}
+This is identical to the original scheme except that we are using a centred time differencing and a (curl free) scalar potential $\textit{q}$ to approximate the pressure $p^{n+1/2}$\\
+Boundary condition for $\textbf{u}^*$ also need to be specified. We will consider varies different choices later
+
+Step 2:\\
+Perform the Projection (simply decompose the intermediate velocity field according to the Helmholtz Decomposition Theorem. Identical to the original method.)
+\begin{dgroup}
+\begin{dmath}\label{eg:general 2nd compatibility equation}
+\textbf{u}^* = \textbf{u}^{n+1} + \Delta t \nabla \phi^{n+1}
+\end{dmath}
+\intertext{\\
+(Note $\phi$ is not an approximation to $\textit{p}^{n+1/2}$, it is just a term resulting from the Helmholtz decomposition)\\
+And the divergence constraint (uses Approximate projection method)\\
+}
+\begin{dmath}\label{eq:approximate 2nd numerical divergence contraint}
+\nabla \cdot \textbf{u}^{n+1} = 0 + \mathcal{O}(\Delta t^2)
+\end{dmath}
+\intertext{\\
+Calculate $\phi^{n+1}$ by solving a Poisson equation\\
+}
+\begin{dmath}
+\nabla^2 \phi^{n+1} = \dfrac{1}{\Delta t} \nabla \cdot \textbf{u}^*
+\end{dmath}
+\intertext{\\
+subject to the Neumann boundary condition\\
+}
+\begin{dmath}
+\textbf{n} \cdot \nabla \phi \,|_{\partial \Omega} = \textbf{n} \cdot \left(\textbf{u}^* - \textbf{u}^{n+1}\right)\,|_{\partial \Omega}
+\end{dmath}
+\end{dgroup} 
+
+Step 3:\\
+Pressure velocity correction (the most critical part of the Projection method)
+\begin{dgroup}
+\begin{dmath}
+p^{n+1/2} = q + L(\phi^{n+1})
+\end{dmath}
+\begin{dmath}
+\textbf{u}^{n+1} = \textbf{u}^* - \Delta t \phi^{n+1}
+\end{dmath}
+\end{dgroup}
+where $\textit{L}$ is a function of $\phi$ such that the pressure can be correctly updated. We will soon see how this would impact the accuracy of pressure.\\
+
+%\begin{dmath}
+%\textbf{u}^{n+1} = \textbf{u} ((n+1)\Delta t) |_{\partial \Omega}
+%\end{dmath}
+%\intertext{the projected velocity field should satisfy the same boundary condition as the exact solution}
+
+This is often referred as incremental pressure projection method \cite{brown2001accurate} as the projection step and step 3 work to compute an incremental pressure correction each time. This is opposed to the original projection method proposed by Chorin where the pressure is fully recovered from the Poisson equation and no correction is being made thereafter.\\
+
+In addition, as mentioned before, the non-physical boundary condition: $\textbf{n}\cdot\textbf{u}^{n+1} = 0$ in Chorin's original method is a direct requirement from Helmholtz decomposition. In practice, we really want the projected divergence free vector field $\textbf{u}^{n+1}$ to satisfy the correct boundary condition required by the problem so that it satisfies the Navier Stokes equations up to the boundary. Hence we really need to re-define the projection operator. We relax the the boundary condition in the Helmholtz decomposition theorem, so that the divergence free vector space is re-defined as 
+\begin{mydef}
+\begin{equation}\label{eq:set H' set of square integrable divergence free and relaxed boundary}
+H' = \lbrace {\textbf{u} \in \textit{L}^2 (\Omega): \nabla \cdot \textbf{u} = 0, \textbf{u} \cdot \textbf{n} |_{\partial \Omega} = \textbf{u}_b} \rbrace 
+\end{equation}
+where now the boundary condition for the divergence free vector field is not zero. It is usually taken be the exact boundary condition of the true velocity solution of the Navier Stokes equations.\\
+\end{mydef}
+
+The new projection operator ($\mathbb{P}$) is same as the previous approximate projection operator except that it acts on $\textbf{u} \in H'$ instead of $H$. Hence it may not be orthogonal any more and this means the resulting decomposition may not be unique either. The question of whether orthogonality is necessary still remains open \cite{maria2003application}. Denaro has proposed an extra Helmholtz decomposition in the projection step to ensure orthogonality. However this corresponds to 2 successive Poisson equations to be solved, which is quite expensive. Therefore we do not consider it here for the sake of efficiency \cite{maria2003application}. We show in the chapter \emph{Error Analysis of Projection methods} that this should not be an issue in terms of accuracy at least in simple domains like periodic channel.\\
+Hence, from now on we will use the new projection operator $\mathbb{P}$ based on $H'$.\\
+
+To achieve optimal convergence rate, there are 3 things that need to be considered: the pressure approximation $\textit{q}$, the boundary condition for the intermediate velocity and the pressure correction function $\textit{L}$. Brown has argued that the coupling between these 3 issues must be considered to obtain high order schemes \cite{brown2001accurate}. To improve the accuracy in pressure, Brown has proposed a new pressure update formula shown below.\cite{brown2001accurate}.
+\begin{dgroup}
+\intertext{Substitute \eqref{eg:general 2nd compatibility equation} into \eqref{eq:general 2nd discretisation of momentum equation to sovle for u*} to eliminate $\textbf{u}^*$ and compare to the centred differencing scheme \eqref{eq:general 2nd scheme momentum equation} we arrived at the pressure update formula:}
+\begin{dmath}\label{eg:general 2nd pressure update}
+p^{n+1/2} = q + \phi^{n+1} - \dfrac{\Delta t}{2 R} \nabla^2 \phi^{n+1}
+\end{dmath}
+\intertext{Hence}
+\begin{dmath}\label{eg:general 2nd velocity update}
+L (\phi^{n+1}) = \phi^{n+1} - \dfrac{\Delta t}{2 R} \nabla^2 \phi^{n+1}
+\end{dmath}
+\intertext{the last term of the function $\textit{L}$ is critical to ensuring a second order accurate scheme to pressure and many previous methods failed to be second order accurate because they did not involve this correction term.}
+\end{dgroup}
+
+The role of the intermediate velocity $\textbf{u}^*$ still remains undetermined. In the original Projection method proposed by Chorin, it is simply served to approximate the fluid velocity at an intermediate time (between $n$ and $n+1$). However the question is not so simple in the incremental pressure projection method and it must be answered by taking into account the role of $\textit{q}$. If $\textit{q}$ is a good approximation to $\textit{p}^{n+1/2}$ (to the truncation error of the method), then $\textbf{u}^*$ should not deviate from the fluid velocity very much and vice versa.\\
+
+Boundary condition is always critical. Notice that the intermediate velocity is closely related to the divergence free velocity ($\textbf{u}^{n+1}$) and the gradient term ($\phi$) by the decomposition given in \eqref{eg:general 2nd compatibility equation}. Hence the boundary condition of $\textbf{u}^*$ must be consistent with that of $\textbf{u}^{n+1}$ and $\phi^{n+1}$ even though $\phi^{n+1}$ is not known yet! Hence an appropriate approximation to it must be considered and this is a question that have puzzled many researchers \cite{brown2001accurate}. In fact all these issues are related to $\textit{q}$ and the degree of approximation to the true pressure field.\\
+
+Naturally people would think that the pressure at the previous time iteration would be a good approximation. Hence let's choose $q = \textit{p}^{n-1/2}$. This type of incremental pressure projection method was first proposed by $\emph{Bell, Colella and Glaz}$ \cite{bell1989second}. This resulting the intermediate velocity to be closer to the true fluid velocity and thus by ensuring the same boundary condition we obtained:
+\begin{dgroup}
+\begin{dmath}
+(\textbf{u}^* - \textbf{u}((n+1)\Delta t))|_{\partial \Omega} = 0
+\end{dmath}
+\intertext{\\
+A convenient choice is simply let $(\textbf{u}^* = \textbf{u}((n+1)\Delta t))|_{\partial \Omega}$. Because we would then have a zero Neumann boundary condition for $\phi^{n+1}$ and it is simple to implement.\\
+}
+\begin{dmath}
+\textbf{n} \cdot \nabla \phi^{n+1}|_{\partial \Omega} = 0
+\end{dmath}
+\end{dgroup}
+
+It is worth to point out that the original scheme proposed by Bell uses a rather different pressure update formula \cite{bell1989second}:
+\begin{equation}
+p^{n+1/2} = p^{n-1/2} + \phi^{n+1}
+\end{equation}
+which is inherently first order accurate \cite{brown2001accurate}.\\
+Let's denote the method with this pressure update formula as ``\textbf{Alg 1}" which simply means algorithm 1.\\
+
+This loss of accuracy in the pressure, which typically manifests itself as a numerical boundary layer, is well known and has been analyzed rigorously by Temam \cite{temam1991remark}, E and Liu \cite{liu1996projection}, Shen \cite{shen1996error}, and many others.\\
+
+As noted by Brown that this problem can be solved if the modified pressure update formula \eqref{eg:general 2nd pressure update} is used instead and this would recover a full second order scheme for both pressure and velocity up to boundary \cite{brown2001accurate}. We will see this in chapter \emph{Error Analysis of Projection methods} using a normal mode analysis. Therefore let us denote such method as ``\textbf{Alg 2}". Note that ``Alg 2" is identical to ``Alg 1" except the different pressure update formula used.\\
+
+There is another way of looking at the problem. Because of the limitation of accuracy of pressure update, what if we simply don't update the pressure? Wouldn't it be nice if our calculations doesn't even involve pressure (and its gradient) at all? This might sound ridiculous at first because velocity and pressure are strongly coupled by the divergence constraint. However this is not theoretically impossible. In fact it is very tempting to do it because we then would not have an accumulation of error of pressure in the numerical calculations. In 1985 Kim and Moin has proposed such a method with $\textit{q}=0$ in their well - cited paper \cite{kim1985application}. This is referred to $\emph{The Pressure free Projection method}$.\\
+
+We can still choose the normal boundary component of $\textbf{u}^*$ to be equal to that of $\textbf{u}^{n+1}$ which leads to zero normal gradient for $\phi^{n+1}$, the tangential component the intermediate velocity field needs more attention. Recall from projection step, the exact tangential boundary should be:
+\begin{equation}
+\textbf{$\tau$}\cdot\textbf{u}^* = \textbf{$\tau$}\cdot\left(\textbf{u}^{n+1} + \Delta t \nabla \phi^{n+1}\right)
+\end{equation}
+In Alg 1 and 2 we have simply made $\textbf{$\tau$}\cdot\nabla\phi^{n+1} = 0$. We can not do this here because now the intermediate velocity field is not a second order approximation to $\textbf{u}^{n+1}$ (we shall see this through normal mode analysis and numerical tests) and so choosing the same boundary condition between $\textbf{u}^*$ and $\textbf{u}^{n+1}$ is not a wise choice. Because when solving for $\textbf{u}^*$, we don't have access to $\phi^{n+1}$ yet, hence Kim has argued that using a lagged value: $\phi^n$ should do the job. We will see this provides second order accuracy for pressure in normal mode analysis.\\
+
+The process of this pressure free projection method can be summarised as follows:
+Step 1:
+\begin{dgroup}
+\intertext{Solve for intermediate velocity field $\textbf{u}^*$\\
+}
+\begin{dmath}
+\dfrac{\textbf{u}^* - \textbf{u}^n}{\Delta t} = -[(\textbf{u} \cdot \nabla)\textbf{u}]^{n+1/2} + \dfrac{1}{2 R} \Delta (\textbf{u}^* + \textbf{u}^n)
+\end{dmath}
+\intertext{\\
+This is identical to the incremental pressure projection method \eqref{eq:general 2nd discretisation of momentum equation to sovle for u*} except that $\textit{q} = 0$\\
+}
+\begin{dmath}
+\textbf{$\tau$} \cdot (\textbf{u}^* - \nabla \phi^{n+1}) |_{\partial \Omega} = \textbf{$\tau$} \cdot \textbf{u} ((n+1) \Delta t)|_{\partial \Omega}
+\end{dmath}
+\intertext{$\phi^n$ is used to approximate $\phi^{n+1}$ along the boundary}
+\end{dgroup}
+
+Step 2:\\
+Solving for the gradient potential $\phi^{n+1}$ and update velocity
+$\phi^{n+1}$ can be solved by the Poisson equation below with a zero Neumman boundary condition
+\begin{dgroup}
+\begin{dmath}
+\nabla^2 \phi^{n+1} = \dfrac{1}{\Delta t} \textbf{u}^* \condition{$\dfrac{\partial \phi^{n+1}}{\partial n}|_{\partial \Omega} = 0$}
+\end{dmath}
+\intertext{velocity can therefore be updated by}
+\begin{dmath}
+\textbf{u}^{n+1} = \textbf{u}^* - \Delta t \phi^{n+1}
+\end{dmath}
+\intertext{with the boundary condition specified by the flow problem}
+\begin{dmath}
+\textbf{u}^{n+1}|_{\partial \Omega} = \textbf{u} ((n+1)\Delta t)|_{\partial \Omega}
+\end{dmath}
+\end{dgroup}
+
+The pressure update is ignored, however we can still use \eqref{eg:general 2nd pressure update} to do it (except q = 0) if we are interested. For convenience, we denote this method as ``\textbf{Alg 3}".
+
+\subsection{Gauge method}
+To date, the projection methods we have considered are simply second order variations of Chorin's original method. There are however other types of ``Projection methods" that follow similar idea but have different structures. Gauge method is a popular one.\\
+Gauge method or ``Impulse" or ``Magnetisation " methods was first introduced by Oseledets and then popularised by several researchers including E and Liu and Summers and Chorin \cite{brown2001accurate,weinan2003gauge}. It provides an alternative option to decouple the velocity and pressure in the Navier Stokes equations by a change of variable. In this section we illustrate a standard second order Gauge method based on E and Liu as well as David \cite{brown2001accurate}. \\
+The method starts by introducing a ``Gauge" variable $\textbf{m}$ which is followed directly by the Helmholtz - Hodge decomposition:
+\begin{equation}\label{eq:Gauge HHD decomposition}
+\textbf{m} = \textbf{u} + \nabla \chi
+\end{equation}
+where $\textbf{u}$ is the velocity field which satisfies the Navier Stokes equations and $\chi$ represents an auxiliary scalar potential obtained by projecting $\textbf{m}$ to the space of divergence free vector field. This is essentially the same as the standard Projection methods where $\textbf{m}$ replaces the intermediate velocity field ($\textbf{u}^*$). However $\textbf{m}$ and $\textbf{u}^*$ do not equal to each other! In fact we will soon see that the Gauge variable introduces advantages in accuracy.\\
+
+To specify the value of $\chi$ we need to make sure the Navier Stokes equations are still satisfied after this change of variable. Substituting the expression for $\textbf{m}$ into the momentum equation we obtain:\\
+(for simplicity the convective term is not transformed)
+\begin{equation}\label{eq:Gauge momentum equation}
+\partial_x\textbf{m} - \partial_x(\nabla \chi) + \left(\nabla p + \nabla \chi\right) = -(\textbf{u} \cdot \nabla)\textbf{u} + \dfrac{1}{R}\nabla^2\textbf{m} 
+\end{equation}
+Hence by ensuring the momentum equation is satisfied, we define the auxiliary field to satisfy the following relation with Pressure:
+\begin{equation}
+p = \partial_x\chi - \dfrac{1}{R}\nabla^2\chi
+\end{equation}
+
+Similar to the projection methods, the first step involves solving $\textbf{m}^{n+1}$ with the knowledge of $\textbf{m}^n$ and $\textbf{u}^n$. Now we discretise the scheme in time using second order methods including centred finite differencing and Crank-Nicholson:
+\begin{dgroup}
+\begin{dmath}\label{eq:Gauge 2nd discretisation of momentum equation to sovle for m at n+1}
+\dfrac{\textbf{m}^{n+1} - \textbf{m}^n}{\Delta t} = -\left[(\textbf{u} \cdot \nabla)\textbf{u}\right]^{n+1/2} + \dfrac{1}{2\,R}\nabla^2\left(\textbf{m}^{n+1} + \textbf{m}^n\right)
+\end{dmath}
+\intertext{Hence we can see that the Gauge variable $\textbf{m}$ is not discarded but rather re-computed at each iteration. This is one of the major differences between the standard Projection methods and this Gauge method. Later through Normal mode analysis we will show the advantages of such transformation. More specifically we show that by updating the Gauge variable the spurious mode often presented in projection methods is eliminated in all variables.\\
+To obtain unique solution we also need the following boundary conditions:\\
+}
+\begin{dmath}
+\textbf{n}\cdot\textbf{m}^{n+1}\,|_{\partial \Omega} = \textbf{n} \cdot \textbf{u}^{n+1}\,|_{\partial \Omega}
+\end{dmath}
+\intertext{and }
+\begin{dmath}
+\textbf{$\tau$}\cdot\textbf{m}^{n+1}\,|_{\partial \Omega} = \textbf{$\tau$} \cdot\,(\textbf{u}^{n+1} - \nabla \chi^{n+1})\,|_{\partial \Omega}
+\end{dmath}
+\end{dgroup}
+This is almost identical to the boundary condition of $\textbf{u}^*$ in Alg 3. In normal mode analysis we show that a second order approximation to $\phi^{n+1}$ in the form of $\phi^{n+1}\simeq 2\phi^n - \phi$ along the boundary is necessary in obtaining second order accuracy in pressure.\\
+
+Second step: imposing divergence free constraint:
+\begin{dgroup}
+\begin{dmath}
+\nabla^2\chi^{n+1} = \nabla \cdot \textbf{m}^{n+1}
+\end{dmath}
+\intertext{with again a zero Neumann boundary condition in the normal component which is followed by the choice of boundary condition of $\textbf{m}^{n+1}$ specified in the previous step:}
+\begin{dmath}
+\textbf{n} \cdot \nabla \chi^{n+1}\,|_{\partial \Omega}  = \dfrac{\chi^{n+1}}{\textbf{n}}\,|_{\partial \Omega}  = 0
+\end{dmath}
+\end{dgroup}
+
+Third step: Then the velocities are updated with the formula:
+\begin{dgroup}
+\begin{dmath}\label{eq:Gauge velocity update}
+\textbf{u}^{n+1} = \textbf{m}^{n+1} - \nabla \chi^{n+1}
+\end{dmath}
+\intertext{Then pressure is updated as:}
+\begin{dmath}\label{eq:Gauge pressure update}
+p^{n+1/2} = \dfrac{\chi^{n+1} - \chi^n}{\Delta t} - \dfrac{1}{2\,R}\,\nabla^2(\chi^{n+1} + \chi^n)
+\end{dmath}
+\begin{dmath*}
+= \dfrac{\chi^{n+1} - \chi^n}{\Delta t} - \dfrac{1}{2\,R}\,\nabla \cdot (\textbf{m}^{n+1} + \textbf{m}^n)
+\end{dmath*}
+\end{dgroup}
+\emph{Shen et.al} has proven through normal mode analysis and numerical results that only Gauge method shows fully second order Pressure error convergence in general domains. Later we demonstrate through numerical results that this is true. Recently Guermond and Shen have also proposed a fully second order accurate scheme called ``Consistent" splitting method. They have shown that it is equivalent to the Gauge method \cite{wong2006consistent,pyo2005normal,guermond2006overview}. However it is more suitable for finite element schemes whereas the original Gauge method we consider here is more designed for finite difference \cite{pyo2005normal}\\
+
+In this project the ``Consistent splitting" method is not presented partly because of limited time and also because it is equivalent to Gauge method.
+
