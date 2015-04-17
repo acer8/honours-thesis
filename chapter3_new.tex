@@ -737,11 +737,11 @@ where $\textbf{u}$ is the velocity field which satisfies the Navier Stokes equat
 To specify the value of $\chi$ we need to make sure the Navier Stokes equations are still satisfied after this change of variable. Substituting the expression for $\textbf{m}$ into the momentum equation we obtain:\\
 (for simplicity the convective term is not transformed)
 \begin{equation}\label{eq:Gauge momentum equation}
-\partial_x\textbf{m} - \partial_x(\nabla \chi) + \left(\nabla p + \nabla \chi\right) = -(\textbf{u} \cdot \nabla)\textbf{u} + \dfrac{1}{R}\nabla^2\textbf{m} 
+\partial_t\textbf{m} - \partial_t(\nabla \chi) + \left(\nabla p + \nabla  \dfrac{1}{R}\nabla^2\chi\right) = -(\textbf{u} \cdot \nabla)\textbf{u} + \dfrac{1}{R}\nabla^2\textbf{m} 
 \end{equation}
 Hence by ensuring the momentum equation is satisfied, we define the auxiliary field to satisfy the following relation with Pressure:
 \begin{equation}
-p = \partial_x\chi - \dfrac{1}{R}\nabla^2\chi
+p = \partial_t\chi - \dfrac{1}{R}\nabla^2\chi
 \end{equation}
 
 Similar to the projection methods, the first step involves solving $\textbf{m}^{n+1}$ with the knowledge of $\textbf{m}^n$ and $\textbf{u}^n$. Now we discretise the scheme in time using second order methods including centred finite differencing and Crank-Nicholson:
@@ -769,7 +769,7 @@ Second step: imposing divergence free constraint:
 \end{dmath}
 \intertext{with again a zero Neumann boundary condition in the normal component which is followed by the choice of boundary condition of $\textbf{m}^{n+1}$ specified in the previous step:}
 \begin{dmath}
-\textbf{n} \cdot \nabla \chi^{n+1}\,|_{\partial \Omega}  = \dfrac{\chi^{n+1}}{\textbf{n}}\,|_{\partial \Omega}  = 0
+\textbf{n} \cdot \nabla \chi^{n+1}\,|_{\partial \Omega}  = \dfrac{\partial\chi^{n+1}}{\partial\textbf{n}}\,|_{\partial \Omega}  = 0
 \end{dmath}
 \end{dgroup}
 
