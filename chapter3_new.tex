@@ -1,7 +1,7 @@
 \chapter{Numerical Methods}
 \label{chapter3}
 \section{Motivation}
-In this chapter we will develop and investigate into the popular numerical solvers to the Incompressible Navier Stokes equations based on the Projection methods.\\
+In this chapter we will develop and investigate some of the popular numerical solvers to the Incompressible Navier Stokes equations based on Projection methods.\\
 
 We have 2 types of variables to solve for: velocities ($\textbf{u}$) and pressure $p$. Intuitively we are looking for numerical schemes which given the velocities and pressure at the initial time step with boundary conditions, computes the velocity and pressure at a later time.\\
 
@@ -16,9 +16,9 @@ Let us consider the Navier Stokes equations in spatial domain $\Omega \subset \m
 \end{equation} 
 Here $\textbf{u}$ with subscript $b$ denotes the boundary velocity values specified by the problem.\\
 
-We have taken $\textbf{u}(\textbf{x},t)$ to be the smooth analytical solution whereas $\textbf{u}^n$ with the superscript $n$ is used to denote the numerical solution discretised at time iteration $n$. This corresponds to the time at $t^n = \Delta t\,n$ with $n = 0,1,\cdots N$ where $N\,\in \mathbb{N}$ is the maximum iteration. The time stepping is determined by the ratio: $\Delta t=\dfrac{T}{N}$. Same notation holds for pressure.\\
+We have taken $\textbf{u}(\textbf{x},t)$ to be the smooth analytical solution whereas $\textbf{u}^n$ with the superscript $n$ is used to denote the numerical solution discretised at time iteration $n$. This corresponds to the time $t^n = \Delta t\,n$ with $n = 0,1,\cdots N$ where $N\,\in \mathbb{N}$ is the maximum iteration. The time stepping is determined by the ratio: $\Delta t=\dfrac{T}{N}$. Same notation holds for pressure.\\
 
-Let us first consider a ``quasi" first order backward Euler discretisation in time to the above initial value problem. Assume we have the knowledge of $\textbf{u}^n$ and $p^n$ for some time iteration $n$. We call it a quasi method because the non-linear convective and the external body force term at the right hand side of \eqref{eq:backward Euler discretisation} are discretised at the $n$th iteration instead of $n+1$. The standard backward Euler approach usually satisfies the equation: $y^{n+1} = y^n + \Delta t f(y^{n+1},t^{n+1})$ for some variable $y$ and a function $f$. Bounded by the implicit nature of the scheme, backward Euler methods are numerically more stable than their explicit forward counterparts \cite{gear1971simultaneous}. However this is not our main discussion point. We have done it in a ``quasi" way because we want to reduce our analytical complexity yet illustrate the direct Navier Stokes solver is computationally expansive.\\
+Let us first consider a ``quasi" first order backward Euler discretisation in time to the above initial value problem. Assume we have the knowledge of $\textbf{u}^n$ and $p^n$ for some time iteration $n$. We call it a quasi method because the non-linear convective and the external body force term at the right hand side of \eqref{eq:backward Euler discretisation} are discretised at the $n$th iteration instead of $n+1$. The standard backward Euler approach usually satisfies the equation: $y^{n+1} = y^n + \Delta t f(y^{n+1},t^{n+1})$ for some variable $y$ and a function $f$. Bounded by the implicit nature of the scheme, backward Euler methods are numerically more stable than their explicit forward counterparts \cite{gear1971simultaneous}. However this is not our main discussion point. We have done it in a ``quasi" way because we want to reduce our analytical complexity yet illustrate the direct Navier Stokes solver is computationally expensive.\\
 
 \begin{equation}\label{eq:backward Euler discretisation}
 \begin{cases}
@@ -63,7 +63,7 @@ p^{n+1}\\
 0
 \end{bmatrix}
 \end{equation}\\
-This block matrix is actually indefinite in the sense that it has both positive and negative eigenvalues. Hence this leads to a saddle point problem when solving it. This causes many trouble in practice.\\
+This block matrix is actually indefinite in the sense that it has both positive and negative eigenvalues. Hence this leads to a saddle point problem when solving it. This causes many problems  in practice.\\
 
 First if we consider this as an optimisation problem, then such a saddle point problem makes it hard to find the minimiser ($\textbf{u}^{n+1}$). We will illustrate this in the following simple analysis.\\
 
@@ -136,7 +136,7 @@ Since $A$ contains a Laplace term and so the method involves calculating Laplaci
 
 
 \section{Projection method}
-In the first half of last century, when the computer digital power was not as strong as it stands today, the coupled solver does give raise serious issues in lack of efficiency. Therefore some researchers in the late 1960s including Chorin and Temam started to think methods to decouple velocity and pressure. The idea is to split the relation between these two quantities and solving them individually (or successively). For instance, solve for velocity at iteration $n+1$ and then correct it by imposing the divergence free constraint. The pressure can then be solved accordingly. The question now is how to find a way to correct the divergence of velocity? Both Chorin and Temam turned to the Helmholtz Hodge Decomposition theorem and used it as a theoretical foundation for their numerical methods \cite{chorin1968numerical,chorin1990mathematical,temam1969approximation,brown2001accurate,maria2003application}. Later this type of decoupling method was coined to be the famous $\emph{Projection Method}$ or $\emph{Splitting method}$ or sometimes $\emph{Fractional Step Method}$ \cite{kim1985application,brown2001accurate}.\\
+In the first half of last century, when the computer digital power was not as strong as it stands today, the coupled solver does give rise to serious issues regarding lack of efficiency. Therefore some researchers in the late 1960s including Chorin and Temam started to think methods to decouple velocity and pressure. The idea is to split the relation between these two quantities and solving them individually (or successively). For instance, solve for velocity at iteration $n+1$ and then correct it by imposing the divergence free constraint. The pressure can then be solved accordingly. The question now is how to find a way to correct the divergence of velocity? Both Chorin and Temam turned to the Helmholtz Hodge Decomposition theorem and used it as a theoretical foundation for their numerical methods \cite{chorin1968numerical,chorin1990mathematical,temam1969approximation,brown2001accurate,maria2003application}. Later this type of decoupling method was coined to be the famous $\emph{Projection Method}$ or $\emph{Splitting method}$ or sometimes $\emph{Fractional Step Method}$ \cite{kim1985application,brown2001accurate}.\\
 
 In this section we talk about the original idea of projection method and how it is used to solve the Navier Stokes equations.
 
@@ -283,7 +283,7 @@ Therefore this implies $\textbf{u}' = \textbf{u}$. The decomposition is unique.\
 Hence we have now demonstrated the uniqueness, existence and orthogonality property of the Helmoholtz Hodge Decomposition Theorem.
 
 \newpage
-\section{Application of Helmoholtz Hodge Decomposition Theorem to numerical solution of Navier Stokes Equations}
+\section[Application of HHD Theorem to N-S equation]{Application of Helmoholtz Hodge Decomposition Theorem to numerical solution of Navier Stokes Equations}
 In this subsection, we will talk about the use of Helmholtz decomposition theorem to the construction of Projection methods in solving incompressible Navier Stokes equations. We are focused on the primitive Projection method first proposed by Chorin and independently by Temam \cite{chorin1968numerical,temam1969approximation,brown2001accurate}. Its advantages and disadvantages are also discussed.\\
 
 \subsection{Chorin's Original projection method}
@@ -302,7 +302,7 @@ The above discussion naturally lead us to define a projection operator $\mathbb{
 
 %\newtheorem{mydef}{Definition}
 \begin{mydef}
-Let $\textit{H}$ (as defined in Equation. 4.3) and $\textit{V}$ be two orthogonal subspaces of $\textit{L}^2 (\Omega)$ such that $\textit{L}^2 (\Omega) = \textit{H} \oplus \textit{V}$.\\
+Let $\textit{H}$ (as defined in Equation~(\ref{eq:set H set of square integrable divergence free and parrallel boundary})) and $\textit{V}$ be two orthogonal subspaces of $\textit{L}^2 (\Omega)$ such that $\textit{L}^2 (\Omega) = \textit{H} \oplus \textit{V}$.\\
 
 Then the projection operator $\mathbb{P}$ is a linear map defined as follows:
 \begin{center}
@@ -318,7 +318,7 @@ We can also define $\mathbb{P}$ formally as:
 \end{equation}
 Thus $\textit{V}$ can be written as:
 \begin{dmath*}\label{eq:set V}
-V = \lbrace { \textbf{w}_2 \in \textit{L}^2 (\Omega): \mathbb{P} (\textbf{u}) = 0} \rbrace 
+V = \lbrace { \textbf{w}_2 \in \textit{L}^2 (\Omega): \mathbb{P} (\textbf{w}_2) = 0} \rbrace 
 \end{dmath*}
 (recall from the Helmholtz theorem in previous section, $\textbf{w}_1 = \textbf{u}$ and $\textbf{w}_2 = \nabla \phi,\,\phi \in H^1(\Omega)$)\\
 \end{mydef}
@@ -357,7 +357,7 @@ Thus we have eliminated the Pressure term and decoupled the momentum equation. T
 
 In this chapter we are mainly interested in constructing numerical solution using projection method. The task is at each iteration: given a divergence free velocity field $\textbf{u}$ which satisfies the momentum equation at time n and the correct boundary condition required by the problem, we perform the projection to update the velocity to time n+1 and still satisfies all the constraints.\\
 
-the Numerical discretisation is:\\
+The Numerical discretisation is:\\
 For $n = 0,1,\cdots N$, where $N \in \mathbb{N}$, the time step is: $\Delta t = \dfrac{T_f - T_0}{N}$ where $T_f,\,T_0$ denotes the end time and start time respectively.
 
 \begin{equation}\label{eq:discrete projection on momentum equation}
@@ -370,8 +370,8 @@ We now introduce the spatial discrete version of the projection operator
 \end{equation}
 where $\textit{I}$ is the identity matrix and $\nabla_h \cdot$ and $\nabla_h$ are the discrete approximation to divergence and gradient operators.\\
 
-As first developed by Chorin, this is called the $\emph{Exact Projection method }$ \cite{chorin1968numerical,almgren1996numerical,almgren2000approximate} because this is the direct discretisation of the projection operator (see $\emph{Definition 1}$). However this often introduces numerical instabilities especially in going to the limit of zero Mach number in reacting flows \cite{almgren1996numerical,almgren2000approximate,lal1993projection,minion1996projection}, and hence it was replaced by the so called $\emph{Approximate Projection methods}$ from the start of 1990s 
-\cite{brown2001accurate,almgren1996numerical,almgren2000approximate}. We will talk about the details in subsection $\emph{Variations in Projection Methods}$\\
+As first developed by Chorin, this is called the $\emph{Exact Projection method }$ \cite{chorin1968numerical,almgren1996numerical,almgren2000approximate} because this is the direct discretisation of the projection operator (see $\emph{Definition 1}$). However this often introduces numerical instabilities especially in going to the limit of zero Mach number in reacting flows \cite{almgren1996numerical,almgren2000approximate,lal1993projection,minion1996projection}, and hence it was replaced by the so called \emph{Approximate Projection methods} from the start of 1990s 
+\cite{brown2001accurate,almgren1996numerical,almgren2000approximate}. We will talk about the details in subsection \textit{Variations in Projection Methods}\\
 
 It is important to note that neither the diffusive nor the convective terms in \eqref{eq:discrete projection on momentum equation} belong to $\textit{V}$ or $\textit{H}$. $-\textbf{u} \cdot \nabla \textbf{u}$ is neither curl or divergence free and while $\dfrac{1}{R} \Delta \textbf{u}$ is divergence free but it may not be parallel to the boundary. Hence we cannot simply expand the right hand side of \eqref{eq:discrete projection on momentum equation}.\\
 We can get around this problem by introducing an auxiliary (or intermediate) vector field $\textbf{u}^*$ in between the time step $n$ and $n+1$ such that its derivative equals to the terms inside the projection operator in the right hand side of Equation \eqref{eq:discrete projection on momentum equation}\\
