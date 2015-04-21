@@ -611,13 +611,13 @@ subject to the Neumann boundary condition\\
 \end{dgroup} 
 
 Step 3:\\
-Pressure velocity correction (the most critical part of the Projection method)
+Pressure and velocity corrections (the most critical part of the Projection method)
 \begin{dgroup}
 \begin{dmath}
 p^{n+1/2} = q + L(\phi^{n+1})
 \end{dmath}
-\begin{dmath}
-\textbf{u}^{n+1} = \textbf{u}^* - \Delta t \phi^{n+1}
+\begin{dmath}\label{eg:general 2nd velocity update}
+\textbf{u}^{n+1} = \textbf{u}^* - \Delta t \nabla \phi^{n+1}
 \end{dmath}
 \end{dgroup}
 where $\textit{L}$ is a function of $\phi$ such that the pressure can be correctly updated. We will soon see how this would impact the accuracy of pressure.\\
@@ -647,7 +647,7 @@ To achieve optimal convergence rate, there are 3 things that need to be consider
 p^{n+1/2} = q + \phi^{n+1} - \dfrac{\Delta t}{2 R} \nabla^2 \phi^{n+1}
 \end{dmath}
 \intertext{Hence}
-\begin{dmath}\label{eg:general 2nd velocity update}
+\begin{dmath}
 L (\phi^{n+1}) = \phi^{n+1} - \dfrac{\Delta t}{2 R} \nabla^2 \phi^{n+1}
 \end{dmath}
 \intertext{the last term of the function $\textit{L}$ is critical to ensuring a second order accurate scheme to pressure and many previous methods failed to be second order accurate because they did not involve this correction term.}
@@ -736,18 +736,22 @@ where $\textbf{u}$ is the velocity field which satisfies the Navier Stokes equat
 
 To specify the value of $\chi$ we need to make sure the Navier Stokes equations are still satisfied after this change of variable. Substituting the expression for $\textbf{m}$ into the momentum equation we obtain:\\
 (for simplicity the convective term is not transformed)
-\begin{equation}\label{eq:Gauge momentum equation}
-\partial_x\textbf{m} - \partial_x(\nabla \chi) + \left(\nabla p + \nabla \chi\right) = -(\textbf{u} \cdot \nabla)\textbf{u} + \dfrac{1}{R}\nabla^2\textbf{m} 
-\end{equation}
-Hence by ensuring the momentum equation is satisfied, we define the auxiliary field to satisfy the following relation with Pressure:
 \begin{equation}
-p = \partial_x\chi - \dfrac{1}{R}\nabla^2\chi
+\partial_t\textbf{m} - \partial_t(\nabla \chi) + \nabla p = -(\textbf{u} \cdot \nabla)\textbf{u} + \dfrac{1}{R}\nabla^2\left(\textbf{m} - \nabla \chi \right)
+\end{equation}
+To fully clarify the relation between pressure and the auxiliary field $\chi$ we further specify an evolution equation for the Gauge method:
+\begin{equation}\label{eq:Gauge momentum equation}
+\partial_t \textbf{m} = -(\textbf{u} \cdot \nabla)\textbf{u}  + \dfrac{1}{R}\nabla^2\textbf{u}
+\end{equation}
+Hence by ensuring equating the above 2 equations, we can define the following relation between the auxiliary field and Pressure:
+\begin{equation}
+p = \partial_t\chi - \dfrac{1}{R}\nabla^2\chi
 \end{equation}
 
 Similar to the projection methods, the first step involves solving $\textbf{m}^{n+1}$ with the knowledge of $\textbf{m}^n$ and $\textbf{u}^n$. Now we discretise the scheme in time using second order methods including centred finite differencing and Crank-Nicholson:
 \begin{dgroup}
 \begin{dmath}\label{eq:Gauge 2nd discretisation of momentum equation to sovle for m at n+1}
-\dfrac{\textbf{m}^{n+1} - \textbf{m}^n}{\Delta t} = -\left[(\textbf{u} \cdot \nabla)\textbf{u}\right]^{n+1/2} + \dfrac{1}{2\,R}\nabla^2\left(\textbf{m}^{n+1} + \textbf{m}^n\right)
+\dfrac{\textbf{m}^{n+1} - \textbf{m}^n}{\Delta t} = -\left[(\textbf{u} \cdot \nabla)\textbf{u}\right]^{n+1/2} + \dfrac{1}{2 R}\nabla^2\left(\textbf{m}^{n+1} + \textbf{m}^n\right)
 \end{dmath}
 \intertext{Hence we can see that the Gauge variable $\textbf{m}$ is not discarded but rather re-computed at each iteration. This is one of the major differences between the standard Projection methods and this Gauge method. Later through Normal mode analysis we will show the advantages of such transformation. More specifically we show that by updating the Gauge variable the spurious mode often presented in projection methods is eliminated in all variables.\\
 To obtain unique solution we also need the following boundary conditions:\\
@@ -769,7 +773,7 @@ Second step: imposing divergence free constraint:
 \end{dmath}
 \intertext{with again a zero Neumann boundary condition in the normal component which is followed by the choice of boundary condition of $\textbf{m}^{n+1}$ specified in the previous step:}
 \begin{dmath}
-\textbf{n} \cdot \nabla \chi^{n+1}\,|_{\partial \Omega}  = \dfrac{\chi^{n+1}}{\textbf{n}}\,|_{\partial \Omega}  = 0
+\textbf{n} \cdot \nabla \chi^{n+1}\,|_{\partial \Omega}  = \dfrac{\partial \chi^{n+1}}{\partial \textbf{n}}\,|_{\partial \Omega}  = 0
 \end{dmath}
 \end{dgroup}
 
@@ -780,13 +784,13 @@ Third step: Then the velocities are updated with the formula:
 \end{dmath}
 \intertext{Then pressure is updated as:}
 \begin{dmath}\label{eq:Gauge pressure update}
-p^{n+1/2} = \dfrac{\chi^{n+1} - \chi^n}{\Delta t} - \dfrac{1}{2\,R}\,\nabla^2(\chi^{n+1} + \chi^n)
+p^{n+1/2} = \dfrac{\chi^{n+1} - \chi^n}{\Delta t} - \dfrac{1}{2 R}\,\nabla^2(\chi^{n+1} + \chi^n)
 \end{dmath}
 \begin{dmath*}
-= \dfrac{\chi^{n+1} - \chi^n}{\Delta t} - \dfrac{1}{2\,R}\,\nabla \cdot (\textbf{m}^{n+1} + \textbf{m}^n)
+= \dfrac{\chi^{n+1} - \chi^n}{\Delta t} - \dfrac{1}{2 R}\,\nabla \cdot (\textbf{m}^{n+1} + \textbf{m}^n)
 \end{dmath*}
 \end{dgroup}
-\emph{Shen et.al} has proven through normal mode analysis and numerical results that only Gauge method shows fully second order Pressure error convergence in general domains. Later we demonstrate through numerical results that this is true. Recently Guermond and Shen have also proposed a fully second order accurate scheme called ``Consistent" splitting method. They have shown that it is equivalent to the Gauge method \cite{wong2006consistent,pyo2005normal,guermond2006overview}. However it is more suitable for finite element schemes whereas the original Gauge method we consider here is more designed for finite difference \cite{pyo2005normal}\\
+\emph{Shen et.al} has proven through normal mode analysis and numerical results that only Gauge method shows fully second order Pressure error convergence in general domains \cite{pyo2005normal, guermond2006overview}. Later we demonstrate through numerical results that this is true. Recently Guermond and Shen have also proposed a fully second order accurate scheme called ``Consistent" splitting method. They have shown that it is equivalent to the Gauge method \cite{wong2006consistent,pyo2005normal,guermond2006overview}. However it is more suitable for finite element schemes whereas the original Gauge method we consider here is more designed for finite difference \cite{pyo2005normal}\\
 
 In this project the ``Consistent splitting" method is not presented partly because of limited time and also because it is equivalent to Gauge method.
 
