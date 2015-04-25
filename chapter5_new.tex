@@ -194,36 +194,35 @@ a = \phi^{n+1}_{nu} - \dfrac{\Delta t}{2R} \nabla^2 \phi^{n+1} - (p^{n+1/2} - p^
 = \phi^{n+1}_{nu} - \dfrac{1}{2R} \nabla \cdot \textbf{u}^* - (p^{n+1/2} - p^{n-1/2})
 \end{dmath}
 
-This requires the knowledge of $p^{n+1/2}$ which of course we don't have when solving for $\phi^{n+1}$! However remember that $a$ is just a constant added to $\phi$ (and pressure), hence if we know the the pressure field at one point in domain then we can fully recover $a$. This point is arbitrary, but in practice, it is usually chosen along the boundary or center or any other points easily accessed. Therefore we need to impose a ``partial" Dirichlet condition on pressure. It is partial because we only require the knowledge of one point in space. In this section, we have chosen the point from the boundary $(x,y) \in \partial \Omega$.
+This requires the knowledge of $p^{n+1/2}$ which of course we don't have when solving for $\phi^{n+1}$! However remember that $a$ is just a constant added to $\phi$ (and pressure), hence if we know the the pressure field at one point in domain then we can fully recover $a$. This point is arbitrary, but in practice, it is usually chosen along the boundary or center or any other points easily accessed. Therefore we need to impose a ``partial" Dirichlet condition on pressure. It is partial because we only require the knowledge of one point in space. In this section, we have chosen the point from the boundary $(x,y) \in \partial \Omega$.\\
 
-\begin{equation}
-a = \phi^{n+1}_{nu}\,(x,y)|_{(x,y)\in \partial\Omega} \,\,\,-\,\,\, \dfrac{1}{2R} \nabla \cdot \textbf{u}^*\,(x,y)|_{(x,y)\in \partial\Omega}\,\,\, -\,\,\, (p^{n+1/2} - p^{n-1/2})\,(x,y)|_{(x,y)\in \partial\Omega}
-\end{equation}
+\begin{dmath}\label{eq:normalisation constant for Alg 2}
+a = \phi^{n+1}_{nu}|_{(x,y)\in \partial\Omega} - \dfrac{1}{2R} \nabla \cdot \textbf{u}^*|_{(x,y)\in \partial\Omega} - (p^{n+1/2} - p^{n-1/2})|_{(x,y)\in \partial\Omega}
+\end{dmath}
 
 Practically in order to ensure consistency we take 2 to 4 points along each boundary or corner and taking their average. \\
 
-For the forced flow example we are considering, the analytical solution ($p = \sin(t)\cos(\pi x)\sin(\pi y)$) indicates the North and South boundaries ($y=\pm 1$) are essentially zero for domain $[-1,1]^2$. Therefore naturally one can consider inhomogeneous Dirichlet boundary condition for pressure variable. Then by picking one arbitrary point along the boundary (for instance $y=1$ and $x$ is arbitrary) our equation for $c$ reads:
+Let's consider a simple forced flow problem just for illustration purposes. The analytical solution of pressure ($p = \sin(t)\cos(\pi x)\sin(\pi y)$) indicates the North and South boundaries ($y=\pm 1$) are essentially zero for domain $[-1,1]^2$. Therefore naturally one can consider homogeneous Dirichlet boundary condition for pressure variable along these directions. Then by picking one arbitrary point along the boundary (for instance $y=1$ and $x$ is arbitrary) our equation for $a$ simplifies:
 \begin{equation*}
 a = \phi^{n+1}_{nu}\,(x,1) \,\,\,-\,\,\, \dfrac{1}{2R} \nabla \cdot \textbf{u}^*\,(x,1)
 \end{equation*}
-In the case of Staggered grids the spatial point $(x,1)$ refers to the coordinate: $(i,\,\dfrac{1}{2}$. Further dropping the time index for convenience we obtained:
+In the case of Staggered grids the spatial point $(x,1)$ refers to the coordinate: $(i,\,\dfrac{1}{2})$. Further dropping the time index for convenience we obtained:
 \begin{equation*}
 a = \phi^{nu}_{i,\,1/2} \,\,\,-\,\,\, \dfrac{1}{2R} \nabla \cdot \textbf{u}^*_{i,\,1/2}
 \end{equation*}
 
 However in Staggered grids, the coordinate ($i,\,1/2$) is along the top edge of the grid and no pressure is stored at this point (pressure is stored at ($i,\,j$) locations). Therefore interpolation from nearby cells are needed. This introduces spatial interpolation error and hence care must be taken to avoid accumulation of spatial errors.\\
 
-In this case, we use a 3rd order cubic interpolation for $\phi^{nu}_{i,\,1/2}$ from 3 nearby points: $\phi^{nu}_{i,\,1}$, $\phi^{nu}_{i,\,2}$ and $\phi^{nu}_{i,\,3}$. Cubic interpolation is needed to ensure the first order derivative of $\phi^{nu}_{i,\,1/2}$ is also second order accurate along the boundary.\\
-We Taylor expand $\phi^{nu}_{i,\,1}$, $\phi^{nu}_{i,\,2}$ and $\phi^{nu}_{i,\,3}$ at location ($i,\,1/2$) up to order $\mathcal{O}(\Delta t^3)$ and we obtained an interpolation formula for $\phi^{nu}_{i,\,1/2}$ as
+In this case, we use a 3rd order cubic interpolation for $\phi^{nu}_{i,\,1/2}$ from 3 nearby points: $\phi^{nu}_{i,\,1}$, $\phi^{nu}_{i,\,2}$ and $\phi^{nu}_{i,\,3}$. Cubic interpolation is needed to ensure the first order derivative of $\phi^{nu}_{i,\,1/2}$ is also second order accurate along the boundary. By Taylor expanding $\phi^{nu}_{i,\,1}$, $\phi^{nu}_{i,\,2}$ and $\phi^{nu}_{i,\,3}$ at location ($i,\,1/2$) up to order $\mathcal{O}(\Delta t^3)$ we obtained an interpolation formula for $\phi^{nu}_{i,\,1/2}$ as
 
 \begin{equation}
-\phi^{nu}_{i,\,1/2} = \dfrac{15}{8}_{i,1} - \dfrac{5}{4}_{i,\,2}+\dfrac{3}{8}_{i,\,3}
+\phi^{nu}_{i,\,1/2} = \dfrac{15}{8}\phi^{nu}_{i,1} - \dfrac{5}{4}\phi^{nu}_{i,\,2}+\dfrac{3}{8}\phi^{nu}_{i,\,3}
 \end{equation}
 Exactly the formula can be used for $\nabla \cdot \textbf{u}^*$ since they are stored at the same locations as $\phi$.\\
 
 Then the exact $\phi^{n+1}$ can be obtained by subtracting $a$ from $\phi^{n+1}_{nu}$ point-wisely. Thus we minus the same constant $a$ on every point of $\phi^{nu}$. Then the correct pressure can be recovered and we call it the ``Normalised Pressure". This in theory should fix the problem of error of error enlargement at finer grids. And this method indeed works as we shall see shortly!\\
 
-For Projection method Alg 2, exactly the same process is used. In fact the expression for $c$ is identical.\\
+For Projection method Alg 3, exactly the same process is used. In fact the expression for the normalisation constant $a$ is identical to that of Alg 2 \eqref{eq:normalisation constant for Alg 2} except the term $(p^{n+1/2} - p^{n-1/2})$ drops out since the pressure approximation $q$ is zero now.\\
 
 For Gauge method, exactly the same procedure can be implemented too. From solving the Poisson equation \eqref{eq:Gauge pressure update} numerically we know that:
 \begin{equation}
@@ -233,8 +232,11 @@ where $b$ and $c$ are constants. They are generally not equal and hence Gauge me
 
 Again the point where we evaluate $b$ and $c$ is arbitrary, so let's use the same one considered above (note the analytical pressure is therefore still zero at this point).\\
 Substitute the expression of $\chi_{nu}$ into the pressure update equation \eqref{eq:Gauge pressure update} and rearranging we obtained:
+%\begin{equation}
+%b - c = \chi^{n+1,\,\,\,nu}_{i,\,1/2} - \chi^{n,\,\,\,nu}_{i,\,1/2} + \dfrac{\Delta t}{2 R}(\nabla \cdot \textbf{m}^{n+1}_{i,\,1/2} + \nabla \cdot \textbf{m}^n_{i,\,1/2}) - p^{n+1/2}_{i,\,1/2}
+%\end{equation}
 \begin{equation}
-b - c = \chi^{n+1,\,\,\,nu}_{i,\,1/2} - \chi^{n,\,\,\,nu}_{i,\,1/2} + \dfrac{\Delta t}{2 R}(\nabla \cdot \textbf{m}^{n+1}_{i,\,1/2} + \nabla \cdot \textbf{m}^n_{i,\,1/2})
+b - c = \left(\chi^{n+1,\,\,\,nu} - \chi^{n,\,\,\,nu}\right)|_{(x,y)\in \partial\Omega} + \dfrac{\Delta t}{2 R}\left(\nabla \cdot \textbf{m}^{n+1} + \nabla \cdot \textbf{m}^n \right)|_{(x,y)\in \partial\Omega} - p^{n+1/2}|_{(x,y)\in \partial\Omega}
 \end{equation}
 
 \subsection{update velocity and pressure.}
