@@ -128,37 +128,37 @@ We first compare Alg 1 and Alg 2 results to illustrate the improvement of modifi
 	\centering
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm1a_pf2_U_exact_t_1_grid_60 - Copy.jpg}
+		\includegraphics[width=2.5in]{figures/Pm1a_pf2_U_exact_t_1_grid_60 - Copy.jpg}
 		\caption{Analytical $U$ velocity at $t=1$}\label{fig:6.1a}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm1a_pf2_uf_t_1_grid_60 - Copy.jpg}
+		\includegraphics[width=2.5in]{figures/Pm1a_pf2_uf_t_1_grid_60 - Copy.jpg}
 		\caption{Numerical $U$ velocity at $t=1$}\label{fig:6.1b}
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm1a_pf2_V_exact_t_1_grid_60 - Copy.jpg}
+		\includegraphics[width=2.5in]{figures/Pm1a_pf2_V_exact_t_1_grid_60 - Copy.jpg}
 		\caption{Analytical $V$ velocity at $t=1$}\label{fig:6.1c}
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm1a_pf2_vf_t_1_grid_60 - Copy.jpg}
+		\includegraphics[width=2.5in]{figures/Pm1a_pf2_vf_t_1_grid_60 - Copy.jpg}
 		\caption{Numerical $V$ velocity at $t=1$}\label{fig:6.1d}
 	\end{subfigure}
 	\quad	
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm1a_pf2_P_exact_t_1_grid_60 - Copy.jpg}
+		\includegraphics[width=2.5in]{figures/Pm1a_pf2_P_exact_t_1_grid_60 - Copy.jpg}
 		\caption{Analytical pressure ($P$) at $t=1$}\label{fig:6.1e}
 	\end{subfigure}
 	\quad	
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm1a_pf2_pf_t_1_grid_60 - Copy.jpg}
+		\includegraphics[width=2.5in]{figures/Pm1a_pf2_pf_t_1_grid_60 - Copy.jpg}
 		\caption{Numerical pressure ($P$) at $t=1$}\label{fig:6.1f}
 	\end{subfigure}
 	\caption{Plot of exact and numerical solutions ($U,V,P$) at time $t=1$ on the spatial domain of $[-1,1]^2$ with grid size $60 \times 60$, Alg 2 was used to compute the numerical solutions with $CFL=0.5$}\label{fig:6.1}
@@ -168,13 +168,13 @@ We first compare Alg 1 and Alg 2 results to illustrate the improvement of modifi
 	\centering
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm1a_pf2_P_error_t_1_grid_60_cfl_0_1.jpg}
+		\includegraphics[width=2.5in]{figures/Pm1a_pf2_P_error_t_1_grid_60_cfl_0_1.jpg}
 		\caption{Pressure error field for Alg 1 at $t=1$ }\label{fig:6.2a}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm1b_pf2_P_error_t_1_grid_60_cfl_0_1.jpg}
+		\includegraphics[width=2.5in]{figures/Pm1b_pf2_P_error_t_1_grid_60_cfl_0_1.jpg}
 		\caption{Pressure error field for Alg 2 at $t=1$}\label{fig:6.2b}
 	\end{subfigure}
 	\caption{$3D$ surface plot of pressure error field for Alg 1 and Alg 2 at time $t=1$ on the spatial domain of $[-1,1]^2$ with grid size $60 \times 60$ and $CFL=0.5$}\label{fig:6.2}
@@ -197,14 +197,14 @@ Taking a closer look at the the plot of the analytic pressure field (Figure \ref
 	\begin{subfigure}[t]{4.5in}
 		\centering
 		\scalebox{1.2}{
-		\includegraphics[width=4.5in]{C:/Users/HONGJI/Latex Home directory/Pm1b_pf2_np_P_rate_c_0_5.jpg}}
+		\includegraphics[width=4.5in]{figures/Pm1b_pf2_np_P_rate_c_0_5.jpg}}
 		\caption{Log-Log plot of Convergence rate for Pressure}\label{fig:6.3a}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{4.5in}
 		\centering
 		\scalebox{1.2}{
-		\includegraphics[width=4.5in]{C:/Users/HONGJI/Latex Home directory/Pm1b_pf2_np_div_uv_rate_c_0_5.jpg}}
+		\includegraphics[width=4.5in]{figures/Pm1b_pf2_np_div_uv_rate_c_0_5.jpg}}
 		\caption{Log-Log plot of Convergence rate for $\nabla \cdot \textbf{u}^*$. }\label{fig:6.3b}
 	\end{subfigure}
 	\caption{Plot of Convergence rates for Alg 2. Domain: $[-1,1]^2$, time = 1 and CFL = 0.5. In each plot, the data points corresponding to grid sizes of 15, 30, 60, 120, 240, and 480. Subplot (a) and (b) shows the error in pressure and divergence of intermediate velocity respecitvely. The data points between different norms are close to each other. Hence $L_1$ and $L_\infty$ norms were shifted up and down by 0.5 respectively to distinguish from $L_2$ norm data points.}\label{fig:6.3}
@@ -215,14 +215,14 @@ Taking a closer look at the the plot of the analytic pressure field (Figure \ref
 	\begin{subfigure}[t]{4.5in}
 		\centering
 		\scalebox{1.2}{
-		\includegraphics[width=4.5in]{C:/Users/HONGJI/Latex Home directory/Pm2_pf2_np_P_rate_c_0_5.jpg}}
+		\includegraphics[width=4.5in]{figures/Pm2_pf2_np_P_rate_c_0_5.jpg}}
 		\caption{Log-Log plot of Convergence rate for Pressure}\label{fig:6.4a}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{4.5in}
 		\centering
 		\scalebox{1.2}{
-		\includegraphics[width=4.5in]{C:/Users/HONGJI/Latex Home directory/Pm2_pf2_np_div_uvstar_rate_c_0_5.jpg}}
+		\includegraphics[width=4.5in]{figures/Pm2_pf2_np_div_uvstar_rate_c_0_5.jpg}}
 		\caption{Log-Log plot of Convergence rate for $\nabla \cdot \textbf{u}^*$. }\label{fig:6.4b}
 	\end{subfigure}
 	\caption{Plot of Convergence rates for Alg 3. Domain: $[-1,1]^2$, time = 1 and CFL = 0.5. In each plot, the data points corresponding to grid sizes of 15, 30, 60, 120 and 240.}\label{fig:6.4}
@@ -231,7 +231,7 @@ Taking a closer look at the the plot of the analytic pressure field (Figure \ref
 \begin{figure}[H]
 	\centering
 	\scalebox{1.2}{
-	\includegraphics[width=4.5in]{C:/Users/HONGJI/Latex Home directory/Gauge_pf2_np_P_rate_c_0_5.jpg}}
+	\includegraphics[width=4.5in]{figures/Gauge_pf2_np_P_rate_c_0_5.jpg}}
 	\caption{Long-Log plot of Pressure Convergence rates for Gauge method. Domain: $[-1,1]^2$, time = 1 and CFL = 0.5. The data points corresponding to grid sizes of 15, 30, 60, 120, 240 and 480.}\label{fig:6.5}
 \end{figure}
 
@@ -239,32 +239,32 @@ Taking a closer look at the the plot of the analytic pressure field (Figure \ref
 	\centering
 	\begin{subfigure}[t]{2.2in}
 		\centering
-		\includegraphics[width=2.2in]{C:/Users/HONGJI/Latex Home directory/Pm1b_pf2_np_P_error_t_1_grid_120.jpg}
+		\includegraphics[width=2.2in]{figures/Pm1b_pf2_np_P_error_t_1_grid_120.jpg}
 		\caption{Pressure error field for Alg 2 method}\label{fig:6.6a}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.8in}
 		\centering
-		\includegraphics[width=2.8in]{C:/Users/HONGJI/Latex Home directory/Pm1b_pf2_np_div_uvstar_t_1_grid_120.jpg}
+		\includegraphics[width=2.8in]{figures/Pm1b_pf2_np_div_uvstar_t_1_grid_120.jpg}
 		\caption{Divergence of intermediate velocity field for Alg 2 method. }\label{fig:6.6b}
 	\end{subfigure}
 	\quad
 	\centering
 	\begin{subfigure}[t]{2.2in}
 		\centering
-		\includegraphics[width=2.2in]{C:/Users/HONGJI/Latex Home directory/Pm2_pf2_cN_np_P_error_t_1_grid_120.jpg}
+		\includegraphics[width=2.2in]{figures/Pm2_pf2_cN_np_P_error_t_1_grid_120.jpg}
 		\caption{Pressure error field for Alg 3 method}\label{fig:6.6c}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.6in}
 		\centering
-		\includegraphics[width=2.6in]{C:/Users/HONGJI/Latex Home directory/Pm2_pf2_cN_np_div_uvstar_t_1_grid_120.jpg}
+		\includegraphics[width=2.6in]{figures/Pm2_pf2_cN_np_div_uvstar_t_1_grid_120.jpg}
 		\caption{Divergence of intermediate velocity field for Alg 3 method.}\label{fig:6.6d}
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Gauge_pf2_P_error_t_1_grid_120.jpg}
+		\includegraphics[width=2.5in]{figures/Gauge_pf2_P_error_t_1_grid_120.jpg}
 		\caption{Pressure error field for Gauge method. }\label{fig:6.6e}
 	\end{subfigure}
 	\caption{Surface plots of Pressure error fields and divergence of intermediate velocity fields for Alg 2, Alg 3 and Gauge method at grid size of 120. Domain: $[-1,1]^2$, time = 1 and CFL = 0.5. }\label{fig:6.6}
@@ -279,37 +279,37 @@ Interestingly, this time we see all the methods including Alg 2 show second orde
 	\centering
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm1b_pf2b_U_exact_t_1_grid_60.jpg}
+		\includegraphics[width=2.5in]{figures/Pm1b_pf2b_U_exact_t_1_grid_60.jpg}
 		\caption{Analytic $U$ velocity at $t=1$}\label{fig:6.7a}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm1b_pf2b_uf_t_1_grid_60.jpg}
+		\includegraphics[width=2.5in]{figures/Pm1b_pf2b_uf_t_1_grid_60.jpg}
 		\caption{Numerical $U$ velocity at $t=1$}\label{fig:6.7b}
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm1b_pf2b_V_exact_t_1_grid_60.jpg}
+		\includegraphics[width=2.5in]{figures/Pm1b_pf2b_V_exact_t_1_grid_60.jpg}
 		\caption{Analytic $V$ velocity at $t=1$}\label{fig:6.7c}
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm1b_pf2b_vf_t_1_grid_60.jpg}
+		\includegraphics[width=2.5in]{figures/Pm1b_pf2b_vf_t_1_grid_60.jpg}
 		\caption{Numerical $V$ velocity at $t=1$}\label{fig:6.7d}
 	\end{subfigure}
 	\quad	
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm1b_pf2b_P_exact_t_1_grid_60.jpg}
+		\includegraphics[width=2.5in]{figures/Pm1b_pf2b_P_exact_t_1_grid_60.jpg}
 		\caption{Analytic pressure ($P$) at $t=1$}\label{fig:6.7e}
 	\end{subfigure}
 	\quad	
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm1b_pf2b_pf_t_1_grid_60.jpg}
+		\includegraphics[width=2.5in]{figures/Pm1b_pf2b_pf_t_1_grid_60.jpg}
 		\caption{Numerical pressure ($P$) at $t=1$}\label{fig:6.7f}
 	\end{subfigure}
 	\caption{Plot of exact and numerical solutions ($U,V,P$) at time $t=1$ on the spatial domain of $[-\dfrac{1}{2},\dfrac{1}{2}]^2$ with grid size $60 \times 60$. Alg 2 method is used to compute the numerical solutions with $CFL=0.5$}\label{fig:6.7}
@@ -320,14 +320,14 @@ Interestingly, this time we see all the methods including Alg 2 show second orde
 	\begin{subfigure}[t]{4.5in}
 		\centering
 		\scalebox{1.2}{
-		\includegraphics[width=4.5in]{C:/Users/HONGJI/Latex Home directory/Pm1b_pf2b_np_P_rate_c_0_5.jpg}}
+		\includegraphics[width=4.5in]{figures/Pm1b_pf2b_np_P_rate_c_0_5.jpg}}
 		\caption{Log-Log plot of Convergence rate for Pressure}\label{fig:6.8a}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{4.5in}
 		\centering
 		\scalebox{1.2}{
-		\includegraphics[width=4.5in]{C:/Users/HONGJI/Latex Home directory/Pm1b_pf2b_np_div_uvstar_rate_c_0_5.jpg}}
+		\includegraphics[width=4.5in]{figures/Pm1b_pf2b_np_div_uvstar_rate_c_0_5.jpg}}
 		\caption{Log-Log plot of Convergence rate for $\nabla \cdot \textbf{u}^*$. }\label{fig:6.8b}
 	\end{subfigure}
 	\caption{Plot of Convergence rates for Alg 2. Domain:  $[-\dfrac{1}{2}, \dfrac{1}{2}]^2$, time = 1 and CFL = 0.5. In each plot, the data points corresponding to grid sizes of 15, 30, 60, 120, 240. The data points for $L_1$ and $L_\infty$ are shifted to distinguish with $L_2$}\label{fig:6.8}
@@ -338,14 +338,14 @@ Interestingly, this time we see all the methods including Alg 2 show second orde
 	\begin{subfigure}[t]{4.5in}
 		\centering
 		\scalebox{1.2}{
-		\includegraphics[width=4.5in]{C:/Users/HONGJI/Latex Home directory/Pm2_pf2b_np_P_rate_c_0_5.jpg}}
+		\includegraphics[width=4.5in]{figures/Pm2_pf2b_np_P_rate_c_0_5.jpg}}
 		\caption{Log-Log plot of Convergence rate for Pressure}\label{fig:6.9a}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{4.5in}
 		\centering
 		\scalebox{1.2}{
-		\includegraphics[width=4.5in]{C:/Users/HONGJI/Latex Home directory/Pm2_pf2b_np_div_uvstar_rate_c_0_5.jpg}}
+		\includegraphics[width=4.5in]{figures/Pm2_pf2b_np_div_uvstar_rate_c_0_5.jpg}}
 		\caption{Log-Log plot of Convergence rate for $\nabla \cdot \textbf{u}^*$. }\label{fig:6.9b}
 	\end{subfigure}
 	\caption{Plot of Convergence rates for Alg 3. Domain: $[-\dfrac{1}{2}, \dfrac{1}{2}]^2$, time = 1 and CFL = 0.5. In each plot, the data points corresponding to grid sizes of 15, 30, 60, 120, 240. The data points for $L_1$ and $L_\infty$ are shifted to distinguish with $L_2$.}\label{fig:6.9}
@@ -354,7 +354,7 @@ Interestingly, this time we see all the methods including Alg 2 show second orde
 \begin{figure}[H]
 	\centering
 	\scalebox{1.2}{
-	\includegraphics[width=4.5in]{C:/Users/HONGJI/Latex Home directory/Gauge_pf2b_np_P_rate_c_0_5.jpg}}
+	\includegraphics[width=4.5in]{figures/Gauge_pf2b_np_P_rate_c_0_5.jpg}}
 	\caption{Long-Log plot of Pressure Convergence rates for Gauge method. Domain: $[-\dfrac{1}{2},\dfrac{1}{2}]^2$, time = 1 and CFL = 0.5. The data points corresponding to grid sizes of 15, 30, 60, 120, 240, and 480.The data points for $L_1$ and $L_\infty$ are shifted to distinguish with $L_2$.}\label{fig:6.10}
 \end{figure}
 
@@ -362,32 +362,32 @@ Interestingly, this time we see all the methods including Alg 2 show second orde
 	\centering
 	\begin{subfigure}[t]{2.2in}
 		\centering
-		\includegraphics[width=2.2in]{C:/Users/HONGJI/Latex Home directory/Pm1b_pf2b_P_error_t_1_grid_60.jpg}
+		\includegraphics[width=2.2in]{figures/Pm1b_pf2b_P_error_t_1_grid_60.jpg}
 		\caption{Pressure error field for Alg 2 method}\label{fig:6.11a}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.6in}
 		\centering
-		\includegraphics[width=2.6in]{C:/Users/HONGJI/Latex Home directory/Pm1b_pf2b_div_uvstar_t_1_grid_60.jpg}
+		\includegraphics[width=2.6in]{figures/Pm1b_pf2b_div_uvstar_t_1_grid_60.jpg}
 		\caption{Divergence of intermediate velocity field for Alg 2 method. }\label{fig:6.11b}
 	\end{subfigure}
 	\quad
 	\centering
 	\begin{subfigure}[t]{2.2in}
 		\centering
-		\includegraphics[width=2.2in]{C:/Users/HONGJI/Latex Home directory/Pm2_pf2b_np_P_error_t_1_grid_60.jpg}
+		\includegraphics[width=2.2in]{figures/Pm2_pf2b_np_P_error_t_1_grid_60.jpg}
 		\caption{Pressure error field for Alg 3 method}\label{fig:6.11c}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.6in}
 		\centering
-		\includegraphics[width=2.6in]{C:/Users/HONGJI/Latex Home directory/Pm2_pf2b_np_div_uvstar_t_1_grid_60.jpg}
+		\includegraphics[width=2.6in]{figures/Pm2_pf2b_np_div_uvstar_t_1_grid_60.jpg}
 		\caption{Divergence of intermediate velocity field for Alg 3 method.}\label{fig:6.11d}
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{3.2in}
 		\centering
-		\includegraphics[width=3.2in]{C:/Users/HONGJI/Latex Home directory/Gauge_pf2b_P_error_t_1_grid_60_corrected.jpg}
+		\includegraphics[width=3.2in]{figures/Gauge_pf2b_P_error_t_1_grid_60_corrected.jpg}
 		\caption{Pressure error field for Gauge method. }\label{fig:6.11e}
 	\end{subfigure}
 	\caption{Surface plots of pressure error fields and divergence of intermediate velocity fields (if applicable) for Alg 2, Alg 3 and Gauge method at grid size of 120. Domain: $[-\dfrac{1}{2},\dfrac{1}{2}]^2$, time = 1 and CFL = 0.5. }\label{fig:6.11}
@@ -399,19 +399,19 @@ We investigate the importance of choice of boundary conditions for the intermedi
 \begin{figure}[H]
 	\centering
 	\scalebox{1.5}{
-	\includegraphics[width=3.5in]{C:/Users/HONGJI/Latex Home directory/Pm2D_pf2_p_rate_cfl_0_5.jpg}}
+	\includegraphics[width=3.5in]{figures/Pm2D_pf2_p_rate_cfl_0_5.jpg}}
 	\caption{Log log plot of pressure error convergence rate for Alg 3 with less accurate boundary condition for $\nabla \cdot \textbf{u}^*$. }\label{fig:6.12}
 \end{figure}
 	
 \begin{figure}[H]
 	\begin{subfigure}[t]{2.6in}
 		\centering
-		\includegraphics[width=2.6in]{C:/Users/HONGJI/Latex Home directory/Pm2D_pf2_np_P_error_t_1_grid_60.jpg}
+		\includegraphics[width=2.6in]{figures/Pm2D_pf2_np_P_error_t_1_grid_60.jpg}
 		\caption{Pressure error field for Alg 3 with grid size 60 at time 1. }\label{fig:6.13a}
 	\end{subfigure}
 	\begin{subfigure}[t]{3.0in}
 		\centering
-		\includegraphics[width=3.0in]{C:/Users/HONGJI/Latex Home directory/Pm2D_pf2_np_div_uvstar_t_1_grid_60.jpg}
+		\includegraphics[width=3.0in]{figures/Pm2D_pf2_np_div_uvstar_t_1_grid_60.jpg}
 		\caption{Plot of $\nabla \cdot \textbf{u}^*$ for Alg 3 with grid size 60 at time 1. }\label{fig:6.13b}
 	\end{subfigure}
 	\caption{Long-Log plot of Pressure Convergence rates and $3D$ surface plot of pressure error field for Alg 3 where the less accurate tangential boundary is used. Domain: $[-1,1]^2$, time = 1 and CFL = 0.5. The data points corresponding to grid sizes of 15, 30, 60, 120, 240.}\label{fig:6.13}
@@ -446,19 +446,19 @@ The convergence rates in pressure are summarised in Figure \ref{fig:6.14}. Inter
 	\centering
 	\begin{subfigure}[t]{4.5in}
 		\centering
-		\includegraphics[width=4.5in]{C:/Users/HONGJI/Latex Home directory/Pm1b_unf1_np_P_rate.jpg}
+		\includegraphics[width=4.5in]{figures/Pm1b_unf1_np_P_rate.jpg}
 		\caption{Log-Log plot of Convergence rate for Pressure Alg 2 method}\label{fig:6.14a}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{4.5in}
 		\centering
-		\includegraphics[width=4.5in]{C:/Users/HONGJI/Latex Home directory/Pm2_unf1_np_P_rate.jpg}
+		\includegraphics[width=4.5in]{figures/Pm2_unf1_np_P_rate.jpg}
 		\caption{Log-Log plot of Convergence rate for Pressure Alg 3. }\label{fig:6.14b}
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{4.5in}
 		\centering
-		\includegraphics[width=4.5in]{C:/Users/HONGJI/Latex Home directory/Gauge_unf1_np_P_rate.jpg}
+		\includegraphics[width=4.5in]{figures/Gauge_unf1_np_P_rate.jpg}
 		\caption{Log-Log plot of Convergence rate for Pressure Gauge method }\label{fig:6.14c}
 	\end{subfigure}
 	\caption{Plot of Convergence rates for the Unforced flow problem with Normalised Pressure approach used. Domain: $[-\dfrac{\pi}{4}, \dfrac{\pi}{4}]^2$, time = 1 and CFL = 0.5. In each plot, the data points corresponding to grid sizes of 15, 30, 60, 120, 240. The data ponts for $L_1$ and $L_\infty$ norms are shifted to disguish those of $L_2$ norm}\label{fig:6.14}
@@ -468,32 +468,32 @@ The convergence rates in pressure are summarised in Figure \ref{fig:6.14}. Inter
 	\centering
 	\begin{subfigure}[t]{2.2in}
 		\centering
-		\includegraphics[width=2.2in]{C:/Users/HONGJI/Latex Home directory/Pm1b_unf1_np_P_error_t_1_grid_60.jpg}
+		\includegraphics[width=2.2in]{figures/Pm1b_unf1_np_P_error_t_1_grid_60.jpg}
 		\caption{Pressure error field for Alg 2 method}\label{fig:6.15a}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.6in}
 		\centering
-		\includegraphics[width=2.6in]{C:/Users/HONGJI/Latex Home directory/Pm1b_unf1_np_div_uvstar_t_1_grid_60.jpg}
+		\includegraphics[width=2.6in]{figures/Pm1b_unf1_np_div_uvstar_t_1_grid_60.jpg}
 		\caption{Divergence of intermediate velocity field Alg 2}\label{fig:6.15b}
 	\end{subfigure}
 	\quad
 	\centering
 	\begin{subfigure}[t]{2.2in}
 		\centering
-		\includegraphics[width=2.2in]{C:/Users/HONGJI/Latex Home directory/Pm2_unf1_np_P_error_t_1_grid_60.jpg}
+		\includegraphics[width=2.2in]{figures/Pm2_unf1_np_P_error_t_1_grid_60.jpg}
 		\caption{Pressure error field for Alg 3 method}\label{fig:6.15c}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm2_unf1_np_div_uvstar_t_1_grid_60.jpg}
+		\includegraphics[width=2.5in]{figures/Pm2_unf1_np_div_uvstar_t_1_grid_60.jpg}
 		\caption{Divergence of intermediate velocity field Alg 3}\label{fig:6.15d}
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Gauge_unf1_P_error_t_1_grid_60.jpg}
+		\includegraphics[width=2.5in]{figures/Gauge_unf1_P_error_t_1_grid_60.jpg}
 		\caption{Pressure error field Gauge method }\label{fig:6.15e}
 	\end{subfigure}
 	\caption{Surface plots of pressure error fields and divergence of intermediate velocity fields for the Unforced flow problem. Domain: $[-\dfrac{\pi}{4}, \dfrac{\pi}{4}]^2$, time = 1 and CFL = 0.5.}\label{fig:6.15}
@@ -507,7 +507,7 @@ We now propose a simplified modification to solve the problem by defining $q$ to
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=4.5in]{C:/Users/HONGJI/Latex Home directory/Pm1b2_unf1_np_P_rate.jpg}
+	\includegraphics[width=4.5in]{figures/Pm1b2_unf1_np_P_rate.jpg}
 	\caption{Log - log plot of the pressure error convergence rate with the modified $q = 2\phi^{n-1/2} - \phi^{n-3/2}$ used }\label{fig:6.16}
 \end{figure}
 
@@ -515,20 +515,20 @@ We now propose a simplified modification to solve the problem by defining $q$ to
 	\centering
 	\begin{subfigure}[t]{2.6in}
 		\centering
-		\includegraphics[width=2.6in]{C:/Users/HONGJI/Latex Home directory/Pm1b2_unf1_np_W_NPexgrad_t_1_grid_60.jpg}
+		\includegraphics[width=2.6in]{figures/Pm1b2_unf1_np_W_NPexgrad_t_1_grid_60.jpg}
 		\caption{Plot of analytic pressure gradient normal to west boundary}\label{fig:6.17a}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.2in}
 		\centering
-		\includegraphics[width=2.2in]{C:/Users/HONGJI/Latex Home directory/Pm1b_unf1_np_W_Npf_t_1_grid_60.jpg}
+		\includegraphics[width=2.2in]{figures/Pm1b_unf1_np_W_Npf_t_1_grid_60.jpg}
 		\caption{Plot of numerical pressure gradient normal to west boundary with $q = p^{n-1/2}$ is used}\label{fig:6.17b}
 	\end{subfigure}
 	\quad
 	\centering
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Pm1b2_unf1_np_W_Npf_t_1_grid_60.jpg}
+		\includegraphics[width=2.5in]{figures/Pm1b2_unf1_np_W_Npf_t_1_grid_60.jpg}
 		\caption{Plot of numerical pressure gradient normal to west boundary with the modified $q = 2\phi^{n-1/2} - \phi^{n-3/2}$ used}\label{fig:6.17b}		
 	\end{subfigure}
 	\caption{Plot of analytical and numerical normal pressure gradients for Alg 2. Domain: $[-\dfrac{\pi}{4}, \dfrac{\pi}{4}]^2$, time = 1 and CFL = 0.5.}\label{fig:6.17}
@@ -546,7 +546,7 @@ We consider a fluid confined in the square domain: $[0,1]^2$. The fluid velociti
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=5.5in]{C:/Users/HONGJI/Latex Home directory/Lid_driven_set_up.png}
+	\includegraphics[width=5.5in]{figures/Lid_driven_set_up.png}
 	\caption{Problem setup of the Lid-driven cavity. The flow is driven by the constant vertical velocity along the East boundary ($v=1$ at $x=1$)  }	
 \label{fig:6.18}
 \end{figure}
@@ -560,13 +560,13 @@ At higher Reynolds number the flow becomes unsteady (or ``turbulent") as more sm
 	\centering
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/streamline_plot_t_0s_grid_100.pdf}
+		\includegraphics[width=2.5in]{figures/streamline_plot_t_0s_grid_100.pdf}
 		\caption{Streamline plot of velocity fields at time $T = 0s$}\label{fig:6.19a}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/streamline_plot_t_ 20s_grid_100.pdf}
+		\includegraphics[width=2.5in]{figures/streamline_plot_t_ 20s_grid_100.pdf}
 		\caption{Streamline plot of velocity fields at time $T = 20s$}\label{fig:6.19b}
 	\end{subfigure}
 	\caption{Streamline plot of velocity fields for driven cavity flow with Reynolds number = 1000. $v(x=1,y,t) = 1$ with grid size 100 and CFL = 0.5 used.}\label{fig:6.19}
@@ -574,7 +574,7 @@ At higher Reynolds number the flow becomes unsteady (or ``turbulent") as more sm
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=3.0in]{C:/Users/HONGJI/Latex Home directory/streamline_plot_t_20_grid30_Re_10000.pdf}
+	\includegraphics[width=3.0in]{figures/streamline_plot_t_20_grid30_Re_10000.pdf}
 	\caption{Streamline plot of velocity fields at time $T = 20s$ with Reynolds number equal to 10000}\label{fig:6.20}		
 \label{fig:6.20}
 \end{figure}
@@ -584,20 +584,20 @@ Plots of velocity and pressure solutions are also shown below:
 	\centering
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Gauge_dcv_uf_grid_120.jpg}
+		\includegraphics[width=2.5in]{figures/Gauge_dcv_uf_grid_120.jpg}
 		\caption{Plot of $U$ velocity at time $T = 20s$}\label{fig:6.21a}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Gauge_dcv_vf_grid_120.jpg}
+		\includegraphics[width=2.5in]{figures/Gauge_dcv_vf_grid_120.jpg}
 		\caption{Plot of $V$ velocity at time $T = 20s$}\label{fig:6.21b}
 	\end{subfigure}
 	\quad
 	\centering
 	\begin{subfigure}[t]{3.5in}
 		\centering
-		\includegraphics[width=2.5in]{C:/Users/HONGJI/Latex Home directory/Gauge_dcv_pf_grid_120.jpg}
+		\includegraphics[width=2.5in]{figures/Gauge_dcv_pf_grid_120.jpg}
 		\caption{Plot of Pressure at time $T = 20s$}\label{fig:6.21c}		
 	\end{subfigure}
 	\caption{Plot of velocity and pressure solutions for driven cavity problem with Reynolds number equal to 1000. The East boundary for $V$ velocity is kept to be 1 over time. Grid size of 100 and CFL = 0.5 were used.}\label{fig:6.16}
