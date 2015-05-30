@@ -38,7 +38,7 @@ fy = - \pi\cos(t)\sin(2\pi x)\sin^2(\pi y) - 2\pi^3\sin(t)\sin(2\pi x)\,(2\sin^2
 \end{cases}
 \end{equation}
 
-The CFL number is given as: $CFL = U\,\Delta t/\Delta x$ where $U = \pi$ is the absolute bound for velocity. We want the CFL number to be below one to ensure stability. However too small CFL number will decrease the efficiency because the numerical solver would take a longer time to run to incorporate small time stepping. Hence we have chosen the optimal CFL number to be 0.5. This is also a commonly used value \cite{brown2001accurate}.
+The Courant-Friedrichs-Lewy condition (CFL) number is given as: $CFL = U\,(\Delta t/\Delta x + \Delta t/\Delta y)$ (CFL for 2D problems) where $U = \pi$ is the absolute bound for velocity. We want the CFL number to be below one to ensure stability. However too small CFL number will decrease the efficiency because the numerical solver would take a longer time to run to incorporate small time stepping. Hence we have chosen the optimal CFL number to be 0.5. This is also a commonly used value \cite{brown2001accurate}.
 
 The actual error $e_h$ is consisted of both spatial and temporal error and $h$ is just an index to indicate the grid size (e.g. a 120 $\times$ 120 grid).\\
 In our purpose of testing the temporal error behaviour, we want the temporal error to dominate and thus we can assume the following simplified error relation:
@@ -585,20 +585,20 @@ Plots of velocity and pressure solutions are also shown below:
 	\begin{subfigure}[t]{2.5in}
 		\centering
 		\includegraphics[width=2.5in]{figures/Gauge_dcv_uf_grid_120.jpg}
-		\caption{Plot of $U$ velocity at time 20s}\label{fig:6.19a}		
+		\caption{Plot of $U$ velocity at time 15s}\label{fig:6.19a}		
 	\end{subfigure}
 	\quad
 	\begin{subfigure}[t]{2.5in}
 		\centering
 		\includegraphics[width=2.5in]{figures/Gauge_dcv_vf_grid_120.jpg}
-		\caption{Plot of $V$ velocity at time 20s}\label{fig:6.19b}
+		\caption{Plot of $V$ velocity at time 15s}\label{fig:6.19b}
 	\end{subfigure}
 	\quad
 	\centering
 	\begin{subfigure}[t]{3.5in}
 		\centering
 		\includegraphics[width=2.5in]{figures/Gauge_dcv_pf_grid_120.jpg}
-		\caption{Plot of Pressure at time 20s}\label{fig:6.19a}		
+		\caption{Plot of Pressure at time 15s}\label{fig:6.19a}		
 	\end{subfigure}
 	\caption{Plot of velocity and pressure solutions for driven cavity problem with Reynolds number equal to 1000. The East boundary for $V$ velocity is kept to be 1 over time. Grid size of 100 and CFL = 0.5 was used.}\label{fig:6.16}
 \end{figure}
